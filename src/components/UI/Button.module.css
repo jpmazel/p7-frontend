@@ -1,0 +1,16 @@
+.button{
+  font: inherit;
+  font-size: 2rem;
+  background-color: rgb(123, 240, 45);
+  padding: 1rem 4rem;
+  border-radius: 5px;
+  border: 1px solid white;
+  cursor: pointer;
+  /* max-width: 100%; */
+}
+
+.button:hover{
+  background-color:rgb(80, 156, 28);
+  border-color: rgb(80, 156, 28);
+  color: white;
+}

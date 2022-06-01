@@ -1,0 +1,59 @@
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.753);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+.modal {
+  position: fixed;
+  top: 40vh;
+  left: 10%;
+  max-width: 80%;
+  z-index: 20;
+  overflow: hidden;  
+}
+
+.header {
+  background-color: rgb(241, 218, 7);
+  padding: 2rem;
+}
+
+.header h2 {
+  font-size: 3rem;  
+  color: rgb(247, 11, 11);
+}
+
+.content {
+  font-size: 3rem;
+  padding: 2rem;
+}
+
+.content p{
+  color: black;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+/* @media (max-width:400px){
+  .actions {    
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+} */
+
+
+@media (min-width: 600px) {
+  .modal {
+    width: 55rem;
+    left: calc(50% - 27.5rem);
+  }
+}

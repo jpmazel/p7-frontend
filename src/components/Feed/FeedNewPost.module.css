@@ -1,0 +1,59 @@
+.feedNewPost {
+  /* background-color: blue; */
+  margin-bottom: 1rem;
+}
+
+.feedNewPost p {
+  font-size: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.feedNewPost .card {
+  background-color: rgba(38, 87, 87, 0.418);
+  margin: 0rem;
+}
+
+.feedNewPost form {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  /* background-color: rgb(229, 229, 16); */
+  width: 100%;
+}
+
+.feedNewPost form label {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1rem;
+}
+
+.feedNewPost form button {
+  margin: 1rem;
+}
+
+.feedNewPost form textarea {
+  margin: 0 1rem;
+  resize: none;
+  width: 95%;
+  height:12rem;
+  font-size:1.8rem ;
+  background-color: antiquewhite;
+}
+
+#messageEmpty {
+  background-color: red;
+  border-radius: 10px;
+  padding: 0.5rem 0.5rem;
+  margin-bottom: 2rem;
+}
+
+#red {
+  background-color: red;
+}
+
+.buttonsMedia {
+  display: flex;
+}

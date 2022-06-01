@@ -1,0 +1,59 @@
+.user{
+  margin: 0.5rem;
+  background-color: rgba(38, 87, 87, 0.418);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow: hidden;
+  max-width: 50rem;
+  margin: 1rem;
+  padding: 1.5rem;
+}
+
+.user h1{
+  font: inherit;
+  font-size: 3rem;
+  font-weight: bold;  
+}
+.user p:nth-child(2n){
+  color: black;
+  font-weight: bold;
+  margin-top: 0.8rem;
+}
+
+.user img{
+  height: 15rem;
+  margin: 1.5rem;
+}
+
+.user button{
+  font-size: 1.5rem;
+  margin: 1.5rem 0.5rem;
+  
+}
+
+.user button:nth-child(2){
+  background-color: red;
+}
+input{
+  background-color: antiquewhite;
+  width: 60%
+}
+
+
+@media(max-width:400px){
+  input{    
+    width: 95%
+  }
+}
+
+.user textarea{
+  height: 20rem;
+  width: 95%;
+  background-color: antiquewhite;
+  resize: none;
+  font-size: 1.8rem;
+}

@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from "react";
+import { Route, Routes } from "react-router-dom";
+import AuthForm from "./components/Auth/AuthForm";
+import FicheUserDisplayRead from "./components/FicheUser/FicheUserDisplayRead";
+import MainHeader from "./components/Layout/MainHeader";
+import Test from "./components/Test";
+import FicheUser from "./pages/FicheUser";
+import Home from "./pages/Home";
+import AuthContext from "./store/authContext";
+import classes from "./App.module.css";
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <section className={classes.app}>
+    <>
+      <MainHeader />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/fiche_utilisateur" element={<FicheUser />} />
+        <Route
+          path="/fiche_utilisateur/read/:id"
+          element={<FicheUserDisplayRead />}
+        />
+        <Route path="*" element={<Home />} />
+      </Routes>
+      </>
+    // </section>
   );
 }
 

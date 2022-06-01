@@ -1,0 +1,21 @@
+.feedComment {
+  /* background-color: blue; */
+  margin-top: 0.8rem;
+  /* margin-right: 0.8rem; */
+  margin-bottom: 0.8rem;
+  width: 95%;
+}
+
+.feedComment textarea {
+  /* max-width: 25rem;
+  max-height: 15rem; */
+  width: 95%;
+  resize: none;
+  font-size: 1.8rem;
+  height: 12rem;
+}
+
+.feedComment p {
+  font-size: 1.8rem;
+  text-align: justify;
+}

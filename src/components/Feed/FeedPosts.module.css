@@ -1,0 +1,16 @@
+.feedPosts {
+  flex-grow: 1;
+}
+
+.feedPosts textarea {
+  width: 95%;
+  height: 15rem;
+  resize: none;
+  font-size: 1.8rem;
+  background-color: antiquewhite;
+}
+
+.feedPosts p {
+  font-size: 1.8rem;
+  text-align: justify;
+}

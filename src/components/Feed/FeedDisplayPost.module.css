@@ -1,0 +1,48 @@
+.feedDisplayPost {
+  /* background-color: aliceblue; */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  /* margin: 0 1rem; */
+}
+
+.feedDisplayPost h2 {
+  color: white;
+  font-size: 2.5rem;
+}
+
+.container {
+  /* background-color: rgb(12, 103, 182); */
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+
+  max-width: 43rem;
+  /* max-width: 20rem; */
+  /* margin: 0 0.2rem; */
+}
+
+.card {
+  background-color: rgba(38, 87, 87, 0.418);
+  margin: 1rem 0;
+}
+
+.card p {
+  font-size: 2rem;
+  padding: 1rem;
+  margin-left: 1rem;
+}
+
+.photoMessage {
+  display: flex;
+}
+
+.likeAndButton {
+  /* background-color: brown; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}

@@ -1,0 +1,15 @@
+.feedIdentifierCreatorComment{
+  /* background-color: rgb(2, 136, 92); */
+}
+
+
+.feedIdentifierCreatorComment p{
+  font-size: 1.4rem;
+  padding: 0.2rem;
+  margin-left:7rem;  
+}
+
+.feedIdentifierCreatorComment p:nth-child(1){
+  font-weight: bold;
+  margin-top: 1rem;
+}

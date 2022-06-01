@@ -1,0 +1,10 @@
+.feedCommentPhotoUser {
+  /* background-color: aqua; */
+}
+
+.feedCommentPhotoUser img {
+  height: 5rem;
+  width: 5rem;
+  margin: 1rem;
+  object-fit: contain;
+}

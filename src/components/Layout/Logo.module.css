@@ -1,0 +1,17 @@
+.logo{
+display: flex;
+justify-content: center;
+}
+
+.logo img{
+  height: 15rem;
+  width: 80rem;
+  object-fit: cover;
+}
+@media(max-width: 400px){
+  .logo img{
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+}

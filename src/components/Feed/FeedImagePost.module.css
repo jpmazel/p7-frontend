@@ -1,0 +1,10 @@
+.feedImagePost{
+  text-align: center;
+}
+
+.feedImagePost img{
+  height: 20rem;
+  border-radius: 15px;
+  max-width: 95%;
+  object-fit: contain;
+}

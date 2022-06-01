@@ -1,0 +1,36 @@
+.container{
+  /* background-color: aqua; */
+  display: flex;
+}
+
+.user{
+  margin: 0.5rem;
+  background-color: rgba(38, 87, 87, 0.418);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  white-space: pre-wrap;
+  overflow: hidden;
+  max-width: 50rem;
+  margin: 1rem auto;
+  padding: 1.5rem;
+}
+
+.user h1{
+  font: inherit;
+  font-size: 2.5rem;
+  font-weight: bold;  
+}
+.user p:nth-child(2n){
+  color: black;
+  font-weight: bold;
+  margin-top: 0.8rem;
+}
+
+.user img{
+  height: 15rem;
+  margin: 1.5rem;
+}
+

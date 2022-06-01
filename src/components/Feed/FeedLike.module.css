@@ -1,0 +1,10 @@
+.feedLike{
+  /* background-color: aqua; */
+  width: 100%;
+  /* display: flex;
+  justify-content: flex-start; */
+}
+
+.feedLike p{
+  margin-left: 8rem;
+}
