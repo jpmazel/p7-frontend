@@ -1,5 +1,5 @@
 # Pour lancer l'application du réseau social
--Il faut d'abord lancer la base de données MySQl et le backend (voir le readme sur le backend)
+-Il faut d'abord lancer la base de données MySQL et le backend (voir le readme sur le backend)
 
 -Après dans le terminal :  npm start
 
