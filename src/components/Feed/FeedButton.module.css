@@ -12,9 +12,17 @@
   margin-bottom: 1rem;
 }
 .red button {
-  background-color: red;
+  background-color: rgb(254, 45, 45);
+}
+
+.red button:hover {
+  background-color: rgb(250, 0, 0);
 }
 
 .orange button {
   background-color: orange;
+}
+
+.orange button:hover {
+  background-color: rgb(251, 163, 0);
 }
