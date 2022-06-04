@@ -36,15 +36,10 @@ const FeedButtonComment = ({
 
         const dataResponse = await response.json();
 
-        if (response.ok) {
-          console.log("fetchDeleteCommentFeedHandler response.ok");
-          console.log(response);
-          console.log(dataResponse);
+        if (response.ok) {          
           onUpdateDelete(idCommentUser);
         } else {
-          console.log("-->fetchDeleteCommentFeedHandler response PAS OK");
-          console.log(response);
-          console.log(dataResponse);
+          console.log("-->fetchDeleteCommentFeedHandler response PAS OK");         
           throw new Error(dataResponse.error);
         }
       } catch (error) {

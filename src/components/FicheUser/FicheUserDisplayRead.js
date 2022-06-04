@@ -25,14 +25,10 @@ const FicheUserDisplayRead = () => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {
-        console.log("-----> fetchGetFicheUserHandler response.ok");
-        console.log(response);
-        console.log(dataResponse);
+      if (response.ok) {        
         setData(dataResponse.results);
       } else {
-        console.log("----->fetchGetFicheUserHandler pas OK response");
-        console.log(response);
+        console.log("----->fetchGetFicheUserHandler pas OK response");        
         console.log(dataResponse);
         throw new Error(dataResponse.error);
       }

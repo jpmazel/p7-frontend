@@ -37,16 +37,10 @@ const FeedButton = ({
 
         const dataResponse = await response.json();
 
-        if (response.ok) {
-          console.log("response.ok");
-          console.log(response);
-          console.log(dataResponse);
-          console.log(`Le post : ${idPostsUser} a été supprimé dans le feed`);
+        if (response.ok) {          
           onUpdateDelete(idPostsUser);
         } else {
-          console.log("-->response PAS OK");
-          console.log(response);
-          console.log(dataResponse);
+          console.log("-->response PAS OK");          
           throw new Error(dataResponse.error);
         }
       } catch (error) {

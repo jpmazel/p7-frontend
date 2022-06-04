@@ -26,7 +26,6 @@ const FeedComment = ({
   };
 
   //Envoyer le message mis à jour
-
   if (buttonSend && modificationOneComment) {
     //Requête PUT pour envoyer les données au serveur
 
@@ -49,14 +48,10 @@ const FeedComment = ({
         const dataResponse = await response.json();
 
         //si la response du serveur est OK
-        if (response.ok) {
-          console.log("-------->Response OK<---------");
-          console.log(response);
-          console.log(dataResponse);
+        if (response.ok) {          
           onUpdateCommentFinish();
         } else {
-          console.log("-------->Response PAS OK<---------");
-          console.log(response);
+          console.log("-------->Response PAS OK<---------");          
           console.log(dataResponse);
         }
       } catch (error) {

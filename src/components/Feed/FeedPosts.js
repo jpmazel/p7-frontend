@@ -46,14 +46,10 @@ const FeedPosts = ({
         const dataResponse = await response.json();
 
         //si la response du serveur est OK
-        if (response.ok) {
-          console.log("-------->Response OK<---------");
-          console.log(response);
-          console.log(dataResponse);
+        if (response.ok) {         
           onUpdatePostFinish();
         } else {
-          console.log("-------->Response PAS OK<---------");
-          console.log(response);
+          console.log("-------->Response PAS OK<---------");          
           console.log(dataResponse);
         }
       } catch (error) {

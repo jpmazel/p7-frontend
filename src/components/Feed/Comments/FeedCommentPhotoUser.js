@@ -20,15 +20,10 @@ const FeedCommentPhotoUser = ({ token, userIdToken, userIdComment }) => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {
-        console.log("-->FeedCommentPhotoUser response.ok");
-        console.log(response);
-        console.log(dataResponse);
+      if (response.ok) {        
         setFicheUser(dataResponse.results);
       } else {
-        console.log("-->FeedCommentPhotoUser response PAS ok");
-        console.log(response);
-        console.log(dataResponse);
+        console.log("-->FeedCommentPhotoUser response PAS ok");        
         throw new Error(dataResponse.error);
       }
     } catch (error) {

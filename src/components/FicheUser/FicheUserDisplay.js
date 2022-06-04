@@ -17,9 +17,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   const jobInputRef = useRef();
   const bioInputRef = useRef();
 
-  console.log("--->state dataUpdate");
-  console.log(dataUpdate);
-
   //pour mettre à jour le state dataUpdate
   useEffect(() => {
     // console.log("je suis dans le useEffect");
@@ -39,15 +36,7 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     const enteredJob = jobInputRef.current.value;
     const enteredBio = bioInputRef.current.value;
 
-    console.log("-->Les inputs REF données");
-    console.log(enteredNom);
-    console.log(enteredPrenom);
-    console.log(enteredAge);
-    console.log(enteredJob);
-    console.log(enteredBio);
-
     //la gestion de la nouvelle photo
-    console.log("------->event.target");
 
     let newPhoto;
     if (event.target.files && event.target.files.length === 1) {
@@ -75,7 +64,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     };
 
     //envoyer les nouvelles données vers le serveur
-    console.log("////formData");
     const formData = new FormData();
     formData.append("image", newPhoto);
     formData.append("ficheUser", JSON.stringify(dataUpdateFormData));
@@ -95,12 +83,8 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
         const dataResponse = await response.json();
 
         if (response.ok) {
-          console.log("----->response.ok");
-          console.log(response);
-          console.log(dataResponse);
         } else {
           console.log("----->pas OK response");
-          console.log(response);
           console.log(dataResponse);
           throw new Error(dataResponse.error);
         }
@@ -131,13 +115,9 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
       //le serveur a répondu
       if (response.ok) {
-        console.log("--->response OK de la suppression du compte");
-        console.log(response);
-        console.log(dataResponse);
         authCtx.logout();
       } else {
         console.log("--->response PAS OK de la suppression du compte");
-        console.log(response);
         console.log(dataResponse);
       }
     } catch (error) {
@@ -168,8 +148,7 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     }
   }, [modification]);
 
-  console.log("---->data.photoProfilUrl");
-  console.log(Boolean(data.photoProfilUrl));
+  
   return (
     <section className={classes.user}>
       <h1>Bonjour {dataUpdate.prenom}</h1>

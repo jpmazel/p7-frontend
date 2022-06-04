@@ -25,15 +25,10 @@ const FeedIdentifierCreatorComment = ({
 
       const dataResponse = await response.json();
 
-      if (response.ok) {
-        console.log("-->FeedIdentifierCreatorComment response.ok");
-        console.log(response);
-        console.log(dataResponse);
+      if (response.ok) {       
         setFicheUser(dataResponse.results);
       } else {
-        console.log("-->FeedIdentifierCreatorComment response PAS ok");
-        console.log(response);
-        console.log(dataResponse);
+        console.log("-->FeedIdentifierCreatorComment response PAS ok");        
         throw new Error(dataResponse.error);
       }
     } catch (error) {

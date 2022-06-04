@@ -20,15 +20,10 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {
-        console.log("-->fetchGetLikeHandler response.ok");
-        console.log(response);
-        console.log(dataResponse);
+      if (response.ok) {        
         setLike(dataResponse.results);
       } else {
-        console.log("-->fetchGetLikeHandler response PAS ok");
-        console.log(response);
-        console.log(dataResponse);
+        console.log("-->fetchGetLikeHandler response PAS ok");        
         throw new Error(dataResponse.error);
       }
     } catch (error) {
@@ -64,9 +59,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
           const dataResponse = await response.json();
 
           //Si la response du serveur est OK
-          if (response.ok) {
-            console.log("--->fetchPOSTLikeHandler dataResponse OK");
-            console.log(dataResponse);
+          if (response.ok) {            
             setReload((prevState) => !prevState);
           } else {
             console.log("--->fetchPOSTLikeHandler dataResponse PAS OK");
@@ -103,9 +96,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
           const dataResponse = await response.json();
 
           //Si la response du serveur est OK
-          if (response.ok) {
-            console.log("--->fetchPUTLikeHandler dataResponse OK");
-            console.log(dataResponse);
+          if (response.ok) {           
             setReload((prevState) => !prevState);
           } else {
             console.log("--->fetchPUTLikeHandler dataResponse PAS OK");
@@ -145,11 +136,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
         const dataResponse = await response.json();
 
         //Si la response du serveur est OK
-        if (response.ok) {
-          console.log(
-            "--->fetchPUTLikeHandler - likeHandler-  dataResponse OK"
-          );
-          console.log(dataResponse);
+        if (response.ok) {          
           setReload((prevState) => !prevState);
         } else {
           console.log(

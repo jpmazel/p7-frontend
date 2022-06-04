@@ -25,14 +25,9 @@ const FeedBadge = ({
       const dataResponse = await response.json();
 
       if (response.ok) {
-        console.log("-->fetchGetNumberCommentHandler response.ok");
-        console.log(response);
-        console.log(dataResponse);
         setNumberOfComments(dataResponse.results);
       } else {
         console.log("-->fetchGetNumberCommentHandlerresponse PAS ok");
-        console.log(response);
-        console.log(dataResponse);
         throw new Error(dataResponse.error);
       }
     } catch (error) {

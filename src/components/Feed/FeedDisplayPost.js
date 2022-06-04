@@ -42,15 +42,10 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {
-        console.log("-->response.ok");
-        console.log(response);
-        console.log(dataResponse);
+      if (response.ok) {        
         setMessages(dataResponse.results);
       } else {
-        console.log("-->response PAS ok");
-        console.log(response);
-        console.log(dataResponse);
+        console.log("-->response PAS ok");      
         throw new Error(dataResponse.error);
       }
     } catch (error) {

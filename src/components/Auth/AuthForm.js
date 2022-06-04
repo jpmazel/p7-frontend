@@ -105,10 +105,7 @@ const AuthForm = () => {
         setIsLoading(false);
 
         if (response.ok) {
-          setData(dataResponse);
-          console.log("-->response fetchHandler AuthForm.js");
-          console.log(response);
-          console.log(dataResponse);
+          setData(dataResponse);          
           authCtx.login(
             dataResponse.token,
             dataResponse.userId,

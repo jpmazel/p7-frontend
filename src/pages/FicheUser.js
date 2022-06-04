@@ -26,9 +26,7 @@ const FicheUser = () => {
         },
       });
 
-      const dataResponse = await response.json();
-      console.log("______>dataResponse fecthHandler FicheUser<______");
-      console.log(dataResponse);
+      const dataResponse = await response.json();      
 
       //Controle si le tableau est vide ou pas
       const controlArrayNotEmpty =
@@ -85,14 +83,10 @@ const FicheUser = () => {
 
               const dataResponse2 = await response2.json();
 
-              if (response2.ok) {
-                console.log("---->response2.ok");
-                console.log(response2);
-                console.log(dataResponse2);
+              if (response2.ok) {                
                 setIsCreateFiche(true);
               } else {
-                console.log("---->response2. PAS ok");
-                console.log(response2);
+                console.log("---->response2. PAS ok");                
                 console.log(dataResponse2);
                 throw new Error(dataResponse2.error);
               }

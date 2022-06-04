@@ -41,15 +41,10 @@ const FeedDisplayComment = ({
 
       const dataResponse = await response.json();
 
-      if (response.ok) {
-        console.log("-->Comments response.ok");
-        console.log(response);
-        console.log(dataResponse);
+      if (response.ok) {        
         setComments(dataResponse.results);
       } else {
-        console.log("-->Comments response PAS ok");
-        console.log(response);
-        console.log(dataResponse);
+        console.log("-->Comments response PAS ok");        
         throw new Error(dataResponse.error);
       }
     } catch (error) {
