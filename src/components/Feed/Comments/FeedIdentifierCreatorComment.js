@@ -6,16 +6,15 @@ const FeedIdentifierCreatorComment = ({
   token,
   userIdToken,
   userIdComment,
-  dateComment
+  dateComment,
 }) => {
   const [ficheUser, setFicheUser] = useState(null);
 
-  console.log("---Je suis dans FeedIdentifierCreatorComment");
   //Aller chercher les photos des utilisateurs des commentaires
   // http://localhost:3000/api/fiche_user/fiche/49?userId=46
-  const url = ` http://localhost:3000/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
 
   const fetchGetFicheUserHandler = async () => {
+    const url = ` http://localhost:3000/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -52,7 +51,6 @@ const FeedIdentifierCreatorComment = ({
   //Modification du format de la date
   const date = dateFormat(dateComment, "isoDate");
   const time = dateFormat(dateComment, "isoTime");
-  console.log( date, time)
 
   return (
     <>

@@ -21,14 +21,11 @@ const FeedButtonComment = ({
 
   //Pour supprimer un commentaire dans le feed
   const deletePost = () => {
-    console.log("idCommentUser et J'ai appuyer sur le boutton supprimer");
-    console.log(idCommentUser);
-
     //La requête à envoyer au backend pour supprimer le post dans le feed
     // http://localhost:3000/api/posts/comment/177?userId=46
-    const url = `http://localhost:3000/api/posts/comment/${idCommentUser}?userId=${userIdToken}`;
 
     const fetchDeleteCommentFeedHandler = async () => {
+      const url = `http://localhost:3000/api/posts/comment/${idCommentUser}?userId=${userIdToken}`;
       try {
         const response = await fetch(url, {
           method: "DELETE",
@@ -43,9 +40,6 @@ const FeedButtonComment = ({
           console.log("fetchDeleteCommentFeedHandler response.ok");
           console.log(response);
           console.log(dataResponse);
-          console.log(
-            `Le commentaire : ${idCommentUser} a été supprimé dans le feed`
-          );
           onUpdateDelete(idCommentUser);
         } else {
           console.log("-->fetchDeleteCommentFeedHandler response PAS OK");
@@ -63,15 +57,12 @@ const FeedButtonComment = ({
 
   //confirmation modal pour suppression du compte---------------------------------
   const confirmationModalHandler = () => {
-    console.log("je suis dans confirmationModalHandler");
     setConfirmationModal({
       title: "Confirmation de la suppression du commentaire",
       message: "La suppression du commentaire est une action irréversible",
     });
   };
   //--------------------------------------------------------------------------------
-  console.log("Je suis dans FeedButton isUpdatingPost");
-  console.log(isUpdatingComment && isUpdatingComment.postToEdit);
 
   //Gestion du bouton ENVOYER
   const modificationOneComment =

@@ -1,11 +1,13 @@
 import Button from "../UI/Button";
 import classes from "./FeedVideoUrl.module.css";
 
-const FeedVideoUrl = ({ onUrlVideo, displayInputVideo, onButtonVideoHandler }) => {
+const FeedVideoUrl = ({
+  onUrlVideo,
+  displayInputVideo,
+  onButtonVideoHandler,
+}) => {
   //Remonter l'information de l'URL dans le composant parent
   const inputVideoHandler = (event) => {
-    console.log("je suis dans inputVideoHandler");
-    console.log(event.target.value);
     onUrlVideo(event.target.value);
   };
 

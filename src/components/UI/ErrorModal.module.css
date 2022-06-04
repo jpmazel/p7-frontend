@@ -14,7 +14,7 @@
   left: 10%;
   max-width: 80%;
   z-index: 20;
-  overflow: hidden;  
+  overflow: hidden;
 }
 
 .header {
@@ -23,7 +23,7 @@
 }
 
 .header h2 {
-  font-size: 3rem;  
+  font-size: 3rem;
   color: rgb(247, 11, 11);
 }
 
@@ -32,7 +32,7 @@
   padding: 2rem;
 }
 
-.content p{
+.content p {
   color: black;
 }
 
@@ -41,15 +41,6 @@
   justify-content: flex-end;
   padding: 1rem;
 }
-
-/* @media (max-width:400px){
-  .actions {    
-    flex-direction: column;
-    justify-content: center;
-    padding: 0.5rem;
-  }
-} */
-
 
 @media (min-width: 600px) {
   .modal {

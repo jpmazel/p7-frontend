@@ -1,14 +1,12 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../store/authContext";
 import classes from "./FicheUser.module.css";
-import emptyPortrait from "../assets/images/empty-portrait.jpg";
 
 import { Navigate } from "react-router-dom";
 import FicheUserDisplay from "../components/FicheUser/FicheUserDisplay";
 
 const FicheUser = () => {
   const authCtx = useContext(AuthContext);
-  console.log(authCtx);
 
   const [data, setData] = useState([]);
   const [isCreateFiche, setIsCreateFiche] = useState(false);
@@ -29,20 +27,12 @@ const FicheUser = () => {
       });
 
       const dataResponse = await response.json();
-
-      console.log("______>dataResponse<______");
+      console.log("______>dataResponse fecthHandler FicheUser<______");
       console.log(dataResponse);
 
       //Controle si le tableau est vide ou pas
-      console.log(Array.isArray(dataResponse.results));
       const controlArrayNotEmpty =
         Array.isArray(dataResponse.results) && dataResponse.results.length;
-
-      if (controlArrayNotEmpty) {
-        console.log("le tableau n'est pas vide et c'est bien un tableau");
-      } else {
-        console.log("le tableau est vide OU ce n'est pas un tableau");
-      }
 
       if (response.ok) {
         //si le tableau n'est pas vide =  la fiche existe sur la base de donnée
@@ -68,7 +58,6 @@ const FicheUser = () => {
             "la fiche n'exite pas - il faut la créer - je suis dans le else"
           );
           //creation de la fiche de l'utilisateur sur la base de donnée
-
           const fetchFicheUserCreateHandler = async () => {
             try {
               const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/?userId=${authCtx.userId}`;
@@ -78,17 +67,13 @@ const FicheUser = () => {
                 nom: "modifier la fiche",
                 prenom: "modifier la fiche",
                 age: 0,
-                job:"modifier la fiche",
-                bio:"modifier la fiche",
-                photoProfilUrl: ""
+                job: "modifier la fiche",
+                bio: "modifier la fiche",
+                photoProfilUrl: "",
               };
 
-              
-              const formData = new FormData();             
+              const formData = new FormData();
               formData.append("ficheUser", JSON.stringify(dataUpdateFormData));
-
-              console.log("--->formData");
-              console.log(formData);
 
               const response2 = await fetch(url, {
                 method: "POST",
@@ -99,8 +84,6 @@ const FicheUser = () => {
               });
 
               const dataResponse2 = await response2.json();
-              console.log("dataResponse2");
-              console.log(dataResponse2);
 
               if (response2.ok) {
                 console.log("---->response2.ok");
@@ -139,11 +122,7 @@ const FicheUser = () => {
     }
   }, [fecthHandler, isLoggedIn]);
 
-  console.log("state data");
-  console.log(data);
-
   const onRefresh = () => {
-    console.log("---->REFRESH");
     fecthHandler();
   };
 

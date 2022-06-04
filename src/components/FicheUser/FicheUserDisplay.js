@@ -6,9 +6,6 @@ import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import ConfirmationModal from "../UI/ConfirmationModal";
 
 const FicheUserDisplay = ({ data, onRefresh }) => {
-  // console.log("-->data qui vient des props du component");
-  // console.log(data);
-
   const [dataUpdate, setDataUpdate] = useState(data);
   const [modification, setModification] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
@@ -32,8 +29,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   //pour modifier les données qu'il y a sur la page
   const modificationHandler = () => {
     setModification((modification) => !modification);
-    // console.log("modificationHandler");
-    // console.log(modification);
   };
 
   //pour surveiller les modifications qui sont faites dans les champs
@@ -53,16 +48,11 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
     //la gestion de la nouvelle photo
     console.log("------->event.target");
-    // console.log(event.target.files)
-    // console.log(event.target.files[0])
 
     let newPhoto;
     if (event.target.files && event.target.files.length === 1) {
       newPhoto = event.target.files[0];
     }
-
-    console.log("-->newPhoto");
-    console.log(newPhoto);
 
     //mettre à jour le state
     setDataUpdate((prevState) => ({
@@ -89,11 +79,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     const formData = new FormData();
     formData.append("image", newPhoto);
     formData.append("ficheUser", JSON.stringify(dataUpdateFormData));
-
-    console.log("----->formData");
-    console.log(formData.get("image"));
-    console.log(formData.get("ficheUser"));
-    console.log("---------------");
 
     //data.idFiche    data.userId
     const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/${data.idFiche}?userId=${data.userId}`;
@@ -162,16 +147,17 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   };
 
   //confirmation modal pour suppression du compte---------------------------------
- const confirmationModalHandler = ()=>{
-   console.log("je suis dans confirmationModalHandler");
-   setConfirmationModal({
-     title: "Confirmation de la suppression du compte",
-     message: "La suppression du compte et des données sont des actions irréverssibles"
-   })
+  const confirmationModalHandler = () => {
+    console.log("je suis dans confirmationModalHandler");
+    setConfirmationModal({
+      title: "Confirmation de la suppression du compte",
+      message:
+        "La suppression du compte et des données sont des actions irréverssibles",
+    });
 
-   console.log("-->confirmationModal state")
-   console.log(confirmationModal)
- }
+    console.log("-->confirmationModal state");
+    console.log(confirmationModal);
+  };
   //--------------------------------------------------------------------------------
 
   //pour faire automatiquement la requête GET de ficheUser
@@ -243,7 +229,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
           ref={jobInputRef}
         />
       )}
-      {/* <p>Technicien de maintenance CVC / génie climatique</p> */}
 
       <p>Mieux me connaître</p>
       {!modification && <p>{dataUpdate.bio}</p>}
@@ -263,14 +248,17 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
           {!modification ? "Modifier la fiche" : "Envoyer"}
         </Button>
 
-        {confirmationModal && 
-        <ConfirmationModal
-         title={confirmationModal.title}
-         message={confirmationModal.message}
-         onConfirm={()=>setConfirmationModal(null)}
-         onConfirmDelete={()=>deleteAccountHandler()}
-        />}
-        <Button onClick={confirmationModalHandler}>Suppression du compte</Button>
+        {confirmationModal && (
+          <ConfirmationModal
+            title={confirmationModal.title}
+            message={confirmationModal.message}
+            onConfirm={() => setConfirmationModal(null)}
+            onConfirmDelete={() => deleteAccountHandler()}
+          />
+        )}
+        <Button onClick={confirmationModalHandler}>
+          Suppression du compte
+        </Button>
       </div>
     </section>
   );

@@ -23,21 +23,15 @@ const FeedNewPost = ({ onUpdate }) => {
   //CONDITION pour envoyer la requête
   // const conditionSend2 = message      si 1 caractère = TRUE sinon FALSE
   // const conditionSend2 = urlInput     si 1 caractère = TRUE sinon FALSE
-  // const conditionSend2 =  message && urlInput   SI il y a un message ET UrlInput
-  // const conditionSend2 =  !displayInput && message  Pour envoyer un post sans image
+  // const conditionSend2 = message && urlInput   SI il y a un message ET UrlInput
+  // const conditionSend2 = !displayInput && message  Pour envoyer un post sans image
   //                                                   avec l'input fermé
-
-  //Pour tester différente condition
-  // const conditionSend2 = displayInput && message && urlInput
-  // console.log("------////conditionSend2////--------");
-  // console.log(conditionSend2);
-  // console.log(Boolean(conditionSend2))
 
   //La condition pour envoyer un POST avec ou sans image vers le serveur
   const conditionSend =
     (!displayInput && message) ||
     (displayInput && message && urlInput) ||
-    (message && displayInputVideo  && urlInputVideo && clickSend);
+    (message && displayInputVideo && urlInputVideo && clickSend);
   //Pour mettre urlInput a null lorsque l'on ferme le input ou on y met l'URL
   useEffect(() => {
     setUrlInput(null);
@@ -58,9 +52,6 @@ const FeedNewPost = ({ onUpdate }) => {
       photoUrlLink: urlInput,
       videoYTUrlLink: urlInputVideo,
     };
-
-    console.log("--->data à envoyer");
-    console.log(data);
 
     //La requête POST avec fetch pour envoyer les données au backend
     const fetchPOSTHandler = async () => {
@@ -105,16 +96,12 @@ const FeedNewPost = ({ onUpdate }) => {
 
   //Récupération de l'URL chez l'enfant
   const onUrlImage = (urlInput) => {
-    console.log("J'ai envoyer l'URL de l'enfant vers le parent ");
-    console.log(urlInput);
     const urlImage = urlInput; //warning Cannot update a component (`FeedNewPost`) while rendering a different component (`FeedImageUrl`)
     urlImage && setUrlInput(urlImage);
   };
 
   //Récupération de l'URL Video YOUTUBE chez l'enfant
   const onUrlVideo = (urlInput) => {
-    console.log("J'ai envoyer l'URL de l'enfant vers le parent ");
-    console.log(urlInput);
     const urlVideo = urlInput; //warning Cannot update a component (`FeedNewPost`) while rendering a different component (`FeedImageUrl`)
     urlVideo && setUrlInputVideo(urlVideo);
   };
@@ -122,14 +109,12 @@ const FeedNewPost = ({ onUpdate }) => {
   //La gestion du bouton IMAGE
   //au clique sur le bouton l'input s'affiche pour pouvoir y entrer l'URL
   const onButtonImageHandler = () => {
-    console.log("J'ai cliqué sur le bouton IMAGE");
     setDisplayInput((prevState) => !prevState);
   };
 
   //La gestion du bouton VIDEO
   //au clique sur le bouton l'input s'affiche pour pouvoir y entrer l'URL
   const onButtonVideoHandler = () => {
-    console.log("J'ai cliqué sur le bouton VIDEO");
     setDisplayInputVideo((prevState) => !prevState);
   };
 

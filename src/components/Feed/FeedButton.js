@@ -5,7 +5,6 @@ import ConfirmationModal from "../UI/ConfirmationModal";
 import AuthContext from "../../store/authContext";
 import FeedBadge from "./Comments/FeedBadge";
 
-
 const FeedButton = ({
   userIdToken,
   userIdPost,
@@ -17,16 +16,13 @@ const FeedButton = ({
   onSendMessage,
   onCommentsDisplayPost,
   newComment,
-  updateDeleteComment
+  updateDeleteComment,
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
   const authCtx = useContext(AuthContext);
 
   //Pour supprimer un post dans le feed
   const deletePost = () => {
-    console.log("J'ai appuyer sur le boutton supprimer");
-    console.log(idPostsUser);
-
     //La requête à envoyer au backend pour supprimer le post dans le feed
     const url = `http://localhost:3000/api/posts/${idPostsUser}?userId=${userIdToken}`;
 
@@ -63,15 +59,12 @@ const FeedButton = ({
 
   //confirmation modal pour suppression du compte---------------------------------
   const confirmationModalHandler = () => {
-    console.log("je suis dans confirmationModalHandler");
     setConfirmationModal({
       title: "Confirmation de la suppression du message",
       message: "La suppression du message est une action irréversible",
     });
   };
   //--------------------------------------------------------------------------------
-  console.log("Je suis dans FeedButton isUpdatingPost");
-  console.log(isUpdatingPost && isUpdatingPost.postToEdit);
 
   //Gestion du bouton ENVOYER
 
@@ -83,13 +76,13 @@ const FeedButton = ({
       {/* Bouton COMMENTAIRE pour AFFICHER les commentaires sous le post  */}
       {!modificationOnePost && (
         <Button id={idPostsUser} onClick={onCommentsDisplayPost}>
-           <FeedBadge
-              userIdToken={userIdToken}
-              token={token}
-              idPostsUser={idPostsUser}
-              newComment={newComment}
-              updateDeleteComment={updateDeleteComment}
-            />
+          <FeedBadge
+            userIdToken={userIdToken}
+            token={token}
+            idPostsUser={idPostsUser}
+            newComment={newComment}
+            updateDeleteComment={updateDeleteComment}
+          />
           Commentaire
         </Button>
       )}

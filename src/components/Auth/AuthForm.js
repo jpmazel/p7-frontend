@@ -16,8 +16,6 @@ const AuthForm = () => {
 
   //utilisation du context
   const authCtx = useContext(AuthContext);
-  console.log("-->authCtx");
-  console.log(authCtx);
 
   const [data, setData] = useState();
   const [isLogin, setIsLogin] = useState(true);
@@ -72,8 +70,6 @@ const AuthForm = () => {
 
     //Contrôle que le password soit le même dans les deux inputs password
     const samePassword = enteredPassword === enteredPasswordControl;
-    console.log("samePassword");
-    console.log(samePassword);
 
     if (!samePassword) {
       setError({
@@ -87,9 +83,6 @@ const AuthForm = () => {
     const url = `${process.env.REACT_APP_API_URL}/api/authentification/${
       isLogin ? "login" : "signup"
     }`;
-
-    console.log("-->URL Route authentification");
-    console.log(url);
 
     //async await function fetchHandler()
     // async function fetchHandler(){
@@ -113,6 +106,8 @@ const AuthForm = () => {
 
         if (response.ok) {
           setData(dataResponse);
+          console.log("-->response fetchHandler AuthForm.js");
+          console.log(response);
           console.log(dataResponse);
           authCtx.login(
             dataResponse.token,
@@ -131,14 +126,9 @@ const AuthForm = () => {
           throw new Error(dataResponse.error);
         }
 
-        console.log("-->response");
-        console.log(response);
-
         //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
 
         if (dataResponse && dataResponse.error) {
-          console.log("je suis dans le if");
-          console.log(dataResponse.error.sqlMessage);
           setError({
             title: "Il y a un problème",
             message: dataResponse.error.sqlMessage,
@@ -171,9 +161,6 @@ const AuthForm = () => {
   const passwordPlainHandler = () => {
     setPasswordPlain((prevState) => !prevState);
   };
-
-  console.log("-->data");
-  console.log(data);
 
   return (
     <Wrapper>

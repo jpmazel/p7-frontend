@@ -4,8 +4,7 @@ import emptyPortrait from "../../../assets/images/empty-portrait.jpg";
 
 const FeedCommentPhotoUser = ({ token, userIdToken, userIdComment }) => {
   const [ficheUser, setFicheUser] = useState(null);
-
-  console.log("---Je suis dans FeedCommentPhotoUser");
+  
   //Aller chercher les photos des utilisateurs des commentaires
   // http://localhost:3000/api/fiche_user/fiche/49?userId=46
   const url = ` http://localhost:3000/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;

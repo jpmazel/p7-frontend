@@ -17,7 +17,7 @@ const FeedDisplayComment = ({
   newComment,
   idCommentButton,
   isDisplayedComment,
-  onUpdateDeleteComment
+  onUpdateDeleteComment,
 }) => {
   const [comments, setComments] = useState(null);
   const [updateDeleteComment, setUpdateDeleteComment] = useState(null);
@@ -60,28 +60,20 @@ const FeedDisplayComment = ({
 
   //Pour mettre à jour un post qui est dans le feed
   const updateCommentHandler = (event) => {
-    console.log("Je suis dans updateCommentHandler");
-    console.log(`l'id du post : ${event.target.id}`);
-
     setIsUpdatingComment({
       isUpdating: true,
       commentToEdit: Number(event.target.id),
     });
   };
 
-  console.log("--->isUpdatingPost");
-  console.log(isUpdatingComment);
-
   //Le message a récupérer ET a envoyer sur la base de données
   //à cliquer sur le bouton envoyer
   const messageToSend = () => {
-    console.log("J'ai appuyer sur le bouton envoyer");
     setButtonSend(true);
   };
 
   //Le message a bien été envoyé à la base de données
   const onUpdateCommentFinish = () => {
-    console.log("------->onUpdateCommentFinish<------");
     setIsUpdatingComment(null);
     setButtonSend(false);
     setIsUpdatingCommentFinish((prevState) => !prevState);
@@ -94,15 +86,6 @@ const FeedDisplayComment = ({
   useEffect(() => {
     fetchGetCommentHandler();
   }, [onUpdate, newComment, updateDeleteComment, isUpdatingCommentFinish]);
-
-  console.log("--->Comments");
-  console.log(comments);
-
-  //Gestion de l'affichage des commentaires au clic sur le bouton commentaire dans les posts
-  console.log("***Gestion de l'affichage des commentaires*****");
-  console.log(isDisplayedComment);
-  console.log(idCommentButton);
-  console.log(idPostsUser);
 
   return (
     <section className={classes.feedDisplayComment}>

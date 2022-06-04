@@ -29,7 +29,7 @@ export const AuthContextProvider = (props) => {
   const loginHandler = (token, userId, admin) => {
     setToken(token);
     setUserId(userId);
-    setAdmin(admin)
+    setAdmin(admin);
     //mettre la donnée dans le local storage
     localStorage.setItem("token", token);
     localStorage.setItem("userId", userId);
@@ -40,7 +40,7 @@ export const AuthContextProvider = (props) => {
   const logoutHandler = () => {
     setToken(null);
     setUserId(null);
-    setAdmin(null)
+    setAdmin(null);
     //supprimer la donnée dans le local storage
     localStorage.clear();
   };
@@ -48,15 +48,13 @@ export const AuthContextProvider = (props) => {
   //s'il y présence du token ça veut dire que je suis loggé
   //convertir le token en valeur booléenne
   const userIsLoggedIn = !!token;
-  console.log("-->userIsLoggedIn");
-  console.log(userIsLoggedIn);
 
   //le context value
   const contextValue = {
     token: token,
     userId: userId,
     isLoggedIn: userIsLoggedIn,
-    admin: admin,   
+    admin: admin,
     login: loginHandler,
     logout: logoutHandler,
   };

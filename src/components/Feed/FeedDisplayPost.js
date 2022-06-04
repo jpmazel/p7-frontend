@@ -61,28 +61,20 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   //Pour mettre à jour un post qui est dans le feed
   const updatePostHandler = (event) => {
-    console.log("Je suis dans updatePostHandler");
-    console.log(`l'id du post : ${event.target.id}`);
-
     setIsUpdatingPost({
       isUpdating: true,
       postToEdit: Number(event.target.id),
     });
   };
 
-  console.log("--->isUpdatingPost");
-  console.log(isUpdatingPost);
-
   //Le message a récupérer ET a envoyer sur la base de données
   //à cliqué sur le bouton envoyer
   const messageToSend = () => {
-    console.log("J'ai appuyer sur le bouton envoyer");
     setButtonSend(true);
   };
 
   //à cliqué sur le bouton COMMENTAIRE du POST
   const commentsDisplayPost = (event) => {
-    console.log("J'ai appuyer sur le bouton COMMENTAIRE");
     console.log(event.target.id);
 
     //Récupération de l'id sur le bouton COMMENTAIRE
@@ -94,7 +86,6 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   //Le message a bien été envoyé à la base de données
   const onUpdatePostFinish = () => {
-    console.log("------->onUpdatePostFinish<------");
     setIsUpdatingPost(null);
     setButtonSend(false);
     setIsUpdatingPostFinish((prevState) => !prevState);
@@ -102,14 +93,11 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   //Le commentaire a bien été envoyé sur la base de donnée
   const onNewComment = () => {
-    console.log("--Je suis dans onNewComment------------");
     setNewComment((prevState) => !prevState);
   };
 
   //Le commentaire a bien été supprimé de la base de données
   const onUpdateDeleteComment = (updateDeleteComment) => {
-    console.log("----updateDeleteComment");
-    console.log(updateDeleteComment);
     setUpdateDeleteComment(updateDeleteComment);
   };
 
@@ -117,24 +105,14 @@ const FeedDisplayPost = ({ onUpdate }) => {
   useEffect(() => {
     fetchGetMessageHandler();
   }, [onUpdate, updateDeletePost, isUpdatingPostFinish]);
-
-  console.log("--->messages");
-  console.log(messages);
-
+ 
   //Mettre le dernier message envoyé en haut de la pile
   //Le denier message envoyé est le premier message affiché
   const orderDisplayMessage =
     messages &&
     messages.sort((a, b) => {
-      console.log("-----------b.id_posts_user----------------");
-      console.log(b.id_posts_user);
-      console.log("-----------a.id_posts_user----------------");
-      console.log(a.id_posts_user);
-
       return b.id_posts_user - a.id_posts_user;
     });
-  console.log("------>orderDisplayMessage<----------");
-  console.log(orderDisplayMessage);
 
   return (
     <section className={classes.feedDisplayPost}>

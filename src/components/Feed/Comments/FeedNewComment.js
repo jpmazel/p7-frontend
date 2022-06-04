@@ -4,19 +4,16 @@ import Button from "../../UI/Button";
 import classes from "./FeedNewComment.module.css";
 import Card from "../../UI/Card";
 
-const FeedNewComment = ({idPostsUser,onNewComment}) => {
+const FeedNewComment = ({ idPostsUser, onNewComment }) => {
   //Pour récupérer le TOKEN d'authentification
   const authCtx = useContext(AuthContext);
 
   //Pour stocker le contenu du message
   const [message, setMessage] = useState(null);
 
-  // l'information du click sur le bouton envoyer  
+  // l'information du click sur le bouton envoyer
   const [clickSend, setClickSend] = useState(false);
 
-  //Récupérer l'id de post
-  console.log(`---->idPostsUser :${idPostsUser}`)  
-  
   //L'URL de la route de la WEB API REST du backend
   //http://localhost:3000/api/posts/comments?userId=48
   const url = `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${authCtx.userId}`;
@@ -29,11 +26,8 @@ const FeedNewComment = ({idPostsUser,onNewComment}) => {
     const data = {
       userId: authCtx.userId,
       idPost: idPostsUser,
-      message: message      
+      message: message,
     };
-
-    console.log("--->data à envoyer");
-    console.log(data);
 
     //La requête POST avec fetch pour envoyer les données au backend
     const fetchPOSTHandler = async () => {
@@ -54,10 +48,10 @@ const FeedNewComment = ({idPostsUser,onNewComment}) => {
         console.log(dataResponse);
 
         //Si la response du serveur est OK
-        if (response.ok) {         
-          setMessage("");          
-          setClickSend(false);  
-          onNewComment();      
+        if (response.ok) {
+          setMessage("");
+          setClickSend(false);
+          onNewComment();
         } else {
           console.log("--->Response PAS OK");
         }
@@ -69,7 +63,7 @@ const FeedNewComment = ({idPostsUser,onNewComment}) => {
 
     //L'exécution de la fonction (envoyer une requête POST vers le serveur)
     message && fetchPOSTHandler();
-  }; 
+  };
 
   return (
     <section className={classes.feedNewComment}>
@@ -82,7 +76,7 @@ const FeedNewComment = ({idPostsUser,onNewComment}) => {
             placeholder="Ecrivez votre commentaire ici"
             value={message ? message : ""}
             onChange={(event) => setMessage(event.target.value)}
-          />           
+          />
 
           {/* Bouton pour envoyer les données vers le serveur  */}
           <Button
@@ -98,8 +92,6 @@ const FeedNewComment = ({idPostsUser,onNewComment}) => {
           {!message && clickSend && (
             <p id={classes["messageEmpty"]}>Le message ne peut pas être vide</p>
           )}
-
-          
         </form>
       </Card>
     </section>

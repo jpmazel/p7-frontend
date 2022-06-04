@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classes from "./FeedComment.module.css";
-import Linkify from 'linkify-react';
+import Linkify from "linkify-react";
 
 const FeedComment = ({
   idComment,
@@ -15,14 +15,7 @@ const FeedComment = ({
     comments_user_message: comment,
   });
 
-  console.log("-->Je suis dans FeedPosts isUpdatingComment");
-  console.log(isUpdatingComment);
-
   const commentToEdit = isUpdatingComment && isUpdatingComment.commentToEdit;
-  console.log(
-    "-->Je suis dans FeedPosts commentToEdit-----------------------------"
-  );
-  console.log(commentToEdit);
 
   //Condition pour afficher l'interface de MODIFICATION
   const modificationOneComment = commentToEdit === idComment;
@@ -32,21 +25,16 @@ const FeedComment = ({
     setMessageTextarea({ comments_user_message: event.target.value });
   };
 
-  console.log("--->MessageTextarea");
-  console.log(messageTextarea);
-
   //Envoyer le message mis à jour
 
   if (buttonSend && modificationOneComment) {
     //Requête PUT pour envoyer les données au serveur
-    console.log("Condition OK pour l'envoie de la requête");
 
     //            http://localhost:3000/api/posts/comment/196?userId=46
-    const url = `http://localhost:3000/api/posts/comment/${idComment}?userId=${userIdToken}`;
 
     const fetchPUTHandler = async () => {
-      console.log("--->MessageTextarea-----------");
-      console.log(messageTextarea);
+      const url = `http://localhost:3000/api/posts/comment/${idComment}?userId=${userIdToken}`;
+
       try {
         const response = await fetch(url, {
           method: "PUT",
@@ -59,8 +47,6 @@ const FeedComment = ({
 
         //convertir la response du serveur
         const dataResponse = await response.json();
-        console.log("--->dataResponse");
-        console.log(dataResponse);
 
         //si la response du serveur est OK
         if (response.ok) {
@@ -91,7 +77,7 @@ const FeedComment = ({
           onChange={messageModificationHandler}
         />
       ) : (
-        <Linkify options={{ target: '_blank' }}>
+        <Linkify options={{ target: "_blank" }}>
           <p>{comment}</p>
         </Linkify>
       )}

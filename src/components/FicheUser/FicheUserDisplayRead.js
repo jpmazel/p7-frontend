@@ -5,9 +5,7 @@ import AuthContext from "../../store/authContext";
 import classes from "./FicheUserDisplayRead.module.css";
 
 const FicheUserDisplayRead = () => {
-  const { id } = useParams();
-  console.log("--->id useParams");
-  console.log(id);
+  const { id } = useParams();  
 
   const [data, setData] = useState();
   const authCtx = useContext(AuthContext);

@@ -47,9 +47,6 @@ const FeedBadge = ({
     fetchGetNumberCommentHandler();
   }, [newComment, updateDeleteComment]);
 
-  console.log("---->numberOfComments");
-  console.log(numberOfComments && numberOfComments.length);
-
   return (
     <div className={classes.feedBadge}>
       <div className={classes.numberCicle}>

@@ -5,8 +5,7 @@ const FeedIdentifierCreator = ({ user_prenom, user_nom, posts_date }) => {
 
   //Modification du format de la date
   const date = dateFormat(posts_date, "isoDate");
-  const time = dateFormat(posts_date, "isoTime");
-  console.log( date, time)
+  const time = dateFormat(posts_date, "isoTime");  
   
   return (
     <div className={classes.feedIdentifierCreator}>

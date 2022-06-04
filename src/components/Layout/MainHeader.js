@@ -7,9 +7,7 @@ import classes from "./MainHeader.module.css";
 const MainHeader = () => {
   const authCtx = useContext(AuthContext);
 
-  const isLoggedIn = authCtx.isLoggedIn;
-  console.log("-->ICI isLoggedIn");
-  console.log(isLoggedIn);
+  const isLoggedIn = authCtx.isLoggedIn;  
 
   return (
     <header className={classes.header}>

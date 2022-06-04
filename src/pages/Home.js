@@ -10,10 +10,8 @@ const Home = () => {
 
   return (
     <section className={classes.home}>
-      {/* <div className={classes.container}> */}
       {!isLoggedIn && <AuthForm />}
       {isLoggedIn && <Feed />}
-      {/* </div> */}
     </section>
   );
 };

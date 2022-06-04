@@ -4,8 +4,6 @@ import classes from "./FeedImageUrl.module.css";
 const FeedImageUrl = ({ onUrlImage, displayInput, onButtonImageHandler }) => {
   //Remonter l'information de l'URL dans le composant parent
   const inputImageHandler = (event) => {
-    console.log("je suis dans inputImageHandler");
-    console.log(event.target.value);
     onUrlImage(event.target.value);
   };
 

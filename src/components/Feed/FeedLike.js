@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import classes from "./FeedLike.module.css";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 
 const FeedLike = ({ token, idPostsUser, userIdToken }) => {
   const [like, setLike] = useState(null);
@@ -39,9 +39,6 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
   //Quand je clique sur le bouton du like du post (le bouton j'aime est à 0 ou neutre - pouce vide-coeur vide)
   const neutralLikeHandler = () => {
-    console.log("Je veux mettre un like et à +1");
-    console.log(Boolean(like && like.length === 0));
-
     if (like && like.length === 0) {
       //La requête POST avec fetch pour pour créer la ligne du like dans la table likes_user
       const fetchPOSTLikeHandler = async () => {
@@ -125,8 +122,6 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
   //Lorsque la ligne like existe sur la bdd passer le like de 1 à 0 ou de 0 à 1
   const likeHandler = () => {
-    console.log("Je suis dans likeHandler pour la route PUT");
-
     //La requête PUT  pour faire passer le like de 1 a 0 ou de 0 à 1
     const fetchPUTLikeHandler = async () => {
       const url = `http://localhost:3000/api/posts/likes/${like[0].id_likes_user}?userId=${userIdToken}`;
@@ -173,10 +168,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
   useEffect(() => {
     fetchGetLikeHandler();
-  }, [reload]);
-
-  console.log("---->like");
-  console.log(like);
+  }, [reload]);  
 
   return (
     <div className={classes.feedLike}>
@@ -184,9 +176,13 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
         LIKE userId: {userIdToken} ET idPost: {idPostsUser}
       </p> */}
       {like && like[0] && like[0].likes_user_like ? (
-        <p onClick={likeHandler}><ThumbUpIcon fontSize="large"/></p>
+        <p onClick={likeHandler}>
+          <ThumbUpIcon fontSize="large" />
+        </p>
       ) : (
-        <p onClick={neutralLikeHandler}> <ThumbUpOutlinedIcon fontSize="large"/></p>
+        <p onClick={neutralLikeHandler}>         
+          <ThumbUpOutlinedIcon fontSize="large" />
+        </p>
       )}
     </div>
   );
