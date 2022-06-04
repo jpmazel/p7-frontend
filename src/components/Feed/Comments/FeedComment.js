@@ -1,5 +1,6 @@
 import { useState } from "react";
 import classes from "./FeedComment.module.css";
+import Linkify from 'linkify-react';
 
 const FeedComment = ({
   idComment,
@@ -90,7 +91,9 @@ const FeedComment = ({
           onChange={messageModificationHandler}
         />
       ) : (
-        <p>{comment}</p>
+        <Linkify options={{ target: '_blank' }}>
+          <p>{comment}</p>
+        </Linkify>
       )}
     </div>
   );

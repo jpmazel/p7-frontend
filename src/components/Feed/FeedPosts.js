@@ -1,5 +1,6 @@
 import { useState } from "react";
 import classes from "./FeedPosts.module.css";
+import Linkify from "linkify-react";
 
 const FeedPosts = ({
   message,
@@ -8,9 +9,8 @@ const FeedPosts = ({
   buttonSend,
   userIdPost,
   token,
-  onUpdatePostFinish
+  onUpdatePostFinish,
 }) => {
-  
   const [messageTextarea, setMessageTextarea] = useState({
     posts_user_message: message,
   });
@@ -85,14 +85,14 @@ const FeedPosts = ({
   return (
     <div className={classes.feedPosts}>
       {modificationOnePost ? (
-        
         <textarea
           defaultValue={message}
           onChange={messageModificationHandler}
         />
-        
       ) : (
-        <p>{message}</p>
+        <Linkify options={{ target: "_blank" }}>
+          <p>{message}</p>
+        </Linkify>
       )}
     </div>
   );
