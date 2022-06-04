@@ -1,9 +1,8 @@
-.feedImageUrl{
+.feedImageUrl {
   display: flex;
 }
 
-.feedImageUrl button{
-  /* background-color: red; */
+.feedImageUrl button {
   font-size: 1.2rem;
   padding: 0.5rem;
   margin: 0.5rem;
@@ -11,14 +10,14 @@
   margin-left: 1rem;
 }
 
-.feedImageUrl button:nth-child(1){
+.feedImageUrl button:nth-child(1) {
   background-color: rgb(236, 225, 25);
 }
 
-.feedImageUrl button:hover{
+.feedImageUrl button:hover {
   background-color: rgb(208, 199, 20);
 }
 
-.feedImageUrl input{
-  width: 16rem;  
+.feedImageUrl input {
+  width: 16rem;
 }

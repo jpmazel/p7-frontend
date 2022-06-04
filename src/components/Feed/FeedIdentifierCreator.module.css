@@ -1,15 +1,13 @@
-.feedIdentifierCreator{
-  /* background-color: rgb(2, 136, 92); */
+.feedIdentifierCreator {
 }
 
-
-.feedIdentifierCreator p{
+.feedIdentifierCreator p {
   font-size: 1.4rem;
   padding: 0.2rem;
-  margin-left:9rem;  
+  margin-left: 9rem;
 }
 
-.feedIdentifierCreator p:nth-child(1){
+.feedIdentifierCreator p:nth-child(1) {
   font-weight: bold;
   margin-top: 1rem;
 }

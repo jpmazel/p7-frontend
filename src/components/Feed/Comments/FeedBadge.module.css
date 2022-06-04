@@ -1,21 +1,19 @@
-.feedBadge{
-font-size: 1.5rem;
-font-weight: bold;
-background-color: yellow;
-color: black;
-border-radius: 50%;
-height: 2.5rem;
-width: 2.5rem;
-position: absolute;
-transform: translate(-2.299999999999997rem, -1.9rem);
-z-index: 1;
-border: 2px solid black;
-display: flex;
-justify-content: center;
-align-items: center;
+.feedBadge {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: yellow;
+  color: black;
+  border-radius: 50%;
+  height: 2.5rem;
+  width: 2.5rem;
+  position: absolute;
+  transform: translate(-2.299999999999997rem, -1.9rem);
+  z-index: 1;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-
-.numberCicle{
-/* transform: translate(-1.915134717478395e-15.7rem, 0.20000000000000004rem); */
+.numberCicle {
 }

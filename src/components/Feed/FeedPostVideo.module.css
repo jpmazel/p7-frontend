@@ -1,12 +1,5 @@
-.feedPostVideo{
+.feedPostVideo {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* align-content: center; */
-  /* flex-shrink:3 ; */
-
-  /* text-align: center; */
-  /* max-width: 100px; */
-  /* background-color: azure; */
 }
-

@@ -1,5 +1,4 @@
-.home{
-  /* background-color: brown; */
+.home{  
   display: flex;
   flex: column;
   justify-content: center;

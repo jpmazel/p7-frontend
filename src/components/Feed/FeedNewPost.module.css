@@ -1,5 +1,4 @@
-.feedNewPost {
-  /* background-color: blue; */
+.feedNewPost {  
   margin-bottom: 1rem;
 }
 
@@ -17,9 +16,7 @@
 .feedNewPost form {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
-  /* background-color: rgb(229, 229, 16); */
   width: 100%;
 }
 
@@ -38,8 +35,8 @@
   margin: 0 1rem;
   resize: none;
   width: 95%;
-  height:12rem;
-  font-size:1.8rem ;
+  height: 12rem;
+  font-size: 1.8rem;
   background-color: antiquewhite;
 }
 
