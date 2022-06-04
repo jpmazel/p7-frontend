@@ -23,6 +23,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
   const [isUpdatingPostFinish, setIsUpdatingPostFinish] = useState(false);
 
   const [newComment, setNewComment] = useState(false);
+  const [updateDeleteComment, setUpdateDeleteComment] = useState();
 
   const [idCommentButton, setIdCommentButton] = useState(null);
   const [isDisplayedComment, setIsDisplayedComment] = useState(false);
@@ -103,6 +104,13 @@ const FeedDisplayPost = ({ onUpdate }) => {
   const onNewComment = () => {
     console.log("--Je suis dans onNewComment------------");
     setNewComment((prevState) => !prevState);
+  };
+
+  //Le commentaire a bien été supprimé de la base de données
+  const onUpdateDeleteComment = (updateDeleteComment) => {
+    console.log("----updateDeleteComment");
+    console.log(updateDeleteComment);
+    setUpdateDeleteComment(updateDeleteComment);
   };
 
   //Pour aller chercher les posts sur la base de données
@@ -189,6 +197,8 @@ const FeedDisplayPost = ({ onUpdate }) => {
                     isUpdatingPost={isUpdatingPost}
                     onSendMessage={messageToSend}
                     onCommentsDisplayPost={commentsDisplayPost}
+                    newComment={newComment}
+                    updateDeleteComment={updateDeleteComment}
                   />
                 </div>
               </Card>
@@ -201,6 +211,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
                 newComment={newComment}
                 idCommentButton={idCommentButton}
                 isDisplayedComment={isDisplayedComment}
+                onUpdateDeleteComment={onUpdateDeleteComment}
               />
 
               {isDisplayedComment &&

@@ -3,6 +3,8 @@ import Button from "../UI/Button";
 import { useContext, useState } from "react";
 import ConfirmationModal from "../UI/ConfirmationModal";
 import AuthContext from "../../store/authContext";
+import FeedBadge from "./Comments/FeedBadge";
+
 
 const FeedButton = ({
   userIdToken,
@@ -14,6 +16,8 @@ const FeedButton = ({
   isUpdatingPost,
   onSendMessage,
   onCommentsDisplayPost,
+  newComment,
+  updateDeleteComment
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
   const authCtx = useContext(AuthContext);
@@ -79,6 +83,13 @@ const FeedButton = ({
       {/* Bouton COMMENTAIRE pour AFFICHER les commentaires sous le post  */}
       {!modificationOnePost && (
         <Button id={idPostsUser} onClick={onCommentsDisplayPost}>
+           <FeedBadge
+              userIdToken={userIdToken}
+              token={token}
+              idPostsUser={idPostsUser}
+              newComment={newComment}
+              updateDeleteComment={updateDeleteComment}
+            />
           Commentaire
         </Button>
       )}
