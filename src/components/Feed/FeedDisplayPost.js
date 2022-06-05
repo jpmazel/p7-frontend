@@ -96,8 +96,8 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {    
-    fetchGetMessageHandler();
-  }, [onUpdate, updateDeletePost, isUpdatingPostFinish,fetchGetMessageHandler]);
+    authCtx.userId && fetchGetMessageHandler();
+  }, [onUpdate, updateDeletePost, isUpdatingPostFinish,fetchGetMessageHandler, authCtx.userId]);
 
   //Mettre le dernier message envoyé en haut de la pile
   //Le denier message envoyé est le premier message affiché
