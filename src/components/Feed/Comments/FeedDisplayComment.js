@@ -75,7 +75,9 @@ const FeedDisplayComment = ({
   };
 
   //Le commentaire a bien été supprimé il faut actualiser le badge du nombre de commentaire
-  onUpdateDeleteComment(updateDeleteComment);
+  useEffect(() => {
+    onUpdateDeleteComment(updateDeleteComment);
+  }, [onUpdateDeleteComment, updateDeleteComment]);
 
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {
