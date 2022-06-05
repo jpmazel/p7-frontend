@@ -18,6 +18,11 @@
   font-size: 3rem;
   font-weight: bold;
 }
+
+.user span {
+  color: rgb(133, 212, 14);
+}
+
 .user p:nth-child(2n) {
   color: black;
   font-weight: bold;
@@ -39,7 +44,8 @@
 }
 input {
   background-color: antiquewhite;
-  width: 60%;
+  width: 70%;
+  font-size:1.8rem;
 }
 
 @media (max-width: 400px) {

@@ -153,7 +153,7 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
   return (
     <section className={classes.user}>
-      <h1>Bonjour {dataUpdate.prenom}</h1>
+      <h1>Bonjour <span> {dataUpdate.prenom}</span></h1>
       <p>Vous êtes sur votre fiche utilisateur</p>
 
       {/* PHOTO PROFIL */}
@@ -193,7 +193,7 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
       {!modification && <p>{dataUpdate.age} ans</p>}
       {modification && (
         <input
-          type="text"
+          type="number"
           value={dataUpdate.age}
           onChange={changeHandler}
           ref={ageInputRef}
