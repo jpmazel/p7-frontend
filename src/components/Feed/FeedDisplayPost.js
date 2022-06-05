@@ -42,10 +42,10 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {        
+      if (response.ok) {
         setMessages(dataResponse.results);
       } else {
-        console.log("-->response PAS ok");      
+        console.log("-->response PAS ok");
         throw new Error(dataResponse.error);
       }
     } catch (error) {
@@ -70,8 +70,6 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   //à cliqué sur le bouton COMMENTAIRE du POST
   const commentsDisplayPost = (event) => {
-    console.log(event.target.id);
-
     //Récupération de l'id sur le bouton COMMENTAIRE
     setIdCommentButton(Number(event.target.id));
 
@@ -100,7 +98,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
   useEffect(() => {
     fetchGetMessageHandler();
   }, [onUpdate, updateDeletePost, isUpdatingPostFinish]);
- 
+
   //Mettre le dernier message envoyé en haut de la pile
   //Le denier message envoyé est le premier message affiché
   const orderDisplayMessage =

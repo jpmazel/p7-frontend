@@ -41,10 +41,10 @@ const FeedDisplayComment = ({
 
       const dataResponse = await response.json();
 
-      if (response.ok) {        
+      if (response.ok) {
         setComments(dataResponse.results);
       } else {
-        console.log("-->Comments response PAS ok");        
+        console.log("-->Comments response PAS ok");
         throw new Error(dataResponse.error);
       }
     } catch (error) {
@@ -90,60 +90,59 @@ const FeedDisplayComment = ({
         comments.map(
           (comment) =>
             comment.comments_user_id_posts === idCommentButton && (
-              <Card className={classes.card}>
+              <Card className={classes.card} key={comment.id_comments_user}>
                 {/* Affichage conditionnel des commentaires si on a cliqué le bouton commentaire */}
                 {/* et que on est sur le bon post */}
-                <div key={comment.id_comments_user}>
-                  {/* <p>id de comment : {comment.id_comments_user}</p> */}
 
-                  <Link
-                    to={`/fiche_utilisateur/read/${comment.comments_user_userId}`}
-                  >
-                    <FeedIdentifierCreatorComment
-                      token={token}
-                      userIdToken={userIdToken}
-                      userIdComment={comment.comments_user_userId}
-                      dateComment={comment.comments_user_date}
-                    />
-                  </Link>
+                {/* <p>id de comment : {comment.id_comments_user}</p> */}
 
-                  <div className={classes.photoComment}>
-                    <Link
-                      to={`/fiche_utilisateur/read/${comment.comments_user_userId}`}
-                    >
-                      <FeedCommentPhotoUser
-                        token={token}
-                        userIdToken={userIdToken}
-                        userIdComment={comment.comments_user_userId}
-                      />
-                    </Link>
-
-                    <FeedComment
-                      token={token}
-                      comment={comment.comments_user_message}
-                      isUpdatingComment={isUpdatingComment}
-                      idComment={comment.id_comments_user}
-                      userId={comment.comments_user_userId}
-                      userIdToken={userIdToken}
-                      idPost={comment.comments_user_id_posts}
-                      buttonSend={buttonSend}
-                      onUpdateCommentFinish={onUpdateCommentFinish}
-                    />
-                  </div>
-
-                  <FeedButtonComment
+                <Link
+                  to={`/fiche_utilisateur/read/${comment.comments_user_userId}`}
+                >
+                  <FeedIdentifierCreatorComment
                     token={token}
                     userIdToken={userIdToken}
                     userIdComment={comment.comments_user_userId}
-                    idCommentUser={comment.id_comments_user}
-                    onUpdateDelete={(idCommentUser) =>
-                      setUpdateDeleteComment(idCommentUser)
-                    }
-                    onModicatifionMessage={updateCommentHandler}
+                    dateComment={comment.comments_user_date}
+                  />
+                </Link>
+
+                <div className={classes.photoComment}>
+                  <Link
+                    to={`/fiche_utilisateur/read/${comment.comments_user_userId}`}
+                  >
+                    <FeedCommentPhotoUser
+                      token={token}
+                      userIdToken={userIdToken}
+                      userIdComment={comment.comments_user_userId}
+                    />
+                  </Link>
+
+                  <FeedComment
+                    token={token}
+                    comment={comment.comments_user_message}
                     isUpdatingComment={isUpdatingComment}
-                    onSendMessage={messageToSend}
+                    idComment={comment.id_comments_user}
+                    userId={comment.comments_user_userId}
+                    userIdToken={userIdToken}
+                    idPost={comment.comments_user_id_posts}
+                    buttonSend={buttonSend}
+                    onUpdateCommentFinish={onUpdateCommentFinish}
                   />
                 </div>
+
+                <FeedButtonComment
+                  token={token}
+                  userIdToken={userIdToken}
+                  userIdComment={comment.comments_user_userId}
+                  idCommentUser={comment.id_comments_user}
+                  onUpdateDelete={(idCommentUser) =>
+                    setUpdateDeleteComment(idCommentUser)
+                  }
+                  onModicatifionMessage={updateCommentHandler}
+                  isUpdatingComment={isUpdatingComment}
+                  onSendMessage={messageToSend}
+                />
               </Card>
             )
         )}
