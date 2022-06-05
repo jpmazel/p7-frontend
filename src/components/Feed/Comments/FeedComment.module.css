@@ -3,6 +3,7 @@
   margin-right: 0.8rem;
   margin-bottom: 0.8rem;
   width: 95%;
+  word-break: break-all;
 }
 
 .feedComment textarea {  
