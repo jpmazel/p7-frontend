@@ -5,7 +5,7 @@ import AuthContext from "../../store/authContext";
 import classes from "./FicheUserDisplayRead.module.css";
 
 const FicheUserDisplayRead = () => {
-  const { id } = useParams();  
+  const { id } = useParams();
 
   const [data, setData] = useState();
   const authCtx = useContext(AuthContext);
@@ -25,10 +25,10 @@ const FicheUserDisplayRead = () => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {        
+      if (response.ok) {
         setData(dataResponse.results);
       } else {
-        console.log("----->fetchGetFicheUserHandler pas OK response");        
+        console.log("----->fetchGetFicheUserHandler pas OK response");
         console.log(dataResponse);
         throw new Error(dataResponse.error);
       }
@@ -51,8 +51,10 @@ const FicheUserDisplayRead = () => {
           <section className={classes.user}>
             <h1>Vous êtes sur la fiche utilisateur de </h1>
             <p>
-              {data && data[0].fiche_user_prenom}{" "}
-              {data && data[0].fiche_user_nom}
+              <span>
+                {data && data[0].fiche_user_prenom}
+                {data && data[0].fiche_user_nom}
+              </span>
             </p>
             {/* PHOTO PROFIL */}
             <p>

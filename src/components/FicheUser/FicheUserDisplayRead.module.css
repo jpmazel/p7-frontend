@@ -22,6 +22,10 @@
   font-size: 2.5rem;
   font-weight: bold;  
 }
+
+.user span{
+  color: rgb(133, 212, 14);
+}
 .user p:nth-child(2n){
   color: black;
   font-weight: bold;
