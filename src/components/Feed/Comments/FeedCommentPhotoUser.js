@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import classes from "./FeedCommentPhotoUser.module.css";
 import emptyPortrait from "../../../assets/images/empty-portrait.jpg";
 
@@ -9,7 +9,7 @@ const FeedCommentPhotoUser = ({ token, userIdToken, userIdComment }) => {
   // http://localhost:3000/api/fiche_user/fiche/49?userId=46
   const url = ` http://localhost:3000/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
 
-  const fetchGetFicheUserHandler = async () => {
+  const fetchGetFicheUserHandler = useCallback( async () => {
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -32,11 +32,11 @@ const FeedCommentPhotoUser = ({ token, userIdToken, userIdComment }) => {
       );
       console.log(error);
     }
-  };
+  },[token, url]);
 
-  useEffect(() => {
+  useEffect(() => {   
     fetchGetFicheUserHandler();
-  }, []);
+  }, [fetchGetFicheUserHandler]);
 
   return (
     <>

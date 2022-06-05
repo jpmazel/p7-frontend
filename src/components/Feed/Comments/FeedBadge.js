@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import classes from "./FeedBadge.module.css";
 
 const FeedBadge = ({
@@ -12,7 +12,7 @@ const FeedBadge = ({
 
   //Requête pour avoir le nombre de commentaire (je vais chercher tous les commentaires du post sélectionné)
 
-  const fetchGetNumberCommentHandler = async () => {
+  const fetchGetNumberCommentHandler = useCallback( async () => {
     const url = `http://localhost:3000/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
@@ -36,11 +36,11 @@ const FeedBadge = ({
       );
       console.log(error);
     }
-  };
+  }, [idPostsUser,token,userIdToken]);
 
   useEffect(() => {
     fetchGetNumberCommentHandler();
-  }, [newComment, updateDeleteComment]);
+  }, [newComment, updateDeleteComment,fetchGetNumberCommentHandler]);
 
   return (
     <div className={classes.feedBadge}>

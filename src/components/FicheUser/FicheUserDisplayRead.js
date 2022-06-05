@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import AuthContext from "../../store/authContext";
@@ -13,8 +13,8 @@ const FicheUserDisplayRead = () => {
   const isLoggedIn = authCtx.isLoggedIn;
 
   //Requête pour récupérer la fiche utilisateur
-  const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authCtx.userId}`;
-  const fetchGetFicheUserHandler = async () => {
+  const fetchGetFicheUserHandler = useCallback(async () => {
+    const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authCtx.userId}`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -36,11 +36,11 @@ const FicheUserDisplayRead = () => {
       console.log("dans le CATCH fetchGetFicheUserHandler");
       console.log(error);
     }
-  };
+  }, [authCtx.token, authCtx.userId, id]);
 
   useEffect(() => {
     id && fetchGetFicheUserHandler();
-  }, []);
+  }, [id, fetchGetFicheUserHandler]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FeedComment from "./FeedComment";
 import FeedCommentPhotoUser from "./FeedCommentPhotoUser";
 
@@ -30,7 +30,7 @@ const FeedDisplayComment = ({
   // http://localhost:3000/api/posts/comments/589?userId=46
   const url = `http://localhost:3000/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
 
-  const fetchGetCommentHandler = async () => {
+  const fetchGetCommentHandler = useCallback(async () => {
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -51,7 +51,7 @@ const FeedDisplayComment = ({
       console.log("-->Comments dans le catch requête fetchGetCommentHandler");
       console.log(error);
     }
-  };
+  }, [token, url]);
 
   //Pour mettre à jour un post qui est dans le feed
   const updateCommentHandler = (event) => {
@@ -82,7 +82,13 @@ const FeedDisplayComment = ({
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {
     fetchGetCommentHandler();
-  }, [onUpdate, newComment, updateDeleteComment, isUpdatingCommentFinish]);
+  }, [
+    onUpdate,
+    newComment,
+    updateDeleteComment,
+    isUpdatingCommentFinish,
+    fetchGetCommentHandler,
+  ]);
 
   return (
     <section className={classes.feedDisplayComment}>

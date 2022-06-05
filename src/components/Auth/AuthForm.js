@@ -17,7 +17,7 @@ const AuthForm = () => {
   //utilisation du context
   const authCtx = useContext(AuthContext);
 
-  const [data, setData] = useState();
+  
   const [isLogin, setIsLogin] = useState(true);
   //isLoading pour mettre un spinner ou un texte qui prévient que c'est en cours de chargement
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +57,7 @@ const AuthForm = () => {
 
     //controle validité email
     const regExEmail = (value) => {
-      return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+      return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
     };
 
     if (!regExEmail(enteredEmail)) {
@@ -105,7 +105,7 @@ const AuthForm = () => {
         setIsLoading(false);
 
         if (response.ok) {
-          setData(dataResponse);          
+                   
           authCtx.login(
             dataResponse.token,
             dataResponse.userId,

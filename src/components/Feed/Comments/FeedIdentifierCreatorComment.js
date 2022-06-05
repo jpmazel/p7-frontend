@@ -1,6 +1,6 @@
 import classes from "./FeedIdentifierCreatorComment.module.css";
 import dateFormat from "dateformat";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const FeedIdentifierCreatorComment = ({
   token,
@@ -13,7 +13,7 @@ const FeedIdentifierCreatorComment = ({
   //Aller chercher les photos des utilisateurs des commentaires
   // http://localhost:3000/api/fiche_user/fiche/49?userId=46
 
-  const fetchGetFicheUserHandler = async () => {
+  const fetchGetFicheUserHandler = useCallback(async () => {
     const url = ` http://localhost:3000/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
@@ -25,10 +25,10 @@ const FeedIdentifierCreatorComment = ({
 
       const dataResponse = await response.json();
 
-      if (response.ok) {       
+      if (response.ok) {
         setFicheUser(dataResponse.results);
       } else {
-        console.log("-->FeedIdentifierCreatorComment response PAS ok");        
+        console.log("-->FeedIdentifierCreatorComment response PAS ok");
         throw new Error(dataResponse.error);
       }
     } catch (error) {
@@ -37,11 +37,11 @@ const FeedIdentifierCreatorComment = ({
       );
       console.log(error);
     }
-  };
+  }, [token, userIdComment, userIdToken]);
 
   useEffect(() => {
     fetchGetFicheUserHandler();
-  }, []);
+  }, [fetchGetFicheUserHandler]);
 
   //Modification du format de la date
   const date = dateFormat(dateComment, "isoDate");

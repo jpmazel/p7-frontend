@@ -43,7 +43,7 @@ const FeedNewComment = ({ idPostsUser, onNewComment }) => {
         });
 
         //Convertir la reponse du serveur avec la méthode json()
-        const dataResponse = await response.json();       
+        await response.json();       
 
         //Si la response du serveur est OK
         if (response.ok) {

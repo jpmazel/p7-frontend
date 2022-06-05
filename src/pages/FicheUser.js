@@ -107,7 +107,7 @@ const FicheUser = () => {
       console.log("Problème serveur la requête n'est pas parti");
       console.log(error);
     }
-  }, [authCtx.token, url]);
+  }, [authCtx.token, url, authCtx.userId]);
 
   //pour exécuter la fonction au montage du composant
   useEffect(() => {

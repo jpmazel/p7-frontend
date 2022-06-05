@@ -153,7 +153,9 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
   return (
     <section className={classes.user}>
-      <h1>Bonjour <span> {dataUpdate.prenom}</span></h1>
+      <h1>
+        Bonjour <span> {dataUpdate.prenom}</span>
+      </h1>
       <p>Vous êtes sur votre fiche utilisateur</p>
 
       {/* PHOTO PROFIL */}

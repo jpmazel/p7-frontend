@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import classes from "./FeedLike.module.css";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
@@ -7,7 +7,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
   const [like, setLike] = useState(null);
   const [reload, setReload] = useState(false);
 
-  const fetchGetLikeHandler = async () => {
+  const fetchGetLikeHandler = useCallback(async () => {
     //Aller chercher tous les likes  de la base de données qui sont la table likes_user
     const url = `http://localhost:3000/api/posts/likes/${idPostsUser}?userId=${userIdToken}`;
     try {
@@ -20,17 +20,17 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
       const dataResponse = await response.json();
 
-      if (response.ok) {        
+      if (response.ok) {
         setLike(dataResponse.results);
       } else {
-        console.log("-->fetchGetLikeHandler response PAS ok");        
+        console.log("-->fetchGetLikeHandler response PAS ok");
         throw new Error(dataResponse.error);
       }
     } catch (error) {
       console.log("-->Dans le catch requête fetchGetLikeHandler");
       console.log(error);
     }
-  };
+  }, [idPostsUser, token, userIdToken]);
 
   //Quand je clique sur le bouton du like du post (le bouton j'aime est à 0 ou neutre - pouce vide-coeur vide)
   const neutralLikeHandler = () => {
@@ -59,7 +59,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
           const dataResponse = await response.json();
 
           //Si la response du serveur est OK
-          if (response.ok) {            
+          if (response.ok) {
             setReload((prevState) => !prevState);
           } else {
             console.log("--->fetchPOSTLikeHandler dataResponse PAS OK");
@@ -96,7 +96,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
           const dataResponse = await response.json();
 
           //Si la response du serveur est OK
-          if (response.ok) {           
+          if (response.ok) {
             setReload((prevState) => !prevState);
           } else {
             console.log("--->fetchPUTLikeHandler dataResponse PAS OK");
@@ -136,7 +136,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
         const dataResponse = await response.json();
 
         //Si la response du serveur est OK
-        if (response.ok) {          
+        if (response.ok) {
           setReload((prevState) => !prevState);
         } else {
           console.log(
@@ -155,7 +155,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
   useEffect(() => {
     fetchGetLikeHandler();
-  }, [reload]);  
+  }, [reload, fetchGetLikeHandler]);
 
   return (
     <div className={classes.feedLike}>
@@ -167,7 +167,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
           <ThumbUpIcon fontSize="large" />
         </p>
       ) : (
-        <p onClick={neutralLikeHandler}>         
+        <p onClick={neutralLikeHandler}>
           <ThumbUpOutlinedIcon fontSize="large" />
         </p>
       )}
