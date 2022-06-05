@@ -31,7 +31,10 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   //pour surveiller les modifications qui sont faites dans les champs
   const changeHandler = (event) => {
     const enteredNom = nomInputRef.current.value.toUpperCase();
-    const enteredPrenom = prenomInputRef.current.value;
+    const enteredPrenomBrut = prenomInputRef.current.value;
+    const enteredPrenom =
+      enteredPrenomBrut.charAt(0).toUpperCase() +
+      enteredPrenomBrut.slice(1).toLowerCase();
     const enteredAge = ageInputRef.current.value;
     const enteredJob = jobInputRef.current.value;
     const enteredBio = bioInputRef.current.value;
@@ -148,7 +151,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     }
   }, [modification]);
 
-  
   return (
     <section className={classes.user}>
       <h1>Bonjour {dataUpdate.prenom}</h1>
