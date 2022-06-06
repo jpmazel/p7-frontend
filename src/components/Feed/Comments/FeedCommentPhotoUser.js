@@ -7,7 +7,7 @@ const FeedCommentPhotoUser = ({ token, userIdToken, userIdComment }) => {
   
   //Aller chercher les photos des utilisateurs des commentaires
   // http://localhost:3000/api/fiche_user/fiche/49?userId=46
-  const url = ` http://localhost:3000/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
+  const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
 
   const fetchGetFicheUserHandler = useCallback( async () => {
     try {

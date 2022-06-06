@@ -31,7 +31,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
   const [isDisplayedComment, setIsDisplayedComment] = useState(false);
 
   //Aller chercher tous les posts de la base de données qui sont la table posts_user
-  const url = `http://localhost:3000/api/posts?userId=${authCtx.userId}`;
+  const url = `${process.env.REACT_APP_API_URL}/api/posts?userId=${authCtx.userId}`;
 
   const fetchGetMessageHandler = useCallback(async () => {
     try {

@@ -9,7 +9,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
   const fetchGetLikeHandler = useCallback(async () => {
     //Aller chercher tous les likes  de la base de données qui sont la table likes_user
-    const url = `http://localhost:3000/api/posts/likes/${idPostsUser}?userId=${userIdToken}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/posts/likes/${idPostsUser}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -37,7 +37,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
     if (like && like.length === 0) {
       //La requête POST avec fetch pour pour créer la ligne du like dans la table likes_user
       const fetchPOSTLikeHandler = async () => {
-        const url = `http://localhost:3000/api/posts/likes/?userId=${userIdToken}`;
+        const url = `${process.env.REACT_APP_API_URL}/api/posts/likes/?userId=${userIdToken}`;
 
         const data = {
           likes_user_id_posts: idPostsUser,
@@ -75,7 +75,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
     } else if (like && like[0]) {
       //La requête PUT  pour faire passer le like de 1 a 0 ou de 0 à 1
       const fetchPUTLikeHandler = async () => {
-        const url = `http://localhost:3000/api/posts/likes/${like[0].id_likes_user}?userId=${userIdToken}`;
+        const url = `${process.env.REACT_APP_API_URL}/api/posts/likes/${like[0].id_likes_user}?userId=${userIdToken}`;
 
         const data = {
           likes_user_like: like[0].likes_user_like,
@@ -115,7 +115,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
   const likeHandler = () => {
     //La requête PUT  pour faire passer le like de 1 a 0 ou de 0 à 1
     const fetchPUTLikeHandler = async () => {
-      const url = `http://localhost:3000/api/posts/likes/${like[0].id_likes_user}?userId=${userIdToken}`;
+      const url = `${process.env.REACT_APP_API_URL}/api/posts/likes/${like[0].id_likes_user}?userId=${userIdToken}`;
 
       const data = {
         likes_user_like: like[0].likes_user_like,

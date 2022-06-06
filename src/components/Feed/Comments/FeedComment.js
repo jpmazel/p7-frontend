@@ -32,7 +32,7 @@ const FeedComment = ({
     //            http://localhost:3000/api/posts/comment/196?userId=46
 
     const fetchPUTHandler = async () => {
-      const url = `http://localhost:3000/api/posts/comment/${idComment}?userId=${userIdToken}`;
+      const url = `${process.env.REACT_APP_API_URL}/api/posts/comment/${idComment}?userId=${userIdToken}`;
 
       try {
         const response = await fetch(url, {

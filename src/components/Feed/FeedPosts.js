@@ -29,7 +29,7 @@ const FeedPosts = ({
 
   if (buttonSend && modificationOnePost) {
     //Requête PUT pour envoyer les données au serveur
-    const url = `http://localhost:3000/api/posts/${idPostsUser}?userId=${userIdPost}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/posts/${idPostsUser}?userId=${userIdPost}`;
 
     const fetchPUTHandler = async () => {
       try {

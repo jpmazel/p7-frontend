@@ -28,7 +28,7 @@ const FeedDisplayComment = ({
 
   //Aller chercher tous les commentaires qui sont sur la table comments_user
   // http://localhost:3000/api/posts/comments/589?userId=46
-  const url = `http://localhost:3000/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
+  const url = `${process.env.REACT_APP_API_URL}/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
 
   const fetchGetCommentHandler = useCallback(async () => {
     try {

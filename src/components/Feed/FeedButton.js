@@ -24,7 +24,7 @@ const FeedButton = ({
   //Pour supprimer un post dans le feed
   const deletePost = () => {
     //La requête à envoyer au backend pour supprimer le post dans le feed
-    const url = `http://localhost:3000/api/posts/${idPostsUser}?userId=${userIdToken}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/posts/${idPostsUser}?userId=${userIdToken}`;
 
     const fetchDeletePostFeedHandler = async () => {
       try {
