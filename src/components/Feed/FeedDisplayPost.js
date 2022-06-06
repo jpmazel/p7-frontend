@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import FeedLike from "./FeedLike";
 
 const FeedDisplayPost = ({ onUpdate }) => {
+  const [mounted, setMounted] = useState(true);
+
   const authCtx = useContext(AuthContext);
   const [messages, setMessages] = useState(null);
   const [updateDeletePost, setUpdateDeletePost] = useState(null);
@@ -31,7 +33,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
   //Aller chercher tous les posts de la base de données qui sont la table posts_user
   const url = `http://localhost:3000/api/posts?userId=${authCtx.userId}`;
 
-  const fetchGetMessageHandler = useCallback( async () => {
+  const fetchGetMessageHandler = useCallback(async () => {
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -52,7 +54,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
       console.log("-->Dans le catch requête fetchGetMessageHandler");
       console.log(error);
     }
-  },[authCtx.token,url]);
+  }, [authCtx.token, url]);
 
   //Pour mettre à jour un post qui est dans le feed
   const updatePostHandler = (event) => {
@@ -95,9 +97,23 @@ const FeedDisplayPost = ({ onUpdate }) => {
   };
 
   //Pour aller chercher les posts sur la base de données
-  useEffect(() => {    
-    authCtx.userId && fetchGetMessageHandler();
-  }, [onUpdate, updateDeletePost, isUpdatingPostFinish,fetchGetMessageHandler, authCtx.userId]);
+  useEffect(() => {
+    if (mounted) {
+      authCtx.userId && fetchGetMessageHandler();
+    }
+    return () => {
+      setMounted(true);
+      //à la première connexion-correction du warning
+      // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function
+    };
+  }, [
+    onUpdate,
+    updateDeletePost,
+    isUpdatingPostFinish,
+    fetchGetMessageHandler,
+    authCtx.userId,
+    mounted,
+  ]);
 
   //Mettre le dernier message envoyé en haut de la pile
   //Le denier message envoyé est le premier message affiché
