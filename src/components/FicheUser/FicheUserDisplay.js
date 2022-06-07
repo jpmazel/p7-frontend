@@ -104,8 +104,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   const url = `${process.env.REACT_APP_API_URL}/api/authentification/delete/?userId=${data.userId}`;
 
   const deleteAccountHandler = async () => {
-    console.log("je suis dans deleteAccountHandler");
-
     try {
       const response = await fetch(url, {
         method: "DELETE",
@@ -131,21 +129,18 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
   //confirmation modal pour suppression du compte---------------------------------
   const confirmationModalHandler = () => {
-    console.log("je suis dans confirmationModalHandler");
     setConfirmationModal({
       title: "Confirmation de la suppression du compte",
       message:
         "La suppression du compte et des données sont des actions irréverssibles",
     });
-
-    console.log("-->confirmationModal state");
-    console.log(confirmationModal);
   };
   //--------------------------------------------------------------------------------
 
   //pour faire automatiquement la requête GET de ficheUser
   //c'est pour afficher les données du serveurs
   useEffect(() => {
+    console.log("useEffect");
     if (!modification) {
       onRefresh();
     }
