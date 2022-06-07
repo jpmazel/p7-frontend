@@ -26,7 +26,7 @@ const FicheUser = () => {
         },
       });
 
-      const dataResponse = await response.json();      
+      const dataResponse = await response.json();
 
       //Controle si le tableau est vide ou pas
       const controlArrayNotEmpty =
@@ -52,9 +52,6 @@ const FicheUser = () => {
           setData(transformedData);
           setIsCreateFiche(true);
         } else {
-          console.log(
-            "la fiche n'exite pas - il faut la créer - je suis dans le else"
-          );
           //creation de la fiche de l'utilisateur sur la base de donnée
           const fetchFicheUserCreateHandler = async () => {
             try {
@@ -83,10 +80,10 @@ const FicheUser = () => {
 
               const dataResponse2 = await response2.json();
 
-              if (response2.ok) {                
+              if (response2.ok) {
                 setIsCreateFiche(true);
               } else {
-                console.log("---->response2. PAS ok");                
+                console.log("---->response2. PAS ok");
                 console.log(dataResponse2);
                 throw new Error(dataResponse2.error);
               }
@@ -116,9 +113,9 @@ const FicheUser = () => {
     }
   }, [fecthHandler, isLoggedIn]);
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     fecthHandler();
-  };
+  }, [fecthHandler]);
 
   return (
     <section className={classes.ficheUser}>

@@ -139,12 +139,11 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
   //pour faire automatiquement la requête GET de ficheUser
   //c'est pour afficher les données du serveurs
-  useEffect(() => {
-    console.log("useEffect");
+  useEffect(() => {    
     if (!modification) {
       onRefresh();
     }
-  }, [modification]);
+  }, [modification,onRefresh]);
 
   return (
     <section className={classes.user}>
