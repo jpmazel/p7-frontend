@@ -16,3 +16,8 @@ body {
 section {
   max-width: 100vw;
 }
+
+p{
+  font-size: 3rem;
+  color: white;
+}
