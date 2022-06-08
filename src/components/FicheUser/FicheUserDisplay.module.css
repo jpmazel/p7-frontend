@@ -1,6 +1,6 @@
 .user {
   margin: 0.5rem;
-  background-color: rgba(38, 87, 87, 0.418);
+  background-color: var(--cardPost-bg-color);
   border-radius: 30px;
   display: flex;
   flex-direction: column;

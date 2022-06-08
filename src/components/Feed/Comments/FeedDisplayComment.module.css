@@ -20,6 +20,6 @@
 }
 
 .feedDisplayComment .card {
-  background-color: rgba(38, 87, 87, 0.418);
+  background-color: var(--cardPost-bg-color);
   margin: 1rem 0;
 }
