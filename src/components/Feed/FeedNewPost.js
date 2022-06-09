@@ -29,7 +29,7 @@ const FeedNewPost = ({ onUpdate }) => {
 
   //La condition pour envoyer un POST avec ou sans image vers le serveur
   const conditionSend =
-    (!displayInput && message) ||
+    (!displayInput && !displayInputVideo && message) ||
     (displayInput && message && urlInput) ||
     (message && displayInputVideo && urlInputVideo && clickSend);
   //Pour mettre urlInput a null lorsque l'on ferme le input ou on y met l'URL

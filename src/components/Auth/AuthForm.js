@@ -17,7 +17,6 @@ const AuthForm = () => {
   //utilisation du context
   const authCtx = useContext(AuthContext);
 
-  
   const [isLogin, setIsLogin] = useState(true);
   //isLoading pour mettre un spinner ou un texte qui prévient que c'est en cours de chargement
   const [isLoading, setIsLoading] = useState(false);
@@ -105,7 +104,6 @@ const AuthForm = () => {
         setIsLoading(false);
 
         if (response.ok) {
-                   
           authCtx.login(
             dataResponse.token,
             dataResponse.userId,
@@ -124,7 +122,6 @@ const AuthForm = () => {
         }
 
         //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
-
         if (dataResponse && dataResponse.error) {
           setError({
             title: "Il y a un problème",
