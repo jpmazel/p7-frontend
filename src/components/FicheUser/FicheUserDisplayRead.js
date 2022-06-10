@@ -51,10 +51,8 @@ const FicheUserDisplayRead = () => {
           <section className={classes.user}>
             <h1>Vous êtes sur la fiche utilisateur de </h1>
             <p>
-              <span>
-                {data && data[0].fiche_user_prenom}
-                {data && data[0].fiche_user_nom}
-              </span>
+              <span>{data && data[0].fiche_user_prenom} </span>
+              <span> {data && data[0].fiche_user_nom}</span>
             </p>
             {/* PHOTO PROFIL */}
             <p>
