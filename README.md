@@ -10,3 +10,6 @@ utilisateur ADMIN/MODERATEUR : test@test.com    password: azertAZERT75
 utilisateur                  : test01@test.com  password: azertAZERT75
 utilisateur                  : test02@test.com  password: azertAZERT75
 
+Formation développeur web 
+Soutenance du dernier projet passée le 10 juin 2022 et soutenance réussie
+Profil linkedin : https://www.linkedin.com/in/jeanpierremazel/
