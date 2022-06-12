@@ -9,6 +9,7 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   const [dataUpdate, setDataUpdate] = useState(data);
   const [modification, setModification] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
+  const [imgPrevisualization, setImgPrevisualization] = useState(null);
   const authCtx = useContext(AuthContext);
 
   const nomInputRef = useRef();
@@ -44,6 +45,13 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     let newPhoto;
     if (event.target.files && event.target.files.length === 1) {
       newPhoto = event.target.files[0];
+
+      //Afficher la prévisualisation de la nouvelle photo de profil
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImgPrevisualization(event.target.result);
+      };
+      reader.readAsDataURL(newPhoto);
     }
 
     //mettre à jour le state
@@ -139,11 +147,11 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
   //pour faire automatiquement la requête GET de ficheUser
   //c'est pour afficher les données du serveurs
-  useEffect(() => {    
+  useEffect(() => {
     if (!modification) {
       onRefresh();
     }
-  }, [modification,onRefresh]);
+  }, [modification, onRefresh]);
 
   return (
     <section className={classes.user}>
@@ -154,11 +162,16 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
       {/* PHOTO PROFIL */}
       <p>
-        <img
-          src={data.photoProfilUrl ? data.photoProfilUrl : emptyPortrait}
-          alt="photo_fiche"
-        />
+        {!imgPrevisualization ? (
+          <img
+            src={data.photoProfilUrl ? data.photoProfilUrl : emptyPortrait}
+            alt="photo_fiche"
+          />
+        ) : (
+          <img src={imgPrevisualization} alt="prévisualisation" />
+        )}
       </p>
+
       {modification && (
         <input type="file" accept=".jpeg,.jpg,.png" onChange={changeHandler} />
       )}
