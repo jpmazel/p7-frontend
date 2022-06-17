@@ -113,19 +113,21 @@ const AuthForm = () => {
           //react router dom V6 navigation par programmation / impérative
           navigate("/fiche_utilisateur");
         } else {
-          setError({
-            title: "Authentification Echec",
-            message: dataResponse.error,
-          });
+          if (isLogin) {
+            setError({
+              title: "Authentification Echec",
+              message: dataResponse.error,
+            });
 
-          throw new Error(dataResponse.error);
+            throw new Error(dataResponse.error);
+          }
         }
 
         //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
         if (dataResponse && dataResponse.error) {
           setError({
             title: "Il y a un problème",
-            message: dataResponse.error.sqlMessage,
+            message: "Compte existant",
           });
         }
       } catch (error) {
