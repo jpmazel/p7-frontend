@@ -114,6 +114,7 @@ const AuthForm = () => {
           navigate("/fiche_utilisateur");
         } else {
           if (isLogin) {
+            //Interface de connexion
             setError({
               title: "Authentification Echec",
               message: dataResponse.error,
@@ -121,10 +122,8 @@ const AuthForm = () => {
 
             throw new Error(dataResponse.error);
           }
-        }
-
-        //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
-        if (dataResponse && dataResponse.error) {
+          //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
+          //sur l'interface de création de compte
           setError({
             title: "Il y a un problème",
             message: "Compte existant",
