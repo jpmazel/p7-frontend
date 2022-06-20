@@ -3,6 +3,7 @@ import Button from "../../UI/Button";
 import { useContext, useState } from "react";
 import ConfirmationModal from "../../UI/ConfirmationModal";
 import AuthContext from "../../../store/authContext";
+import useHttp from "../../../hooks/use-http";
 
 const FeedButtonComment = ({
   userIdToken,
@@ -16,38 +17,24 @@ const FeedButtonComment = ({
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
 
+  const { sendRequest: fetchDeleteCommentFeedHandler } = useHttp();
+
   //Importation du context
   const authCtx = useContext(AuthContext);
 
   //Pour supprimer un commentaire dans le feed
-  const deletePost = () => {
-    //La requête à envoyer au backend pour supprimer le post dans le feed
-    // http://localhost:3000/api/posts/comment/177?userId=46
-
-    const fetchDeleteCommentFeedHandler = async () => {
-      const url = `${process.env.REACT_APP_API_URL}/api/posts/comment/${idCommentUser}?userId=${userIdToken}`;
-      try {
-        const response = await fetch(url, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const dataResponse = await response.json();
-
-        if (response.ok) {          
-          onUpdateDelete(idCommentUser);
-        } else {
-          console.log("-->fetchDeleteCommentFeedHandler response PAS OK");         
-          throw new Error(dataResponse.error);
-        }
-      } catch (error) {
-        console.log("-->Dans le catch ");
-      }
+  const deleteComment = () => {
+    const requestConfig = {
+      url: `http://localhost:3000/api/posts/comment/${idCommentUser}?userId=${userIdToken}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     };
 
-    fetchDeleteCommentFeedHandler();
+    fetchDeleteCommentFeedHandler(requestConfig, () =>
+      onUpdateDelete(idCommentUser)
+    );
   };
 
   //confirmation modal pour suppression du compte---------------------------------
@@ -95,7 +82,7 @@ const FeedButtonComment = ({
             title={confirmationModal.title}
             message={confirmationModal.message}
             onConfirm={() => setConfirmationModal(null)}
-            onConfirmDelete={() => deletePost()}
+            onConfirmDelete={() => deleteComment()}
           />
         )}
       </>

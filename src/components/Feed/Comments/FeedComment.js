@@ -1,6 +1,8 @@
 import { useState } from "react";
 import classes from "./FeedComment.module.css";
 import Linkify from "linkify-react";
+import { useEffect } from "react";
+import useHttp from "../../../hooks/use-http";
 
 const FeedComment = ({
   idComment,
@@ -15,6 +17,8 @@ const FeedComment = ({
     comments_user_message: comment,
   });
 
+  const { sendRequest: fetchPUTHandler } = useHttp();
+
   const commentToEdit = isUpdatingComment && isUpdatingComment.commentToEdit;
 
   //Condition pour afficher l'interface de MODIFICATION
@@ -26,43 +30,32 @@ const FeedComment = ({
   };
 
   //Envoyer le message mis à jour
-  if (buttonSend && modificationOneComment) {
-    //Requête PUT pour envoyer les données au serveur
-
-    //            http://localhost:3000/api/posts/comment/196?userId=46
-
-    const fetchPUTHandler = async () => {
-      const url = `${process.env.REACT_APP_API_URL}/api/posts/comment/${idComment}?userId=${userIdToken}`;
-
-      try {
-        const response = await fetch(url, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(messageTextarea),
-        });
-
-        //convertir la response du serveur
-        const dataResponse = await response.json();
-
-        //si la response du serveur est OK
-        if (response.ok) {          
-          onUpdateCommentFinish();
-        } else {
-          console.log("-------->Response PAS OK<---------");          
-          console.log(dataResponse);
-        }
-      } catch (error) {
-        console.log("--->Dans le CATCH de fetchPUTHandler");
-        throw new Error(error);
-      }
+  //La requête PUT avec le custom Hook HTTP
+  useEffect(() => {
+    const requestConfig = {
+      url: `http://localhost:3000/api/posts/comment/${idComment}?userId=${userIdToken}`,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: messageTextarea,
     };
 
-    //exécution de la fonction
-    fetchPUTHandler();
-  }
+    if (buttonSend && modificationOneComment) {
+      //exécution de la fonction
+      fetchPUTHandler(requestConfig, () => onUpdateCommentFinish());
+    }
+  }, [
+    buttonSend,
+    fetchPUTHandler,
+    idComment,
+    messageTextarea,
+    modificationOneComment,
+    onUpdateCommentFinish,
+    token,
+    userIdToken,
+  ]);
 
   return (
     <div className={classes.feedComment}>

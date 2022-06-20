@@ -8,6 +8,7 @@ import FeedIdentifierCreatorComment from "./FeedIdentifierCreatorComment";
 import Card from "../../UI/Card";
 import FeedButtonComment from "./FeedButtonComment";
 import { Link } from "react-router-dom";
+import useHttp from "../../../hooks/use-http";
 
 const FeedDisplayComment = ({
   onUpdate,
@@ -25,33 +26,7 @@ const FeedDisplayComment = ({
   const [isUpdatingComment, setIsUpdatingComment] = useState(null);
   const [buttonSend, setButtonSend] = useState(false);
   const [isUpdatingCommentFinish, setIsUpdatingCommentFinish] = useState(false);
-
-  //Aller chercher tous les commentaires qui sont sur la table comments_user
-  // http://localhost:3000/api/posts/comments/589?userId=46
-  const url = `${process.env.REACT_APP_API_URL}/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
-
-  const fetchGetCommentHandler = useCallback(async () => {
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const dataResponse = await response.json();
-
-      if (response.ok) {
-        setComments(dataResponse.results);
-      } else {
-        console.log("-->Comments response PAS ok");
-        throw new Error(dataResponse.error);
-      }
-    } catch (error) {
-      console.log("-->Comments dans le catch requête fetchGetCommentHandler");
-      console.log(error);
-    }
-  }, [token, url]);
+  const { sendRequest: fetchGetCommentHandler } = useHttp();
 
   //Pour mettre à jour un post qui est dans le feed
   const updateCommentHandler = (event) => {
@@ -81,13 +56,26 @@ const FeedDisplayComment = ({
 
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {
-    fetchGetCommentHandler();
+    //Objet de configuration du custom hook
+    const requestConfig = {
+      url: `http://localhost:3000/api/posts/comments/${idPostsUser}?userId=${userIdToken}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    //l'exécution de la requête
+    fetchGetCommentHandler(requestConfig, (data) => setComments(data));
   }, [
     onUpdate,
     newComment,
     updateDeleteComment,
     isUpdatingCommentFinish,
     fetchGetCommentHandler,
+    idPostsUser,
+    token,
+    userIdToken,
   ]);
 
   return (

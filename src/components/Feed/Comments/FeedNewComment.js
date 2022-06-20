@@ -3,20 +3,19 @@ import AuthContext from "../../../store/authContext";
 import Button from "../../UI/Button";
 import classes from "./FeedNewComment.module.css";
 import Card from "../../UI/Card";
+import useHttp from "../../../hooks/use-http";
 
 const FeedNewComment = ({ idPostsUser, onNewComment }) => {
   //Pour récupérer le TOKEN d'authentification
   const authCtx = useContext(AuthContext);
+
+  const { sendRequest: fetchPOSTHandler } = useHttp();
 
   //Pour stocker le contenu du message
   const [message, setMessage] = useState(null);
 
   // l'information du click sur le bouton envoyer
   const [clickSend, setClickSend] = useState(false);
-
-  //L'URL de la route de la WEB API REST du backend
-  //http://localhost:3000/api/posts/comments?userId=48
-  const url = `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${authCtx.userId}`;
 
   //Lorsque l'on appuie sur le bouton ENVOYER du formulaire
   const submitHandler = (event) => {
@@ -29,38 +28,24 @@ const FeedNewComment = ({ idPostsUser, onNewComment }) => {
       message: message,
     };
 
-    //La requête POST avec fetch pour envoyer les données au backend
-    const fetchPOSTHandler = async () => {
-      try {
-        //La requête POST avec text (pas d'image)
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authCtx.token}`,
-          },
-          body: JSON.stringify(data),
-        });
-
-        //Convertir la reponse du serveur avec la méthode json()
-        await response.json();       
-
-        //Si la response du serveur est OK
-        if (response.ok) {
-          setMessage("");
-          setClickSend(false);
-          onNewComment();
-        } else {
-          console.log("--->Response PAS OK");
-        }
-      } catch (error) {
-        console.log("--->Dans le CATCH");
-        throw new Error(error);
-      }
+    //Objet de configuration de la requête POST
+    const requestConfig = {
+      url: `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${authCtx.userId}`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+      body: data,
     };
 
     //L'exécution de la fonction (envoyer une requête POST vers le serveur)
-    message && fetchPOSTHandler();
+    message &&
+      fetchPOSTHandler(requestConfig, () => {
+        setMessage("");
+        setClickSend(false);
+        onNewComment();
+      });
   };
 
   return (
