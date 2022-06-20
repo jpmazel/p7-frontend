@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../../store/authContext";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import ConfirmationModal from "../UI/ConfirmationModal";
+import useHttp from "../../hooks/use-http";
 
 const FicheUserDisplay = ({ data, onRefresh }) => {
   const [dataUpdate, setDataUpdate] = useState(data);
@@ -11,6 +12,9 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
   const [imgPrevisualization, setImgPrevisualization] = useState(null);
   const authCtx = useContext(AuthContext);
+
+  const { sendRequest: fetchUploadHandler } = useHttp();
+  const { sendRequest: fetchDeleteAccountHandler } = useHttp();
 
   const nomInputRef = useRef();
   const prenomInputRef = useRef();
@@ -79,60 +83,30 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     formData.append("image", newPhoto);
     formData.append("ficheUser", JSON.stringify(dataUpdateFormData));
 
-    //data.idFiche    data.userId
-    const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/${data.idFiche}?userId=${data.userId}`;
-    const fetchUploadHandler = async () => {
-      try {
-        const response = await fetch(url, {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${authCtx.token}`,
-          },
-          body: formData,
-        });
-
-        const dataResponse = await response.json();
-
-        if (response.ok) {
-        } else {
-          console.log("----->pas OK response");
-          console.log(dataResponse);
-          throw new Error(dataResponse.error);
-        }
-      } catch (error) {
-        console.log("dans le CATCH requête update serveur error");
-        console.log(error);
-      }
+    const requestConfig = {
+      url: `${process.env.REACT_APP_API_URL}/api/fiche_user/${data.idFiche}?userId=${data.userId}`,
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+      body: formData,
     };
 
-    fetchUploadHandler();
+    fetchUploadHandler(requestConfig, (dataResponse) => {
+      console.log(dataResponse);
+    });
   };
 
   //la suppression du compte et des données de l'utilisateurs
-  const url = `${process.env.REACT_APP_API_URL}/api/authentification/delete/?userId=${data.userId}`;
-
-  const deleteAccountHandler = async () => {
-    try {
-      const response = await fetch(url, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${authCtx.token}`,
-        },
-      });
-
-      const dataResponse = await response.json();
-
-      //le serveur a répondu
-      if (response.ok) {
-        authCtx.logout();
-      } else {
-        console.log("--->response PAS OK de la suppression du compte");
-        console.log(dataResponse);
-      }
-    } catch (error) {
-      console.log("dans le CATCH requête suppression du compte");
-      console.log(error);
-    }
+  const deleteAccountHandler = () => {
+    const requestConfig = {
+      url: `${process.env.REACT_APP_API_URL}/api/authentification/delete/?userId=${data.userId}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+    };
+    fetchDeleteAccountHandler(requestConfig, () => authCtx.logout());
   };
 
   //confirmation modal pour suppression du compte---------------------------------

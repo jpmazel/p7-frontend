@@ -3,44 +3,36 @@ import { Navigate, useParams } from "react-router-dom";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import AuthContext from "../../store/authContext";
 import classes from "./FicheUserDisplayRead.module.css";
+import useHttp from "../../hooks/use-http";
+import { useMemo } from "react";
 
 const FicheUserDisplayRead = () => {
   const { id } = useParams();
 
   const [data, setData] = useState();
   const authCtx = useContext(AuthContext);
-
   const isLoggedIn = authCtx.isLoggedIn;
 
+  const { sendRequest: fetchGetFicheUserHandler } = useHttp();
+
   //Requête pour récupérer la fiche utilisateur
-  const fetchGetFicheUserHandler = useCallback(async () => {
-    const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authCtx.userId}`;
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authCtx.token}`,
-        },
-      });
-
-      const dataResponse = await response.json();
-
-      if (response.ok) {
-        setData(dataResponse.results);
-      } else {
-        console.log("----->fetchGetFicheUserHandler pas OK response");
-        console.log(dataResponse);
-        throw new Error(dataResponse.error);
-      }
-    } catch (error) {
-      console.log("dans le CATCH fetchGetFicheUserHandler");
-      console.log(error);
-    }
-  }, [authCtx.token, authCtx.userId, id]);
+  const requestConfig = useMemo(
+    () => ({
+      url: `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authCtx.userId}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+    }),
+    [authCtx.token, authCtx.userId, id]
+  );
 
   useEffect(() => {
-    id && fetchGetFicheUserHandler();
-  }, [id, fetchGetFicheUserHandler]);
+    id &&
+      fetchGetFicheUserHandler(requestConfig, (dataResponse) =>
+        setData(dataResponse)
+      );
+  }, [fetchGetFicheUserHandler, requestConfig, id]);
 
   return (
     <>
