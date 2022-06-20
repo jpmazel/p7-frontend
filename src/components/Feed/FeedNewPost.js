@@ -5,6 +5,7 @@ import classes from "./FeedNewPost.module.css";
 import Card from "../UI/Card";
 import FeedImageUrl from "./FeedImageUrl";
 import FeedVideoUrl from "./FeedVideoUrl";
+import useHttp from "../../hooks/use-http";
 
 const FeedNewPost = ({ onUpdate }) => {
   //Pour récupérer le TOKEN d'authentification
@@ -19,13 +20,7 @@ const FeedNewPost = ({ onUpdate }) => {
   const [clickSend, setClickSend] = useState(false);
   const [displayInput, setDisplayInput] = useState(false);
   const [displayInputVideo, setDisplayInputVideo] = useState(false);
-
-  //CONDITION pour envoyer la requête
-  // const conditionSend2 = message      si 1 caractère = TRUE sinon FALSE
-  // const conditionSend2 = urlInput     si 1 caractère = TRUE sinon FALSE
-  // const conditionSend2 = message && urlInput   SI il y a un message ET UrlInput
-  // const conditionSend2 = !displayInput && message  Pour envoyer un post sans image
-  //                                                   avec l'input fermé
+  const { sendRequest: fetchPOSTHandler } = useHttp();
 
   //La condition pour envoyer un POST avec ou sans image vers le serveur
   const conditionSend =
@@ -37,9 +32,6 @@ const FeedNewPost = ({ onUpdate }) => {
     setUrlInput(null);
     setUrlInputVideo(null);
   }, [displayInput, displayInputVideo]);
-
-  //L'URL de la route de la WEB API REST du backend
-  const url = `${process.env.REACT_APP_API_URL}/api/posts?userId=${authCtx.userId}`;
 
   //Lorsque l'on appuie sur le bouton ENVOYER du formulaire
   const submitHandler = (event) => {
@@ -53,43 +45,29 @@ const FeedNewPost = ({ onUpdate }) => {
       videoYTUrlLink: urlInputVideo,
     };
 
-    //La requête POST avec fetch pour envoyer les données au backend
-    const fetchPOSTHandler = async () => {
-      try {
-        //La requête POST avec text (pas d'image)
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authCtx.token}`,
-          },
-          body: JSON.stringify(data),
-        });
-
-        //Convertir la reponse du serveur avec la méthode json()
-         await response.json();        
-
-        //Si la response du serveur est OK
-        if (response.ok) {
-          onUpdate(message);
-          setMessage("");
-          setUrlInput(null);
-          setClickSend(false);
-          setDisplayInput(false);
-
-          setUrlInputVideo(null);
-          setDisplayInputVideo(false);
-        } else {
-          console.log("--->Response PAS OK");
-        }
-      } catch (error) {
-        console.log("--->Dans le CATCH");
-        throw new Error(error);
-      }
+    //La requête POST avec le custom hook HTTP pour envoyer les données au backend
+    //L'exécution de la fonction (envoyer une requête POST vers le serveur)
+    //Objet de configuration de la requête post
+    const requestConfig = {
+      url: `${process.env.REACT_APP_API_URL}/api/posts?userId=${authCtx.userId}`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+      body: data,
     };
 
-    //L'exécution de la fonction (envoyer une requête POST vers le serveur)
-    conditionSend && fetchPOSTHandler();
+    conditionSend &&
+      fetchPOSTHandler(requestConfig, () => {
+        onUpdate(message);
+        setMessage("");
+        setUrlInput(null);
+        setClickSend(false);
+        setDisplayInput(false);
+        setUrlInputVideo(null);
+        setDisplayInputVideo(false);
+      });
   };
 
   //Récupération de l'URL chez l'enfant

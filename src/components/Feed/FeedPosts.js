@@ -1,6 +1,8 @@
 import { useState } from "react";
 import classes from "./FeedPosts.module.css";
 import Linkify from "linkify-react";
+import useHttp from "../../hooks/use-http";
+import { useEffect } from "react";
 
 const FeedPosts = ({
   message,
@@ -15,6 +17,8 @@ const FeedPosts = ({
     posts_user_message: message,
   });
 
+  const { sendRequest: fetchPUTHandler } = useHttp();
+
   const postToEdit = isUpdatingPost && isUpdatingPost.postToEdit;
 
   //Condition pour afficher l'interface de MODIFICATION
@@ -26,41 +30,33 @@ const FeedPosts = ({
   };
 
   //Envoyer le message mis à jour
-
-  if (buttonSend && modificationOnePost) {
-    //Requête PUT pour envoyer les données au serveur
-    const url = `${process.env.REACT_APP_API_URL}/api/posts/${idPostsUser}?userId=${userIdPost}`;
-
-    const fetchPUTHandler = async () => {
-      try {
-        const response = await fetch(url, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(messageTextarea),
-        });
-
-        //convertir la response du serveur
-        const dataResponse = await response.json();
-
-        //si la response du serveur est OK
-        if (response.ok) {         
-          onUpdatePostFinish();
-        } else {
-          console.log("-------->Response PAS OK<---------");          
-          console.log(dataResponse);
-        }
-      } catch (error) {
-        console.log("--->Dans le CATCH de fetchPUTHandler");
-        throw new Error(error);
-      }
+  //exécution de la fonction
+  useEffect(() => {
+    //Objet de configuration du custom hook http
+    const requestConfig = {
+      url: `http://localhost:3000/api/posts/${idPostsUser}?userId=${userIdPost}`,
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: messageTextarea,
     };
 
-    //exécution de la fonction
-    fetchPUTHandler();
-  }
+    //Exécution de la requête
+    if (buttonSend && modificationOnePost) {
+      fetchPUTHandler(requestConfig, () => onUpdatePostFinish());
+    }
+  }, [
+    buttonSend,
+    fetchPUTHandler,
+    idPostsUser,
+    messageTextarea,
+    modificationOnePost,
+    token,
+    userIdPost,
+    onUpdatePostFinish,
+  ]);
 
   return (
     <div className={classes.feedPosts}>

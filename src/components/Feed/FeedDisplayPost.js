@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import {useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/authContext";
 import classes from "./FeedDisplayPost.module.css";
 import Card from "../UI/Card";
@@ -12,6 +12,7 @@ import FeedNewComment from "./Comments/FeedNewComment";
 import FeedDisplayComment from "./Comments/FeedDisplayComment";
 import { Link } from "react-router-dom";
 import FeedLike from "./FeedLike";
+import useHttp from "../../hooks/use-http";
 
 const FeedDisplayPost = ({ onUpdate }) => {
   const [mounted, setMounted] = useState(true);
@@ -29,32 +30,9 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   const [idCommentButton, setIdCommentButton] = useState(null);
   const [isDisplayedComment, setIsDisplayedComment] = useState(false);
-
-  //Aller chercher tous les posts de la base de données qui sont la table posts_user
-  const url = `${process.env.REACT_APP_API_URL}/api/posts?userId=${authCtx.userId}`;
-
-  const fetchGetMessageHandler = useCallback(async () => {
-    try {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authCtx.token}`,
-        },
-      });
-
-      const dataResponse = await response.json();
-
-      if (response.ok) {
-        setMessages(dataResponse.results);
-      } else {
-        console.log("-->response PAS ok");
-        throw new Error(dataResponse.error);
-      }
-    } catch (error) {
-      console.log("-->Dans le catch requête fetchGetMessageHandler");
-      console.log(error);
-    }
-  }, [authCtx.token, url]);
+ 
+  //CUSTOM HOOLK HTTP GET
+  const { sendRequest: fetchGetMessageHandler } = useHttp();
 
   //Pour mettre à jour un post qui est dans le feed
   const updatePostHandler = (event) => {
@@ -98,21 +76,31 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {
+    //objet de configuration de la requête du custom-hook
+    const requestConfig = {
+      url: `http://localhost:3000/api/posts?userId=${authCtx.userId}`,
+      method: "GET",
+      headers: { Authorization: `Bearer ${authCtx.token}` },
+    };
+
     if (mounted) {
-      authCtx.userId && fetchGetMessageHandler();
+      authCtx.userId &&
+        fetchGetMessageHandler(requestConfig, (applyData) =>
+          setMessages(applyData)
+        );
     }
     return () => {
+      //fonction de nettoyage
       setMounted(true);
-      //à la première connexion-correction du warning
-      // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function
     };
   }, [
     onUpdate,
     updateDeletePost,
     isUpdatingPostFinish,
-    fetchGetMessageHandler,
     authCtx.userId,
+    fetchGetMessageHandler,
     mounted,
+    authCtx.token,
   ]);
 
   //Mettre le dernier message envoyé en haut de la pile

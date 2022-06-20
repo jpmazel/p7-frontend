@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import ConfirmationModal from "../UI/ConfirmationModal";
 import AuthContext from "../../store/authContext";
 import FeedBadge from "./Comments/FeedBadge";
+import useHttp from "../../hooks/use-http";
 
 const FeedButton = ({
   userIdToken,
@@ -20,35 +21,19 @@ const FeedButton = ({
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
   const authCtx = useContext(AuthContext);
+  const { sendRequest: fetchDeletePostFeedHandler } = useHttp();
 
   //Pour supprimer un post dans le feed
   const deletePost = () => {
-    //La requête à envoyer au backend pour supprimer le post dans le feed
-    const url = `${process.env.REACT_APP_API_URL}/api/posts/${idPostsUser}?userId=${userIdToken}`;
-
-    const fetchDeletePostFeedHandler = async () => {
-      try {
-        const response = await fetch(url, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const dataResponse = await response.json();
-
-        if (response.ok) {          
-          onUpdateDelete(idPostsUser);
-        } else {
-          console.log("-->response PAS OK");          
-          throw new Error(dataResponse.error);
-        }
-      } catch (error) {
-        console.log("-->Dans le catch ");
-      }
+    //Objet de configuration du custom hook http
+    const requestConfig = {
+      url: `http://localhost:3000/api/posts/${idPostsUser}?userId=${userIdToken}`,
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
     };
-
-    fetchDeletePostFeedHandler();
+    fetchDeletePostFeedHandler(requestConfig, () =>
+      onUpdateDelete(idPostsUser)
+    );
   };
 
   //confirmation modal pour suppression du compte---------------------------------
