@@ -13,12 +13,14 @@ const AuthForm = () => {
   const passwordInputRef = useRef();
   const passwordControleInputRef = useRef();
 
+  const [errorSamePassword, setErrorSamePassword] = useState(false);
+
   const navigate = useNavigate();
 
-  //utilisation du context
   const authCtx = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(true);
+  //isLoading pour mettre un spinner ou un texte qui prévient que c'est en cours de chargement
 
   const [error, setError] = useState(null);
 
@@ -81,6 +83,8 @@ const AuthForm = () => {
         title: "Le mot de passe est différent",
         message: "Entrer un mot de passe identique dans les deux champs",
       });
+
+      setErrorSamePassword(true);
       return;
     }
 
@@ -98,40 +102,44 @@ const AuthForm = () => {
         password: enteredPassword,
       },
     };
-    fetchHandler(requestConfig, (dataResponse) => {
-      authCtx.login(
-        dataResponse.token,
-        dataResponse.userId,
-        dataResponse.admin
-      );
 
-      navigate("/fiche_utilisateur");
-    });
+    !errorSamePassword &&
+      fetchHandler(requestConfig, (dataResponse) => {
+        authCtx.login(
+          dataResponse.token,
+          dataResponse.userId,
+          dataResponse.admin
+        );
+
+        navigate("/fiche_utilisateur");
+      });
   };
 
   //Gérer les modales d'erreurs------------------------------------------
   useEffect(() => {
+    //AUTHENTIFICATION ECHEC
     if (isLogin && errorHookHttp) {
       setError({
         title: "Authentification Echec",
-        message: errorHookHttp && errorHookHttp.response.error,
+        message: errorHookHttp && errorHookHttp.error,
       });
       return;
     }
 
-    //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
+    //gérer l'erreur du COMPTE EXISTANT SUR LA BASE DE DONNEE
+    // pour l'afficher dans la modal ErrorModal
     if (!isLogin && errorHookHttp) {
-      console.log(errorHookHttp);
       setError({
         title: "Il y a un problème",
-        message: "Email déja utilisé",
+        message: errorHookHttp.error.code || errorHookHttp.error,
       });
     }
   }, [errorHookHttp, isLogin]);
 
-  //pour reset le state error--------------------
+  //pour reset le state error-------------------------------------------
   const errorHandler = () => {
     setError(null);
+    setErrorSamePassword(false);
   };
 
   //Pour gérer l'affichage en clair du password

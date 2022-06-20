@@ -37,10 +37,7 @@ const useHttp = () => {
         applyData(dataResponse.results);
       } else {
         isActive = true;
-        setError({
-          error: true,
-          response: dataResponse,
-        });
+        setError(dataResponse);
       }
     } catch (error) {
     } finally {
