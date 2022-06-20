@@ -11,8 +11,6 @@ const useHttp = () => {
     setIsLoading(true);
     setError(null);
 
-    console.log("-->requestConfig dans HOOK HTTP");
-    console.log(requestConfig.body instanceof FormData);
     //Pour controler la présence du constructeur Formdata
     const controlFormData = requestConfig.body instanceof FormData;
 
@@ -34,24 +32,17 @@ const useHttp = () => {
       });
 
       const dataResponse = await response.json();
-      console.log("dataResponse HOOK HTTP");
-      console.log(dataResponse);
 
       if (response.ok) {
         applyData(dataResponse.results);
       } else {
-        console.log("-->response PAS ok");
-        console.log(dataResponse);
         isActive = true;
-
         setError({
           error: true,
           response: dataResponse,
         });
       }
     } catch (error) {
-      console.log("-->Dans le catch  sendRequest custom hook");
-      console.log(error);
     } finally {
       if (isActive) {
         setError(null);

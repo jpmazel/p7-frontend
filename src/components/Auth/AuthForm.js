@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Button from "../UI/Button";
 import classes from "./authForm.module.css";
 import ErrorModal from "../UI/ErrorModal";
@@ -6,6 +6,7 @@ import Wrapper from "../Helpers/Wrapper";
 import Loader from "../UI/Loader";
 import AuthContext from "../../store/authContext";
 import { useNavigate } from "react-router-dom";
+import useHttp from "../../hooks/use-http";
 
 const AuthForm = () => {
   const emailInputRef = useRef();
@@ -18,11 +19,16 @@ const AuthForm = () => {
   const authCtx = useContext(AuthContext);
 
   const [isLogin, setIsLogin] = useState(true);
-  //isLoading pour mettre un spinner ou un texte qui prévient que c'est en cours de chargement
-  const [isLoading, setIsLoading] = useState(false);
+
   const [error, setError] = useState(null);
 
   const [passwordPlain, setPasswordPlain] = useState(false);
+
+  const {
+    sendRequest: fetchHandler,
+    error: errorHookHttp,
+    isLoading,
+  } = useHttp();
 
   let enteredPasswordControl;
 
@@ -78,76 +84,52 @@ const AuthForm = () => {
       return;
     }
 
-    //pour se connecter pour récupérer le userId et le token d'authentification
-    const url = `${process.env.REACT_APP_API_URL}/api/authentification/${
-      isLogin ? "login" : "signup"
-    }`;
-
-    //async await function fetchHandler()
-    // async function fetchHandler(){
-    const fetchHandler = async () => {
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const dataResponse = await response.json();
-
-        //le serveur a répondu, le chargement est terminé
-        setIsLoading(false);
-
-        if (response.ok) {
-          authCtx.login(
-            dataResponse.token,
-            dataResponse.userId,
-            dataResponse.admin
-          );
-
-          //react router dom V6 navigation par programmation / impérative
-          navigate("/fiche_utilisateur");
-        } else {
-          if (isLogin) {
-            //Interface de connexion
-            setError({
-              title: "Authentification Echec",
-              message: dataResponse.error,
-            });
-
-            throw new Error(dataResponse.error);
-          }
-          //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
-          //sur l'interface de création de compte
-          setError({
-            title: "Il y a un problème",
-            message: "Compte existant",
-          });
-        }
-      } catch (error) {
-        console.log("problème serveur");
-        console.log(error);
-      }
+    //CUSTOM HOOK HTTP---------------------------------------------
+    const requestConfig = {
+      url: `${process.env.REACT_APP_API_URL}/api/authentification/${
+        isLogin ? "login" : "signup"
+      }`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: {
+        email: enteredEmail,
+        password: enteredPassword,
+      },
     };
+    fetchHandler(requestConfig, (dataResponse) => {
+      authCtx.login(
+        dataResponse.token,
+        dataResponse.userId,
+        dataResponse.admin
+      );
 
-    //spinner ou message que la requête est en cours de chargement
-    setIsLoading(true);
-
-    fetchHandler();
-
-    //pour vider les champs
-    // emailInputRef.current.value = "";
-    // passwordInputRef.current.value = "";
-    // test06@test.com
-    // azertAZERT75
+      navigate("/fiche_utilisateur");
+    });
   };
 
-  //pour reset le state error
+  //Gérer les modales d'erreurs------------------------------------------
+  useEffect(() => {
+    if (isLogin && errorHookHttp) {
+      setError({
+        title: "Authentification Echec",
+        message: errorHookHttp && errorHookHttp.response.error,
+      });
+      return;
+    }
+
+    //gérer l'erreur du compte existant pour l'afficher dans la modal ErrorModal
+    if (!isLogin && errorHookHttp) {
+      console.log(errorHookHttp);
+      setError({
+        title: "Il y a un problème",
+        message: "Email déja utilisé",
+      });
+    }
+  }, [errorHookHttp, isLogin]);
+
+  //pour reset le state error--------------------
   const errorHandler = () => {
     setError(null);
   };
