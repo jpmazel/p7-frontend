@@ -10,11 +10,12 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   const [dataUpdate, setDataUpdate] = useState(data);
   const [modification, setModification] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
-  const [imgPrevisualization, setImgPrevisualization] = useState(null);
   const authCtx = useContext(AuthContext);
-
+  const [imgPrevisualization, setImgPrevisualization] = useState(null);
   const { sendRequest: fetchUploadHandler } = useHttp();
   const { sendRequest: fetchDeleteAccountHandler } = useHttp();
+  const [formData, setFormData] = useState({});
+  const [validationSend, setValidationSend] = useState(false);
 
   const nomInputRef = useRef();
   const prenomInputRef = useRef();
@@ -24,7 +25,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
 
   //pour mettre à jour le state dataUpdate
   useEffect(() => {
-    // console.log("je suis dans le useEffect");
     setDataUpdate(data);
   }, [data]);
 
@@ -45,7 +45,6 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     const enteredBio = bioInputRef.current.value;
 
     //la gestion de la nouvelle photo
-
     let newPhoto;
     if (event.target.files && event.target.files.length === 1) {
       newPhoto = event.target.files[0];
@@ -79,10 +78,28 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     };
 
     //envoyer les nouvelles données vers le serveur
+
     const formData = new FormData();
     formData.append("image", newPhoto);
     formData.append("ficheUser", JSON.stringify(dataUpdateFormData));
 
+    setFormData(formData);
+  };
+
+  const deleteAccountHandler = () => {
+    const requestConfig = {
+      url: `${process.env.REACT_APP_API_URL}/api/authentification/delete/?userId=${data.userId}`,
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${authCtx.token}`,
+      },
+    };
+    fetchDeleteAccountHandler(requestConfig, () => authCtx.logout());
+  };
+
+  //Lorsque je clique sur le bouton envoyer du formulaire
+  const sendHandler = () => {
+    //requête vers le serveur
     const requestConfig = {
       url: `${process.env.REACT_APP_API_URL}/api/fiche_user/${data.idFiche}?userId=${data.userId}`,
       method: "PUT",
@@ -93,20 +110,10 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
     };
 
     fetchUploadHandler(requestConfig, (dataResponse) => {
-      console.log(dataResponse);
+      setValidationSend(true);
     });
-  };
 
-  //la suppression du compte et des données de l'utilisateurs
-  const deleteAccountHandler = () => {
-    const requestConfig = {
-      url: `${process.env.REACT_APP_API_URL}/api/authentification/delete/?userId=${data.userId}`,
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${authCtx.token}`,
-      },
-    };
-    fetchDeleteAccountHandler(requestConfig, () => authCtx.logout());
+    setModification(false);
   };
 
   //confirmation modal pour suppression du compte---------------------------------
@@ -122,15 +129,15 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
   //pour faire automatiquement la requête GET de ficheUser
   //c'est pour afficher les données du serveurs
   useEffect(() => {
-    if (!modification) {
+    if (validationSend) {
       onRefresh();
     }
-  }, [modification, onRefresh]);
+  }, [validationSend, onRefresh]);
 
   return (
     <section className={classes.user}>
       <h1>
-        Bonjour <span> {dataUpdate.prenom}</span>
+        Bonjour <span>{dataUpdate.prenom}</span>
       </h1>
       <p>Vous êtes sur votre fiche utilisateur</p>
 
@@ -193,6 +200,7 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
           ref={jobInputRef}
         />
       )}
+      {/* <p>Technicien de maintenance CVC / génie climatique</p> */}
 
       <p>Mieux me connaître</p>
       {!modification && <p>{dataUpdate.bio}</p>}
@@ -208,9 +216,11 @@ const FicheUserDisplay = ({ data, onRefresh }) => {
       {/* J'apprends les technologies pour être développeur full stack JavaScript mais c'est vachement dur , car pour s'autoformer il faut trouver du contenu de qualité et accessible à un débutant  ce qui est très difficile</p> */}
 
       <div>
-        <Button onClick={modificationHandler}>
-          {!modification ? "Modifier la fiche" : "Envoyer"}
-        </Button>
+        {!modification && (
+          <Button onClick={modificationHandler}>Modifier la fiche</Button>
+        )}
+
+        {modification && <Button onClick={sendHandler}>Envoyer</Button>}
 
         {confirmationModal && (
           <ConfirmationModal
