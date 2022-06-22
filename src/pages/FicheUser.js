@@ -111,7 +111,7 @@ const FicheUser = () => {
     if (isLoggedIn) {
       fecthHandler();
     }
-  }, [fecthHandler, isLoggedIn]);
+  }, [fecthHandler, isLoggedIn,isCreateFiche]);
 
   const onRefresh = useCallback(() => {
     fecthHandler();
