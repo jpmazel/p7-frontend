@@ -1,25 +1,24 @@
-.feedDisplayComment {
+.feedDisplayComment {  
   display: flex;
   justify-content: center;
-  flex-direction: column;
-
-  margin-left: 10rem;
+  flex-direction: column; 
+   margin-left: 10rem; 
 }
-@media (max-width: 400px) {
+@media (max-width: 400px){
   .feedDisplayComment {
     margin-left: 2rem;
   }
 }
 
-.feedDisplayComment p {
+.feedDisplayComment p{
   font-size: 1.5rem;
 }
 
-.feedDisplayComment .photoComment {
+.feedDisplayComment .photoComment{
   display: flex;
 }
 
-.feedDisplayComment .card {
-  background-color: var(--cardPost-bg-color);
-  margin: 1rem 0;
+.feedDisplayComment .card{
+  background-color: var(--card-bg-color); 
+  margin: 1rem 0;  
 }

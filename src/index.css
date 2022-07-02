@@ -1,8 +1,9 @@
 :root {
   font-size: 62.5%;
-  --header-bg-color: rgb(156, 157, 156);
-  --body-bg-color: rgb(122, 122, 122);
-  --cardPost-bg-color: rgba(38, 87, 87, 0.418);
+  --main-bg-color: rgb(122, 122, 122);
+  --header-bg-color: rgb(116, 116, 116);
+  --textArea-bg-color: antiquewhite;
+  --card-bg-color: rgba(38, 87, 87, 0.418);
 }
 
 * {
@@ -12,8 +13,9 @@
 }
 
 body {
-  background-color: var(--body-bg-color);
-  font-family: "Lato", sans-serif;
+  /* max-width: 100%; */
+  background-color: var(--main-bg-color);
+  font-family: "Roboto", sans-serif;
 }
 
 section {

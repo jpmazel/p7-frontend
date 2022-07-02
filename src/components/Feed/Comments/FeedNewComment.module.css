@@ -4,14 +4,14 @@
   margin-bottom: 1.5rem;
 }
 
-@media (max-width:400px){
+@media (max-width: 400px) {
   .feedNewComment {
-  margin-left : 2rem;
+    margin-left: 2rem;
   }
 }
 
 .feedNewComment .card {
-  background-color: var(--cardPost-bg-color);
+  background-color: var(--card-bg-color);
 }
 
 .feedNewComment textarea {
@@ -20,8 +20,8 @@
   resize: none;
   height: 10rem;
   padding: 0.5rem;
-  font-size:1.8rem ;
-  background-color: antiquewhite;
+  font-size: 1.8rem;
+  background-color: var(--textArea-bg-color);
 }
 
 .feedNewComment form {
@@ -29,7 +29,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
 }
 
 .feedNewComment label {

@@ -1,9 +1,9 @@
-.feedDisplayPost {
+.feedDisplayPost { 
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  max-width: 100%;
+  max-width: 100%;  
 }
 
 .feedDisplayPost h2 {
@@ -11,12 +11,12 @@
   font-size: 2.5rem;
 }
 
-.container {
-  max-width: 43rem;
+.container { 
+  max-width: 43rem; 
 }
 
 .card {
-  background-color: var(--cardPost-bg-color);
+  background-color: var(--card-bg-color);
   margin: 1rem 0;
 }
 
@@ -30,7 +30,7 @@
   display: flex;
 }
 
-.likeAndButton {
+.likeAndButton {  
   display: flex;
   justify-content: flex-end;
   align-items: center;

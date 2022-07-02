@@ -1,6 +1,6 @@
 .user {
   margin: 0.5rem;
-  background-color: var(--cardPost-bg-color);
+  background-color: rgba(38, 87, 87, 0.418);
   border-radius: 30px;
   display: flex;
   flex-direction: column;
@@ -30,7 +30,7 @@
 }
 
 .user img {
-  height: 15rem;
+  height: 10rem;
   margin: 1.5rem;
 }
 
@@ -45,7 +45,7 @@
 input {
   background-color: antiquewhite;
   width: 70%;
-  font-size:1.8rem;
+  font-size: 1.8rem;
 }
 
 @media (max-width: 400px) {
@@ -57,7 +57,63 @@ input {
 .user textarea {
   height: 20rem;
   width: 95%;
-  background-color: antiquewhite;
+  background-color: var(--textArea-bg-color);
+  /* background-color: antiquewhite; */
   resize: none;
   font-size: 1.8rem;
+  border-radius: 5px;
+}
+
+.group-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.form-control label {
+  font-size: 3rem;
+}
+
+.form-control input {
+  width: 80%;
+  border-radius: 5px;
+  margin-top: 0.3rem;
+}
+
+.form-control input:focus,
+textarea:focus {
+  background-color: rgb(250, 204, 143);
+  border: solid rgb(0, 0, 0) 4px;
+  outline: none;
+}
+
+.invalid input, .invalid textarea {
+  border: 5px solid red;
+}
+
+/* .invalid textarea {
+  border: 5px solid red;
+} */
+
+.invalid input:focus {
+  /* background-color: rgb(250, 204, 143); */
+}
+
+.error-text {
+  color: red;
+  font-size: 1.8rem;
+  background-color: yellow;
+  border-radius: 5px;
+  margin-top: 0.3rem;
 }

@@ -5,7 +5,7 @@ import classes from "./FicheUser.module.css";
 import { Navigate } from "react-router-dom";
 import FicheUserDisplay from "../components/FicheUser/FicheUserDisplay";
 
-const FicheUser = () => {
+const FicheUser = ({ onNewFiche }) => {
   const authCtx = useContext(AuthContext);
 
   const [data, setData] = useState([]);
@@ -13,7 +13,7 @@ const FicheUser = () => {
 
   const isLoggedIn = authCtx.isLoggedIn;
 
-  //PREMIRE REQUÊTE requête pour accéder à des ressources protéger qui nécessite un token et un userId
+  //PREMIERE REQUÊTE requête pour accéder à des ressources protéger qui nécessite un token et un userId
   const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/?userId=${authCtx.userId}`;
 
   const fecthHandler = useCallback(async () => {
@@ -46,6 +46,7 @@ const FicheUser = () => {
               prenom: dataResponse.results[0].fiche_user_prenom,
               userId: dataResponse.results[0].fiche_user_userId,
               idFiche: dataResponse.results[0].id_fiche_user,
+              newFiche: dataResponse.results[0].fiche_user_new_fiche,
             };
           };
           //envoie dans le state des données
@@ -53,18 +54,20 @@ const FicheUser = () => {
           setIsCreateFiche(true);
         } else {
           //creation de la fiche de l'utilisateur sur la base de donnée
+
           const fetchFicheUserCreateHandler = async () => {
             try {
               const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/?userId=${authCtx.userId}`;
 
               const dataUpdateFormData = {
                 userId: authCtx.userId,
-                nom: "modifier la fiche",
-                prenom: "modifier la fiche",
+                nom: "",
+                prenom: "",
                 age: 0,
-                job: "modifier la fiche",
-                bio: "modifier la fiche",
+                job: "",
+                bio: "",
                 photoProfilUrl: "",
+                newFiche: true,
               };
 
               const formData = new FormData();
@@ -106,12 +109,23 @@ const FicheUser = () => {
     }
   }, [authCtx.token, url, authCtx.userId]);
 
+  //----------------------------------------------------------------
+  const newFicheHandler = () => {
+    onNewFiche();
+  };
+  //-----------------------------------------------------------------
+
   //pour exécuter la fonction au montage du composant
   useEffect(() => {
-    if (isLoggedIn) {
+    let isActive = true;
+    if (isActive && isLoggedIn && authCtx.userId) {
       fecthHandler();
     }
-  }, [fecthHandler, isLoggedIn,isCreateFiche]);
+    //cleanup function
+    return () => {
+      isActive = false;
+    };
+  }, [fecthHandler, isLoggedIn, isCreateFiche, authCtx.userId]);
 
   const onRefresh = useCallback(() => {
     fecthHandler();
@@ -121,7 +135,11 @@ const FicheUser = () => {
     <section className={classes.ficheUser}>
       {!isLoggedIn && <Navigate to="/" replace={true} />}
       {isLoggedIn && isCreateFiche && (
-        <FicheUserDisplay data={data} onRefresh={onRefresh} />
+        <FicheUserDisplay
+          data={data}
+          onRefresh={onRefresh}
+          onNewFiche={newFicheHandler}
+        />
       )}
     </section>
   );

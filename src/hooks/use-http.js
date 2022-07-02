@@ -9,8 +9,7 @@ const useHttp = () => {
 
   const sendRequest = useCallback(async (requestConfig, applyData) => {
     setIsLoading(true);
-    setError(null);
-
+    setError(null);   
     //Pour controler la présence du constructeur Formdata
     const controlFormData = requestConfig.body instanceof FormData;
 
@@ -32,14 +31,19 @@ const useHttp = () => {
       });
 
       const dataResponse = await response.json();
+      
 
       if (response.ok) {
         applyData(dataResponse.results);
       } else {
+        console.log("-->response PAS ok");
+        console.log(dataResponse);
         isActive = true;
         setError(dataResponse);
       }
     } catch (error) {
+      console.log("-->Dans le catch  sendRequest custom hook");
+      console.log(error);
     } finally {
       if (isActive) {
         setError(null);

@@ -1,4 +1,4 @@
-.feedNewPost {  
+.feedNewPost {
   margin-bottom: 1rem;
 }
 
@@ -9,7 +9,7 @@
 }
 
 .feedNewPost .card {
-  background-color: var(--cardPost-bg-color);
+  background-color: var(--card-bg-color);
   margin: 0rem;
 }
 
@@ -37,7 +37,7 @@
   width: 95%;
   height: 12rem;
   font-size: 1.8rem;
-  background-color: antiquewhite;
+  background-color: var(--textArea-bg-color);
 }
 
 #messageEmpty {
