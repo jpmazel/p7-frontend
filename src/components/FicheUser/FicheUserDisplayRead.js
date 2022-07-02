@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import AuthContext from "../../store/authContext";

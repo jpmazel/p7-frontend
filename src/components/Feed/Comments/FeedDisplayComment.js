@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import FeedComment from "./FeedComment";
 import FeedCommentPhotoUser from "./FeedCommentPhotoUser";
 
