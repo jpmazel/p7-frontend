@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useReducer, useRef } from "react";
 import Button from "../UI/Button";
 import classes from "./authForm.module.css";
 import ErrorModal from "../UI/ErrorModal";
@@ -8,23 +8,67 @@ import AuthContext from "../../store/authContext";
 import { useNavigate } from "react-router-dom";
 import useHttp from "../../hooks/use-http";
 
+//fonction reducer pour le hook useReducer
+const authenticationReducer = (state, action) => {
+  switch (action.type) {
+    case "ERROR_SAME_PASSWORD":
+      return {
+        ...state,
+        errorSamePassword: action.payload,
+      };
+
+    case "TOGGLE_ISLOGIN":
+      return {
+        ...state,
+        isLogin: !state.isLogin,
+      };
+
+    case "ERROR_MESSAGE":
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case "DISPLAY_PASSWORD":
+      return {
+        ...state,
+        passwordPlain: !state.passwordPlain,
+      };
+
+    default:
+      return {
+        errorSamePassword: false,
+        isLogin: true,
+        error: null,
+        passwordPlain: false,
+      };
+  }
+};
+
+//Le composant
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const passwordControleInputRef = useRef();
 
-  const [errorSamePassword, setErrorSamePassword] = useState(false);
-
   const navigate = useNavigate();
 
+  //le state initial
+  const initialState = {
+    errorSamePassword: false,
+    isLogin: true,
+    error: null,
+    passwordPlain: false,
+  };
+
+  const [authentication, authenticationDispatch] = useReducer(
+    authenticationReducer,
+    initialState
+  );
+
+  const { errorSamePassword, isLogin, passwordPlain, error } = authentication;
+
   const authCtx = useContext(AuthContext);
-
-  const [isLogin, setIsLogin] = useState(true);
-  //isLoading pour mettre un spinner ou un texte qui prévient que c'est en cours de chargement
-
-  const [error, setError] = useState(null);
-
-  const [passwordPlain, setPasswordPlain] = useState(false);
 
   const {
     sendRequest: fetchHandler,
@@ -35,7 +79,9 @@ const AuthForm = () => {
   let enteredPasswordControl;
 
   const toggleAuthModeHandler = () => {
-    setIsLogin((prevState) => !prevState);
+    authenticationDispatch({
+      type: "TOGGLE_ISLOGIN",
+    });
   };
 
   const submitHandler = (event) => {
@@ -55,9 +101,12 @@ const AuthForm = () => {
       enteredEmail.trim().length === 0 ||
       enteredPassword.trim().length === 0
     ) {
-      setError({
-        title: "Un ou plusieurs champs sont vides",
-        message: "Entrer votre email et ou votre mot de passe",
+      authenticationDispatch({
+        type: "ERROR_MESSAGE",
+        payload: {
+          title: "Un ou plusieurs champs sont vides",
+          message: "Entrer votre email et ou votre mot de passe",
+        },
       });
       return;
     }
@@ -68,9 +117,12 @@ const AuthForm = () => {
     };
 
     if (!regExEmail(enteredEmail)) {
-      setError({
-        title: "Email invalide",
-        message: "Entrer un format de mail valide",
+      authenticationDispatch({
+        type: "ERROR_MESSAGE",
+        payload: {
+          title: "Email invalide",
+          message: "Entrer un format de mail valide",
+        },
       });
       return;
     }
@@ -79,12 +131,19 @@ const AuthForm = () => {
     const samePassword = enteredPassword === enteredPasswordControl;
 
     if (!samePassword) {
-      setError({
-        title: "Le mot de passe est différent",
-        message: "Entrer un mot de passe identique dans les deux champs",
+      authenticationDispatch({
+        type: "ERROR_MESSAGE",
+        payload: {
+          title: "Le mot de passe est différent",
+          message: "Entrer un mot de passe identique dans les deux champs",
+        },
       });
 
-      setErrorSamePassword(true);
+      // setErrorSamePassword(true)
+      authenticationDispatch({
+        type: "ERROR_SAME_PASSWORD",
+        payload: true,
+      });
       return;
     }
 
@@ -119,32 +178,49 @@ const AuthForm = () => {
   useEffect(() => {
     //AUTHENTIFICATION ECHEC
     if (isLogin && errorHookHttp) {
-      setError({
-        title: "Authentification Echec",
-        message: errorHookHttp && errorHookHttp.error,
+      authenticationDispatch({
+        type: "ERROR_MESSAGE",
+        payload: {
+          title: "Authentification Echec",
+          message: errorHookHttp && errorHookHttp.error,
+        },
       });
       return;
     }
 
-    //gérer l'erreur du COMPTE EXISTANT SUR LA BASE DE DONNEE
-    // pour l'afficher dans la modal ErrorModal
+    //gérer l'erreur de la CREATION DE COMPTE avec un EMAIL
+    //DEJA PRIS et l'afficher dans la modal ErrorModal
+    //OU mot de passe TROP FAIBLE
     if (!isLogin && errorHookHttp) {
-      setError({
-        title: "Il y a un problème",
-        message: errorHookHttp.error.code || errorHookHttp.error,
+      console.log(errorHookHttp);
+      authenticationDispatch({
+        type: "ERROR_MESSAGE",
+        payload: {
+          title: "Il y a un problème",
+          message: errorHookHttp.error.code || errorHookHttp.error,
+        },
       });
     }
   }, [errorHookHttp, isLogin]);
 
   //pour reset le state error-------------------------------------------
   const errorHandler = () => {
-    setError(null);
-    setErrorSamePassword(false);
+    authenticationDispatch({
+      type: "ERROR_MESSAGE",
+      payload: null,
+    });
+    // setErrorSamePassword(false);
+    authenticationDispatch({
+      type: "ERROR_SAME_PASSWORD",
+      payload: false,
+    });
   };
 
   //Pour gérer l'affichage en clair du password
   const passwordPlainHandler = () => {
-    setPasswordPlain((prevState) => !prevState);
+    authenticationDispatch({
+      type: "DISPLAY_PASSWORD",
+    });
   };
 
   return (
