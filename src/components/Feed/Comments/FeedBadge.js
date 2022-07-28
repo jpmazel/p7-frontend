@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 import classes from "./FeedBadge.module.css";
+import { useSelector } from "react-redux";
 
 const FeedBadge = ({
   idPostsUser,
   userIdToken,
-  token,
-  newComment,
-  updateDeleteComment,
+  token,  
 }) => {
   const [numberOfComments, setNumberOfComments] = useState();
 
+  const newComment = useSelector((state) => state.commentary.onNewComment);
+  const updateDeleteComment = useSelector((state) => state.commentary.onUpdateDeleteComment);
+
   //Requête pour avoir le nombre de commentaire (je vais chercher tous les commentaires du post sélectionné)
 
-  const fetchGetNumberCommentHandler = useCallback( async () => {
-    const url = `${process.env.REACT_APP_API_URL}/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
+  const fetchGetNumberCommentHandler = useCallback(async () => {
+    const url = `http://localhost:3000/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -28,6 +30,7 @@ const FeedBadge = ({
         setNumberOfComments(dataResponse.results);
       } else {
         console.log("-->fetchGetNumberCommentHandlerresponse PAS ok");
+        console.log(dataResponse);
         throw new Error(dataResponse.error);
       }
     } catch (error) {
@@ -36,11 +39,11 @@ const FeedBadge = ({
       );
       console.log(error);
     }
-  }, [idPostsUser,token,userIdToken]);
+  }, [idPostsUser, token, userIdToken]);
 
   useEffect(() => {
     fetchGetNumberCommentHandler();
-  }, [newComment, updateDeleteComment,fetchGetNumberCommentHandler]);
+  }, [newComment, updateDeleteComment, fetchGetNumberCommentHandler]);
 
   return (
     <div className={classes.feedBadge}>

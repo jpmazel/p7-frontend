@@ -118,7 +118,7 @@ const FicheUser = ({ onNewFiche }) => {
   //pour exécuter la fonction au montage du composant
   useEffect(() => {
     let isActive = true;
-    if (isActive && isLoggedIn && authCtx.userId) {
+    if ( isLoggedIn && authCtx.userId && isActive) {
       fecthHandler();
     }
     //cleanup function

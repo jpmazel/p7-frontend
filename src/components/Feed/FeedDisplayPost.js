@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/authContext";
 import classes from "./FeedDisplayPost.module.css";
 import Card from "../UI/Card";
@@ -25,12 +25,12 @@ const FeedDisplayPost = ({ onUpdate }) => {
   const [buttonSend, setButtonSend] = useState(false);
   const [isUpdatingPostFinish, setIsUpdatingPostFinish] = useState(false);
 
-  const [newComment, setNewComment] = useState(false);
-  const [updateDeleteComment, setUpdateDeleteComment] = useState();
+  // const [updateDeleteComment, setUpdateDeleteComment] = useState();
 
   const [idCommentButton, setIdCommentButton] = useState(null);
   const [isDisplayedComment, setIsDisplayedComment] = useState(false);
- 
+
+  //Aller chercher tous les posts de la base de données qui sont la table posts_user
   //CUSTOM HOOLK HTTP GET
   const { sendRequest: fetchGetMessageHandler } = useHttp();
 
@@ -64,15 +64,10 @@ const FeedDisplayPost = ({ onUpdate }) => {
     setIsUpdatingPostFinish((prevState) => !prevState);
   };
 
-  //Le commentaire a bien été envoyé sur la base de donnée
-  const onNewComment = () => {
-    setNewComment((prevState) => !prevState);
-  };
-
   //Le commentaire a bien été supprimé de la base de données
-  const onUpdateDeleteComment = (updateDeleteComment) => {
-    setUpdateDeleteComment(updateDeleteComment);
-  };
+  // const onUpdateDeleteComment = (updateDeleteComment) => {
+  //   setUpdateDeleteComment(updateDeleteComment);
+  // };
 
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {
@@ -172,30 +167,25 @@ const FeedDisplayPost = ({ onUpdate }) => {
                     isUpdatingPost={isUpdatingPost}
                     onSendMessage={messageToSend}
                     onCommentsDisplayPost={commentsDisplayPost}
-                    newComment={newComment}
-                    updateDeleteComment={updateDeleteComment}
                   />
                 </div>
               </Card>
 
-              <FeedDisplayComment
-                onUpdate={onUpdate}
-                token={authCtx.token}
-                userIdToken={Number(authCtx.userId)}
-                idPostsUser={message.id_posts_user}
-                newComment={newComment}
-                idCommentButton={idCommentButton}
-                isDisplayedComment={isDisplayedComment}
-                onUpdateDeleteComment={onUpdateDeleteComment}
-              />
-
-              {isDisplayedComment &&
-                message.id_posts_user === idCommentButton && (
-                  <FeedNewComment
+              {isDisplayedComment && message.id_posts_user === idCommentButton && (
+                <>
+                  <FeedDisplayComment
+                    onUpdate={onUpdate}
+                    token={authCtx.token}
+                    userIdToken={Number(authCtx.userId)}
                     idPostsUser={message.id_posts_user}
-                    onNewComment={onNewComment}
+                    idCommentButton={idCommentButton}
+                    isDisplayedComment={isDisplayedComment}
+                    // onUpdateDeleteComment={onUpdateDeleteComment}
                   />
-                )}
+
+                  <FeedNewComment idPostsUser={message.id_posts_user} />
+                </>
+              )}
             </section>
           ))}
       </div>

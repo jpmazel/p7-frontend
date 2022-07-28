@@ -2,57 +2,46 @@ import { useState } from "react";
 import classes from "./FeedComment.module.css";
 import Linkify from "linkify-react";
 import { useEffect } from "react";
-import useHttp from "../../../hooks/use-http";
+import {useDispatch, useSelector} from "react-redux";
+import {putFetchCommentary} from "../../../store/actions/commentary-action"
 
 const FeedComment = ({
   idComment,
   userIdToken,
-  comment,
-  isUpdatingComment,
-  buttonSend,
-  token,
-  onUpdateCommentFinish,
+  comment,  
+  token,  
 }) => {
   const [messageTextarea, setMessageTextarea] = useState({
     comments_user_message: comment,
   });
 
-  const { sendRequest: fetchPUTHandler } = useHttp();
+  const buttonSend = useSelector((state) =>state.commentary.modificationComment.buttonSend)
+  const isUpdatingComment = useSelector((state) =>state.commentary.modificationComment )  
 
-  const commentToEdit = isUpdatingComment && isUpdatingComment.commentToEdit;
+  const commentToEdit =  isUpdatingComment.commentToEdit;  
+
+  const dispatch = useDispatch()
 
   //Condition pour afficher l'interface de MODIFICATION
-  const modificationOneComment = commentToEdit === idComment;
+  const modificationOneComment = (commentToEdit === idComment ) &&  isUpdatingComment.isUpdating;
 
   //fonction exécuté par onChange du textarea du post
   const messageModificationHandler = (event) => {
     setMessageTextarea({ comments_user_message: event.target.value });
   };
 
-  //Envoyer le message mis à jour
   //La requête PUT avec le custom Hook HTTP
   useEffect(() => {
-    const requestConfig = {
-      url: `http://localhost:3000/api/posts/comment/${idComment}?userId=${userIdToken}`,
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: messageTextarea,
-    };
-
     if (buttonSend && modificationOneComment) {
-      //exécution de la fonction
-      fetchPUTHandler(requestConfig, () => onUpdateCommentFinish());
+      //exécution de la fonction     
+      dispatch(putFetchCommentary(idComment,userIdToken,token,messageTextarea))      
     }
   }, [
     buttonSend,
-    fetchPUTHandler,
+    dispatch,
     idComment,
     messageTextarea,
-    modificationOneComment,
-    onUpdateCommentFinish,
+    modificationOneComment,   
     token,
     userIdToken,
   ]);

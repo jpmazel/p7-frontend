@@ -266,7 +266,6 @@ const FicheUserDisplay = ({ data, onRefresh, onNewFiche }) => {
       enterJobIsValid &&
       enterBioIsValid &&
       fetchUploadHandler(requestConfig, (dataResponse) => {
-        console.log(dataResponse);
         setValidationSend(true);
         setModification(false);
         setEnterNameIsValid(true);

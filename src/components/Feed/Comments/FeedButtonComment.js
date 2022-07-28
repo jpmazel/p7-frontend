@@ -3,38 +3,32 @@ import Button from "../../UI/Button";
 import { useContext, useState } from "react";
 import ConfirmationModal from "../../UI/ConfirmationModal";
 import AuthContext from "../../../store/authContext";
-import useHttp from "../../../hooks/use-http";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteFetchCommentary } from "../../../store/actions/commentary-action";
+import { commentaryActions } from "../../../store/slices/commentary-slice";
 
 const FeedButtonComment = ({
   userIdToken,
   userIdComment,
   idCommentUser,
-  token,
-  onUpdateDelete,
-  onModicatifionMessage,
-  isUpdatingComment,
-  onSendMessage,
+  token,  
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
-
-  const { sendRequest: fetchDeleteCommentFeedHandler } = useHttp();
 
   //Importation du context
   const authCtx = useContext(AuthContext);
 
-  //Pour supprimer un commentaire dans le feed
-  const deleteComment = () => {
-    const requestConfig = {
-      url: `http://localhost:3000/api/posts/comment/${idCommentUser}?userId=${userIdToken}`,
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+  const dispatch = useDispatch();
 
-    fetchDeleteCommentFeedHandler(requestConfig, () =>
-      onUpdateDelete(idCommentUser)
-    );
+  const isUpdatingComment = useSelector((state) =>state.commentary.modificationComment)
+
+  //bouton envoyer pour valider la modification du commentaire
+  const buttonSendHandler = () => dispatch(commentaryActions.boutonSend(true));
+
+  //Pour supprimer un commentaire dans le feed
+  const deleteCommentHandler = () => {
+    dispatch(deleteFetchCommentary(idCommentUser, userIdToken, token));
+    setConfirmationModal(null);
   };
 
   //confirmation modal pour suppression du compte---------------------------------
@@ -46,17 +40,26 @@ const FeedButtonComment = ({
   };
   //--------------------------------------------------------------------------------
 
+  const modificationHandler = () => {
+    dispatch(
+      commentaryActions.modificationComment({
+        isUpdating: true,
+        commentToEdit: idCommentUser,
+      })
+    );
+  };
+
   //Gestion du bouton ENVOYER
   const modificationOneComment =
-    idCommentUser === (isUpdatingComment && isUpdatingComment.commentToEdit);
-
+    (idCommentUser === isUpdatingComment.commentToEdit) && isUpdatingComment.isUpdating;
+  
   return (
     <div className={classes.feedButtonComment}>
       <>
         {/* Bouton MODIFIER */}
-        {userIdToken === userIdComment && !isUpdatingComment && (
+        {userIdToken === userIdComment && !isUpdatingComment.isUpdating && (
           <div className={classes.orange}>
-            <Button id={idCommentUser} onClick={onModicatifionMessage}>
+            <Button id={idCommentUser} onClick={modificationHandler}>
               Modifier
             </Button>
           </div>
@@ -64,7 +67,7 @@ const FeedButtonComment = ({
 
         {/* Bouton ENVOYER  */}
         {userIdToken === userIdComment && modificationOneComment && (
-          <Button id={idCommentUser} onClick={onSendMessage}>
+          <Button id={idCommentUser} onClick={buttonSendHandler}>
             Envoyer
           </Button>
         )}
@@ -82,7 +85,7 @@ const FeedButtonComment = ({
             title={confirmationModal.title}
             message={confirmationModal.message}
             onConfirm={() => setConfirmationModal(null)}
-            onConfirmDelete={() => deleteComment()}
+            onConfirmDelete={deleteCommentHandler}
           />
         )}
       </>

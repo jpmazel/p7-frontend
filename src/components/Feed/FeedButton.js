@@ -8,16 +8,14 @@ import useHttp from "../../hooks/use-http";
 
 const FeedButton = ({
   userIdToken,
-  userIdPost,
-  idPostsUser,
   token,
+  idPostsUser,
+  userIdPost,
   onUpdateDelete,
   onModicatifionMessage,
   isUpdatingPost,
   onSendMessage,
   onCommentsDisplayPost,
-  newComment,
-  updateDeleteComment,
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
   const authCtx = useContext(AuthContext);
@@ -54,16 +52,16 @@ const FeedButton = ({
     <div className={classes.feedButton}>
       {/* Bouton COMMENTAIRE pour AFFICHER les commentaires sous le post  */}
       {!modificationOnePost && (
-        <Button id={idPostsUser} onClick={onCommentsDisplayPost}>
-          <FeedBadge
-            userIdToken={userIdToken}
-            token={token}
-            idPostsUser={idPostsUser}
-            newComment={newComment}
-            updateDeleteComment={updateDeleteComment}
-          />
-          Commentaire
-        </Button>
+        <>
+          <Button id={idPostsUser} onClick={onCommentsDisplayPost}>
+            <FeedBadge
+              userIdToken={userIdToken}
+              token={token}
+              idPostsUser={idPostsUser}
+            />
+            Commentaire
+          </Button>
+        </>
       )}
 
       <>

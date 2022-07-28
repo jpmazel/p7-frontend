@@ -25,10 +25,15 @@ __Utlisation de React avec les hooks:__
   * useCallback
   * useMemo
   * useReducer (dans le composant AuthForm.js)
-
+    
   * custom hook http: useHttp
 
 __React Router DOM V6:__ 
   * Navigate 
   * useParams
   * NavLink
+
+  __Utlisation de Redux Toolkit:__
+  * sur la partie gestion des commentaires des posts
+  * création du store, du slice, des reducers, et des requettes HTTP
+  * Gestion du CRUD et du props drilling

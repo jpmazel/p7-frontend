@@ -1,21 +1,20 @@
+import { useMemo } from "react";
 import { useContext, useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
+import useHttp from "../../hooks/use-http";
 import AuthContext from "../../store/authContext";
 import classes from "./FicheUserDisplayRead.module.css";
-import useHttp from "../../hooks/use-http";
-import { useMemo } from "react";
 
 const FicheUserDisplayRead = () => {
   const { id } = useParams();
 
   const [data, setData] = useState();
+  const { sendRequest: fetchGetFicheUserHandler } = useHttp();
   const authCtx = useContext(AuthContext);
+
   const isLoggedIn = authCtx.isLoggedIn;
 
-  const { sendRequest: fetchGetFicheUserHandler } = useHttp();
-
-  //Requête pour récupérer la fiche utilisateur
   const requestConfig = useMemo(
     () => ({
       url: `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authCtx.userId}`,
@@ -43,8 +42,9 @@ const FicheUserDisplayRead = () => {
           <section className={classes.user}>
             <h1>Vous êtes sur la fiche utilisateur de </h1>
             <p>
-              <span>{data && data[0].fiche_user_prenom} </span>
-              <span> {data && data[0].fiche_user_nom}</span>
+              <span> {data && data[0].fiche_user_prenom}</span>
+              {" "}
+              {data && data[0].fiche_user_nom}
             </p>
             {/* PHOTO PROFIL */}
             <p>

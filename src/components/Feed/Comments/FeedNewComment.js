@@ -3,19 +3,23 @@ import AuthContext from "../../../store/authContext";
 import Button from "../../UI/Button";
 import classes from "./FeedNewComment.module.css";
 import Card from "../../UI/Card";
-import useHttp from "../../../hooks/use-http";
+import { useDispatch } from "react-redux";
+import { postFetchCommentary } from "../../../store/actions/commentary-action";
 
-const FeedNewComment = ({ idPostsUser, onNewComment }) => {
+const FeedNewComment = ({ idPostsUser}) => {
   //Pour récupérer le TOKEN d'authentification
   const authCtx = useContext(AuthContext);
-
-  const { sendRequest: fetchPOSTHandler } = useHttp();
+  const dispatch = useDispatch();
 
   //Pour stocker le contenu du message
   const [message, setMessage] = useState(null);
 
   // l'information du click sur le bouton envoyer
   const [clickSend, setClickSend] = useState(false);
+
+  // //L'URL de la route de la WEB API REST du backend
+  // //http://localhost:3000/api/posts/comments?userId=48
+  // const url = `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${authCtx.userId}`;
 
   //Lorsque l'on appuie sur le bouton ENVOYER du formulaire
   const submitHandler = (event) => {
@@ -25,27 +29,13 @@ const FeedNewComment = ({ idPostsUser, onNewComment }) => {
     const data = {
       userId: authCtx.userId,
       idPost: idPostsUser,
-      message: message,
+      message,
     };
-
-    //Objet de configuration de la requête POST
-    const requestConfig = {
-      url: `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${authCtx.userId}`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${authCtx.token}`,
-      },
-      body: data,
-    };
-
-    //L'exécution de la fonction (envoyer une requête POST vers le serveur)
-    message &&
-      fetchPOSTHandler(requestConfig, () => {
-        setMessage("");
-        setClickSend(false);
-        onNewComment();
-      });
+    
+    //requête POST redux
+    dispatch(postFetchCommentary(authCtx.userId, authCtx.token, data));
+    setMessage("");
+    setClickSend(false);   
   };
 
   return (
