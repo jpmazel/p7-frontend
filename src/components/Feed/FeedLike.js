@@ -76,7 +76,7 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
   };
 
   useEffect(() => {
-    //objet de configuration
+    //Objet de configuration
     const sendRequest = {
       url: `http://localhost:3000/api/posts/likes/${idPostsUser}?userId=${userIdToken}`,
       method: "GET",
@@ -90,16 +90,12 @@ const FeedLike = ({ token, idPostsUser, userIdToken }) => {
 
   return (
     <div className={classes.feedLike}>
-      {/* <p>
-        LIKE userId: {userIdToken} ET idPost: {idPostsUser}
-      </p> */}
       {like && like[0] && like[0].likes_user_like ? (
         <p onClick={likeHandler}>
           <ThumbUpIcon fontSize="large" />
         </p>
       ) : (
         <p onClick={neutralLikeHandler}>
-          {" "}
           <ThumbUpOutlinedIcon fontSize="large" />
         </p>
       )}

@@ -1,87 +1,45 @@
-import { useContext, useEffect, useReducer, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../UI/Button";
 import classes from "./authForm.module.css";
 import ErrorModal from "../UI/ErrorModal";
 import Wrapper from "../Helpers/Wrapper";
 import Loader from "../UI/Loader";
-import AuthContext from "../../store/authContext";
-import { useNavigate } from "react-router-dom";
-import useHttp from "../../hooks/use-http";
 
-//fonction reducer pour le hook useReducer
-const authenticationReducer = (state, action) => {
-  switch (action.type) {
-    case "ERROR_SAME_PASSWORD":
-      return {
-        ...state,
-        errorSamePassword: action.payload,
-      };
+import { useDispatch, useSelector } from "react-redux";
+import { postFetchLoginAuthentification } from "../../store/actions/authentification-actions";
+import { authentificationActions } from "../../store/slices/authentification-slice";
 
-    case "TOGGLE_ISLOGIN":
-      return {
-        ...state,
-        isLogin: !state.isLogin,
-      };
+//isLogin TRUE : Affiche l'interface pour se connecter
+//isLogin FALSE : Affiche l'interface pour créer un compte
 
-    case "ERROR_MESSAGE":
-      return {
-        ...state,
-        error: action.payload,
-      };
-
-    case "DISPLAY_PASSWORD":
-      return {
-        ...state,
-        passwordPlain: !state.passwordPlain,
-      };
-
-    default:
-      return {
-        errorSamePassword: false,
-        isLogin: true,
-        error: null,
-        passwordPlain: false,
-      };
-  }
-};
-
-//Le composant
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const passwordControleInputRef = useRef();
 
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isLogin, setIsLogin] = useState(true);
 
-  //le state initial
-  const initialState = {
-    errorSamePassword: false,
-    isLogin: true,
-    error: null,
-    passwordPlain: false,
-  };
+  const [passwordPlain, setPasswordPlain] = useState(false);
 
-  const [authentication, authenticationDispatch] = useReducer(
-    authenticationReducer,
-    initialState
+  const [error, setError] = useState();
+  const errorFetch = useSelector((state) => state.authentification.errorFetch);
+  const accountCreate = useSelector(
+    (state) => state.authentification.accountCreate
   );
 
-  const { errorSamePassword, isLogin, passwordPlain, error } = authentication;
+  //SPINNER - LOADER
+  const isLoading = useSelector((state) => state.authentification.isLoading);
 
-  const authCtx = useContext(AuthContext);
+  //Lire les identifiants dans le local storage
+  useEffect(() => {
+    dispatch(authentificationActions.localStorageAuth());
+  }, [dispatch]);
 
-  const {
-    sendRequest: fetchHandler,
-    error: errorHookHttp,
-    isLoading,
-  } = useHttp();
-
-  let enteredPasswordControl;
-
+  //pour basculer entre les interfaces "CREATION de COMPTE" et "CONNEXION"
   const toggleAuthModeHandler = () => {
-    authenticationDispatch({
-      type: "TOGGLE_ISLOGIN",
-    });
+    dispatch(authentificationActions.accountCreate(false));
+    setIsLogin((prevState) => !prevState);
   };
 
   const submitHandler = (event) => {
@@ -89,6 +47,7 @@ const AuthForm = () => {
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
+    let enteredPasswordControl;
 
     if (isLogin) {
       enteredPasswordControl = enteredPassword;
@@ -101,29 +60,25 @@ const AuthForm = () => {
       enteredEmail.trim().length === 0 ||
       enteredPassword.trim().length === 0
     ) {
-      authenticationDispatch({
-        type: "ERROR_MESSAGE",
-        payload: {
-          title: "Un ou plusieurs champs sont vides",
-          message: "Entrer votre email et ou votre mot de passe",
-        },
+      setError({
+        title: "Un ou plusieurs champs sont vides",
+        message: "Entrer votre email et ou votre mot de passe",
       });
+
       return;
     }
 
-    //controle validité email
+    //Controle validité email
     const regExEmail = (value) => {
       return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
     };
 
     if (!regExEmail(enteredEmail)) {
-      authenticationDispatch({
-        type: "ERROR_MESSAGE",
-        payload: {
-          title: "Email invalide",
-          message: "Entrer un format de mail valide",
-        },
+      setError({
+        title: "Email invalide",
+        message: "Email invalide",
       });
+
       return;
     }
 
@@ -131,96 +86,61 @@ const AuthForm = () => {
     const samePassword = enteredPassword === enteredPasswordControl;
 
     if (!samePassword) {
-      authenticationDispatch({
-        type: "ERROR_MESSAGE",
-        payload: {
-          title: "Le mot de passe est différent",
-          message: "Entrer un mot de passe identique dans les deux champs",
-        },
+      setError({
+        title: "Le mot de passe est différent",
+        message: "Entrer un mot de passe identique dans les deux champs",
       });
 
-      // setErrorSamePassword(true)
-      authenticationDispatch({
-        type: "ERROR_SAME_PASSWORD",
-        payload: true,
-      });
       return;
     }
 
-    //CUSTOM HOOK HTTP---------------------------------------------
-    const requestConfig = {
-      url: `${process.env.REACT_APP_API_URL}/api/authentification/${
-        isLogin ? "login" : "signup"
-      }`,
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: {
-        email: enteredEmail,
-        password: enteredPassword,
-      },
+    const credential = {
+      email: enteredEmail,
+      password: enteredPassword,
     };
 
-    !errorSamePassword &&
-      fetchHandler(requestConfig, (dataResponse) => {
-        authCtx.login(
-          dataResponse.token,
-          dataResponse.userId,
-          dataResponse.admin
-        );
+    dispatch(authentificationActions.isLoading(true));
 
-        navigate("/fiche_utilisateur");
-      });
+    //Envois de la requête login et création de compte
+    dispatch(postFetchLoginAuthentification(isLogin, credential));
   };
 
-  //Gérer les modales d'erreurs------------------------------------------
+  //Gérer les modales d'erreurs------------------------------------------------
+  const errorHandler = () => {
+    setError(null);
+    dispatch(authentificationActions.resetErrorFetch());
+  };
+
   useEffect(() => {
     //AUTHENTIFICATION ECHEC
-    if (isLogin && errorHookHttp) {
-      authenticationDispatch({
-        type: "ERROR_MESSAGE",
-        payload: {
-          title: "Authentification Echec",
-          message: errorHookHttp && errorHookHttp.error,
-        },
+    if (isLogin && errorFetch) {
+      setError({
+        title: "Echec authentification",
+        message: errorFetch.error,
       });
       return;
     }
 
-    //gérer l'erreur de la CREATION DE COMPTE avec un EMAIL
+    //Gérer l'erreur de la CREATION DE COMPTE avec un EMAIL
     //DEJA PRIS et l'afficher dans la modal ErrorModal
     //OU mot de passe TROP FAIBLE
-    if (!isLogin && errorHookHttp) {
-      console.log(errorHookHttp);
-      authenticationDispatch({
-        type: "ERROR_MESSAGE",
-        payload: {
-          title: "Il y a un problème",
-          message: errorHookHttp.error.code || errorHookHttp.error,
-        },
+    if (!isLogin && errorFetch) {
+      setError({
+        title: "Il y a un problème",
+        message: errorFetch.error.code || errorFetch.error,
       });
     }
-  }, [errorHookHttp, isLogin]);
 
-  //pour reset le state error-------------------------------------------
-  const errorHandler = () => {
-    authenticationDispatch({
-      type: "ERROR_MESSAGE",
-      payload: null,
-    });
-    // setErrorSamePassword(false);
-    authenticationDispatch({
-      type: "ERROR_SAME_PASSWORD",
-      payload: false,
-    });
-  };
+    //Quand il n'y a pas d'erreur à la création de compte
+    //basculer sur la page connexion
+    if (!isLogin && !errorFetch && accountCreate) {
+      setIsLogin(true);
+    }
+  }, [isLogin, errorFetch, accountCreate]);
 
   //Pour gérer l'affichage en clair du password
   const passwordPlainHandler = () => {
-    authenticationDispatch({
-      type: "DISPLAY_PASSWORD",
-    });
+    setPasswordPlain((prevState) => !prevState);
   };
 
   return (

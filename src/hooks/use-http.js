@@ -1,3 +1,5 @@
+//CUSTM HOOK utlisé pour les commentaires
+
 import { useState } from "react";
 import { useCallback } from "react";
 
@@ -5,11 +7,11 @@ import { useCallback } from "react";
 //sans body , avec body JSON.stringify(), avec body formData
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   const sendRequest = useCallback(async (requestConfig, applyData) => {
     setIsLoading(true);
-    setError(null);
+    setError(null);   
     //Pour controler la présence du constructeur Formdata
     const controlFormData = requestConfig.body instanceof FormData;
 
@@ -30,11 +32,13 @@ const useHttp = () => {
             : null,
       });
 
-      const dataResponse = await response.json();
+      const dataResponse = await response.json();      
 
       if (response.ok) {
         applyData(dataResponse.results);
       } else {
+        console.log("-->custom hook response PAS ok");
+        console.log(dataResponse);
         isActive = true;
         setError(dataResponse);
       }
@@ -48,7 +52,7 @@ const useHttp = () => {
       }
     }
   }, []);
-
+ 
   return {
     sendRequest,
     isLoading,

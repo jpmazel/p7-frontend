@@ -1,25 +1,23 @@
-import { useContext, useState } from "react";
-import AuthContext from "../../../store/authContext";
+import { useState } from "react";
 import Button from "../../UI/Button";
 import classes from "./FeedNewComment.module.css";
 import Card from "../../UI/Card";
 import { useDispatch } from "react-redux";
 import { postFetchCommentary } from "../../../store/actions/commentary-action";
+import { useSelector } from "react-redux";
 
-const FeedNewComment = ({ idPostsUser}) => {
+const FeedNewComment = ({ idPostsUser }) => {
   //Pour récupérer le TOKEN d'authentification
-  const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
 
   //Pour stocker le contenu du message
   const [message, setMessage] = useState(null);
 
-  // l'information du click sur le bouton envoyer
+  //L'information du click sur le bouton envoyer
   const [clickSend, setClickSend] = useState(false);
-
-  // //L'URL de la route de la WEB API REST du backend
-  // //http://localhost:3000/api/posts/comments?userId=48
-  // const url = `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${authCtx.userId}`;
 
   //Lorsque l'on appuie sur le bouton ENVOYER du formulaire
   const submitHandler = (event) => {
@@ -27,15 +25,17 @@ const FeedNewComment = ({ idPostsUser}) => {
     event.preventDefault();
 
     const data = {
-      userId: authCtx.userId,
+      userId: authentification.userId,
       idPost: idPostsUser,
       message,
     };
-    
+
     //requête POST redux
-    dispatch(postFetchCommentary(authCtx.userId, authCtx.token, data));
+    dispatch(
+      postFetchCommentary(authentification.userId, authentification.token, data)
+    );
     setMessage("");
-    setClickSend(false);   
+    setClickSend(false);
   };
 
   return (

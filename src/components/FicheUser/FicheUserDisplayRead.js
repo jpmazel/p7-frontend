@@ -1,9 +1,10 @@
 import { useMemo } from "react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import useHttp from "../../hooks/use-http";
-import AuthContext from "../../store/authContext";
+import { useSelector } from "react-redux";
+
 import classes from "./FicheUserDisplayRead.module.css";
 
 const FicheUserDisplayRead = () => {
@@ -11,19 +12,21 @@ const FicheUserDisplayRead = () => {
 
   const [data, setData] = useState();
   const { sendRequest: fetchGetFicheUserHandler } = useHttp();
-  const authCtx = useContext(AuthContext);
 
-  const isLoggedIn = authCtx.isLoggedIn;
+  const isLoggedIn = useSelector((state) => state.authentification.isLoggedIn);
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
 
   const requestConfig = useMemo(
     () => ({
-      url: `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authCtx.userId}`,
+      url: `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${id}?userId=${authentification.userId}`,
       method: "GET",
       headers: {
-        Authorization: `Bearer ${authCtx.token}`,
+        Authorization: `Bearer ${authentification.token}`,
       },
     }),
-    [authCtx.token, authCtx.userId, id]
+    [authentification.token, authentification.userId, id]
   );
 
   useEffect(() => {
@@ -42,8 +45,7 @@ const FicheUserDisplayRead = () => {
           <section className={classes.user}>
             <h1>Vous êtes sur la fiche utilisateur de </h1>
             <p>
-              <span> {data && data[0].fiche_user_prenom}</span>
-              {" "}
+              <span> {data && data[0].fiche_user_prenom}</span>{" "}
               {data && data[0].fiche_user_nom}
             </p>
             {/* PHOTO PROFIL */}

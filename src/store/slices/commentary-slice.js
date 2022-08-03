@@ -20,22 +20,20 @@ const commentarySlice = createSlice({
     postCommentary(state) {
       state.onNewComment = !state.onNewComment;
     },
-    deleteCommentary(state, action) {
-      // state.onUpdateDeleteComment = action.payload;
-      const idComment = action.payload;
-      const datas = state.comments;
+    deleteCommentary(state, action) {     
+      const idComment = action.payload
+      const datas = state.comments
 
-      const results = datas.filter(
-        (data) => data.id_comments_user !== idComment
-      );
+      const results = datas.filter((data) => data.id_comments_user !== idComment)      
       state.comments = results;
 
       //pour actualiser le badge des commentaire
-      state.onUpdateDeleteComment = idComment;
+      state.onUpdateDeleteComment = idComment
     },
     putCommentary(state, action) {
       state.modificationComment.buttonSend = false;
       state.modificationComment.isUpdating = false;
+      
       //Pour mettre à jour le state redux après la modification du message du commentaire
       const idComment = action.payload.idComment;
       const message = action.payload.messageTextarea.comments_user_message;
@@ -47,12 +45,15 @@ const commentarySlice = createSlice({
 
       results[0].comments_user_message = message;
     },
-    boutonSend(state, action) {
+    boutonSend(state, action) {      
       state.modificationComment.buttonSend = action.payload;
     },
-    modificationComment(state, action) {
+    modificationComment(state, action) {    
       state.modificationComment = action.payload;
     },
+    clearStateCommentary(state, action){
+     state.comments = []
+    }
   },
 });
 

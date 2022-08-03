@@ -13,9 +13,8 @@ const FeedBadge = ({
   const updateDeleteComment = useSelector((state) => state.commentary.onUpdateDeleteComment);
 
   //Requête pour avoir le nombre de commentaire (je vais chercher tous les commentaires du post sélectionné)
-
   const fetchGetNumberCommentHandler = useCallback(async () => {
-    const url = `http://localhost:3000/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
+    const url = `${process.env.REACT_APP_API_URL}/api/posts/comments/${idPostsUser}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
         method: "GET",

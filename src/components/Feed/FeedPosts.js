@@ -30,7 +30,7 @@ const FeedPosts = ({
   };
 
   //Envoyer le message mis à jour
-  //exécution de la fonction
+  //Exécution de la fonction
   useEffect(() => {
     //Objet de configuration du custom hook http
     const requestConfig = {

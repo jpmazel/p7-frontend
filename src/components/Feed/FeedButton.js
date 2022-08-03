@@ -1,10 +1,11 @@
 import classes from "./FeedButton.module.css";
 import Button from "../UI/Button";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import ConfirmationModal from "../UI/ConfirmationModal";
-import AuthContext from "../../store/authContext";
+
 import FeedBadge from "./Comments/FeedBadge";
 import useHttp from "../../hooks/use-http";
+import {useSelector} from "react-redux"
 
 const FeedButton = ({
   userIdToken,
@@ -18,9 +19,9 @@ const FeedButton = ({
   onCommentsDisplayPost,
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
-  const authCtx = useContext(AuthContext);
+  const authentification = useSelector((state) =>state.authentification.dataResponse)
   const { sendRequest: fetchDeletePostFeedHandler } = useHttp();
-
+  
   //Pour supprimer un post dans le feed
   const deletePost = () => {
     //Objet de configuration du custom hook http
@@ -34,14 +35,14 @@ const FeedButton = ({
     );
   };
 
-  //confirmation modal pour suppression du compte---------------------------------
+  //confirmation modal pour suppression du compte------------------------------
   const confirmationModalHandler = () => {
     setConfirmationModal({
       title: "Confirmation de la suppression du message",
       message: "La suppression du message est une action irréversible",
     });
   };
-  //--------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   //Gestion du bouton ENVOYER
 
@@ -82,7 +83,7 @@ const FeedButton = ({
         )}
 
         {/* Bouton SUPPRIMER  */}
-        {(userIdToken === userIdPost || authCtx.admin === 1) &&
+        {(userIdToken === userIdPost || authentification.admin === 1) &&
           !modificationOnePost && (
             <div className={classes.red}>
               <Button onClick={confirmationModalHandler}>Supprimer</Button>

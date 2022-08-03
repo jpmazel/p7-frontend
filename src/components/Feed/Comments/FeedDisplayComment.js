@@ -38,9 +38,8 @@ const FeedDisplayComment = ({
             comment.comments_user_id_posts === idCommentButton && (
               <Card className={classes.card} key={comment.id_comments_user}>
                 {/* Affichage conditionnel des commentaires si on a cliqué le bouton commentaire */}
-                {/* et que on est sur le bon post */}
-                {/* <p>id de comment : {comment.id_comments_user}</p> */}
-
+                {/* et qu'on est sur le bon post */}
+               
                 <Link
                   to={`/fiche_utilisateur/read/${comment.comments_user_userId}`}
                 >

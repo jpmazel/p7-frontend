@@ -1,16 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import AuthContext from "../../store/authContext";
+import { useEffect, useState } from "react";
+
 import Button from "../UI/Button";
 import classes from "./FeedNewPost.module.css";
 import Card from "../UI/Card";
 import FeedImageUrl from "./FeedImageUrl";
 import FeedVideoUrl from "./FeedVideoUrl";
 import useHttp from "../../hooks/use-http";
-
+import { useSelector } from "react-redux";
 const FeedNewPost = ({ onUpdate }) => {
-  //Pour récupérer le TOKEN d'authentification
-  const authCtx = useContext(AuthContext);
-
   //Pour stocker le contenu du message
   const [message, setMessage] = useState(null);
 
@@ -20,13 +17,18 @@ const FeedNewPost = ({ onUpdate }) => {
   const [clickSend, setClickSend] = useState(false);
   const [displayInput, setDisplayInput] = useState(false);
   const [displayInputVideo, setDisplayInputVideo] = useState(false);
+
   const { sendRequest: fetchPOSTHandler } = useHttp();
+
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
 
   //La condition pour envoyer un POST avec ou sans image vers le serveur
   const conditionSend =
     (!displayInput && !displayInputVideo && message) ||
-    (displayInput && message && urlInput) ||
-    (message && displayInputVideo && urlInputVideo && clickSend);
+    (message && displayInput && urlInput) ||
+    (message && displayInputVideo && urlInputVideo);
   //Pour mettre urlInput a null lorsque l'on ferme le input ou on y met l'URL
   useEffect(() => {
     setUrlInput(null);
@@ -39,7 +41,7 @@ const FeedNewPost = ({ onUpdate }) => {
     event.preventDefault();
 
     const data = {
-      userId: authCtx.userId,
+      userId: authentification.userId,
       message: message,
       photoUrlLink: urlInput,
       videoYTUrlLink: urlInputVideo,
@@ -49,11 +51,11 @@ const FeedNewPost = ({ onUpdate }) => {
     //L'exécution de la fonction (envoyer une requête POST vers le serveur)
     //Objet de configuration de la requête post
     const requestConfig = {
-      url: `${process.env.REACT_APP_API_URL}/api/posts?userId=${authCtx.userId}`,
+      url: `${process.env.REACT_APP_API_URL}/api/posts?userId=${authentification.userId}`,
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${authCtx.token}`,
+        Authorization: `Bearer ${authentification.token}`,
       },
       body: data,
     };
@@ -83,13 +85,13 @@ const FeedNewPost = ({ onUpdate }) => {
   };
 
   //La gestion du bouton IMAGE
-  //au clique sur le bouton l'input s'affiche pour pouvoir y entrer l'URL
+  //Au clique sur le bouton l'input s'affiche pour pouvoir y entrer l'URL
   const onButtonImageHandler = () => {
     setDisplayInput((prevState) => !prevState);
   };
 
   //La gestion du bouton VIDEO
-  //au clique sur le bouton l'input s'affiche pour pouvoir y entrer l'URL
+  //Au clique sur le bouton l'input s'affiche pour pouvoir y entrer l'URL
   const onButtonVideoHandler = () => {
     setDisplayInputVideo((prevState) => !prevState);
   };

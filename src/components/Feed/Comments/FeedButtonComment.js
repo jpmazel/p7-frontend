@@ -1,8 +1,7 @@
 import classes from "./FeedButtonComment.module.css";
 import Button from "../../UI/Button";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import ConfirmationModal from "../../UI/ConfirmationModal";
-import AuthContext from "../../../store/authContext";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteFetchCommentary } from "../../../store/actions/commentary-action";
 import { commentaryActions } from "../../../store/slices/commentary-slice";
@@ -11,16 +10,20 @@ const FeedButtonComment = ({
   userIdToken,
   userIdComment,
   idCommentUser,
-  token,  
+  token,
 }) => {
   const [confirmationModal, setConfirmationModal] = useState(null);
 
   //Importation du context
-  const authCtx = useContext(AuthContext);
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
 
   const dispatch = useDispatch();
 
-  const isUpdatingComment = useSelector((state) =>state.commentary.modificationComment)
+  const isUpdatingComment = useSelector(
+    (state) => state.commentary.modificationComment
+  );
 
   //bouton envoyer pour valider la modification du commentaire
   const buttonSendHandler = () => dispatch(commentaryActions.boutonSend(true));
@@ -31,14 +34,14 @@ const FeedButtonComment = ({
     setConfirmationModal(null);
   };
 
-  //confirmation modal pour suppression du compte---------------------------------
+  //confirmation modal pour suppression du compte------------------------------
   const confirmationModalHandler = () => {
     setConfirmationModal({
       title: "Confirmation de la suppression du commentaire",
       message: "La suppression du commentaire est une action irréversible",
     });
   };
-  //--------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   const modificationHandler = () => {
     dispatch(
@@ -51,8 +54,9 @@ const FeedButtonComment = ({
 
   //Gestion du bouton ENVOYER
   const modificationOneComment =
-    (idCommentUser === isUpdatingComment.commentToEdit) && isUpdatingComment.isUpdating;
-  
+    idCommentUser === isUpdatingComment.commentToEdit &&
+    isUpdatingComment.isUpdating;
+
   return (
     <div className={classes.feedButtonComment}>
       <>
@@ -73,7 +77,7 @@ const FeedButtonComment = ({
         )}
 
         {/* Bouton SUPPRIMER  */}
-        {(userIdToken === userIdComment || authCtx.admin === 1) &&
+        {(userIdToken === userIdComment || authentification.admin === 1) &&
           !modificationOneComment && (
             <div className={classes.red}>
               <Button onClick={confirmationModalHandler}>Supprimer</Button>

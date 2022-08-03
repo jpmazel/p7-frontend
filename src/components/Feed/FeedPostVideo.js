@@ -4,9 +4,9 @@ import classes from "./FeedPostVideo.module.css";
 const FeedPostVideo = ({ videoPost }) => {
   const [idVideo, setIdVideo] = useState(null);
 
-  //Prise en compte des 2 formats URL des liens vidéos YouTube
-  //https://www.youtube.com/watch?v=N0DhCV_-Qbg
-  //https://youtu.be/N0DhCV_-Qbg
+  //Lesformats de lien accepté
+  // https://www.youtube.com/watch?v=PKjDWbeKUUU  lien qui vient du navigateur barre d'adresse
+  // https://youtu.be/PKjDWbeKUUU                 lien qui vient du bouton partager
 
   useEffect(() => {
     if (videoPost && videoPost.split("=")[1]) {
@@ -25,7 +25,7 @@ const FeedPostVideo = ({ videoPost }) => {
         <iframe
           width="300"
           height="170"
-          src={`https://www.youtube-nocookie.com/embed/${idVideo}`}
+          src={`https://www.youtube.com/embed/${idVideo}`}
           title="YouTube video player"
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

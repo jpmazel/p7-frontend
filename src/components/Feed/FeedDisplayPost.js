@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import AuthContext from "../../store/authContext";
+import { useEffect, useState } from "react";
+
 import classes from "./FeedDisplayPost.module.css";
 import Card from "../UI/Card";
 import FeedPhotoUser from "./FeedPhotoUser";
@@ -13,19 +13,20 @@ import FeedDisplayComment from "./Comments/FeedDisplayComment";
 import { Link } from "react-router-dom";
 import FeedLike from "./FeedLike";
 import useHttp from "../../hooks/use-http";
+import { useSelector } from "react-redux";
 
 const FeedDisplayPost = ({ onUpdate }) => {
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
   const [mounted, setMounted] = useState(true);
 
-  const authCtx = useContext(AuthContext);
   const [messages, setMessages] = useState(null);
   const [updateDeletePost, setUpdateDeletePost] = useState(null);
 
   const [isUpdatingPost, setIsUpdatingPost] = useState(null);
   const [buttonSend, setButtonSend] = useState(false);
   const [isUpdatingPostFinish, setIsUpdatingPostFinish] = useState(false);
-
-  // const [updateDeleteComment, setUpdateDeleteComment] = useState();
 
   const [idCommentButton, setIdCommentButton] = useState(null);
   const [isDisplayedComment, setIsDisplayedComment] = useState(false);
@@ -64,22 +65,17 @@ const FeedDisplayPost = ({ onUpdate }) => {
     setIsUpdatingPostFinish((prevState) => !prevState);
   };
 
-  //Le commentaire a bien été supprimé de la base de données
-  // const onUpdateDeleteComment = (updateDeleteComment) => {
-  //   setUpdateDeleteComment(updateDeleteComment);
-  // };
-
   //Pour aller chercher les posts sur la base de données
   useEffect(() => {
     //objet de configuration de la requête du custom-hook
     const requestConfig = {
-      url: `http://localhost:3000/api/posts?userId=${authCtx.userId}`,
+      url: `http://localhost:3000/api/posts?userId=${authentification.userId}`,
       method: "GET",
-      headers: { Authorization: `Bearer ${authCtx.token}` },
+      headers: { Authorization: `Bearer ${authentification.token}` },
     };
 
     if (mounted) {
-      authCtx.userId &&
+      authentification.userId &&
         fetchGetMessageHandler(requestConfig, (applyData) =>
           setMessages(applyData)
         );
@@ -92,10 +88,10 @@ const FeedDisplayPost = ({ onUpdate }) => {
     onUpdate,
     updateDeletePost,
     isUpdatingPostFinish,
-    authCtx.userId,
+    authentification.userId,
     fetchGetMessageHandler,
     mounted,
-    authCtx.token,
+    authentification.token,
   ]);
 
   //Mettre le dernier message envoyé en haut de la pile
@@ -140,7 +136,7 @@ const FeedDisplayPost = ({ onUpdate }) => {
                     idPostsUser={message.id_posts_user}
                     buttonSend={buttonSend}
                     userIdPost={message.posts_user_userId}
-                    token={authCtx.token}
+                    token={authentification.token}
                     onUpdatePostFinish={onUpdatePostFinish}
                   />
                 </div>
@@ -150,16 +146,16 @@ const FeedDisplayPost = ({ onUpdate }) => {
 
                 <div className={classes.likeAndButton}>
                   <FeedLike
-                    token={authCtx.token}
+                    token={authentification.token}
                     idPostsUser={message.id_posts_user}
-                    userIdToken={Number(authCtx.userId)}
+                    userIdToken={Number(authentification.userId)}
                   />
 
                   <FeedButton
-                    userIdToken={Number(authCtx.userId)}
+                    userIdToken={Number(authentification.userId)}
                     userIdPost={message.posts_user_userId}
                     idPostsUser={message.id_posts_user}
-                    token={authCtx.token}
+                    token={authentification.token}
                     onUpdateDelete={(idPostsUser) =>
                       setUpdateDeletePost(idPostsUser)
                     }
@@ -175,12 +171,11 @@ const FeedDisplayPost = ({ onUpdate }) => {
                 <>
                   <FeedDisplayComment
                     onUpdate={onUpdate}
-                    token={authCtx.token}
-                    userIdToken={Number(authCtx.userId)}
+                    token={authentification.token}
+                    userIdToken={Number(authentification.userId)}
                     idPostsUser={message.id_posts_user}
                     idCommentButton={idCommentButton}
                     isDisplayedComment={isDisplayedComment}
-                    // onUpdateDeleteComment={onUpdateDeleteComment}
                   />
 
                   <FeedNewComment idPostsUser={message.id_posts_user} />

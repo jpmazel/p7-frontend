@@ -12,9 +12,9 @@ const FeedIdentifierCreatorComment = ({
 
   //Aller chercher les photos des utilisateurs des commentaires
   // http://localhost:3000/api/fiche_user/fiche/49?userId=46
+  const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
 
   const fetchGetFicheUserHandler = useCallback(async () => {
-    const url = `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/${userIdComment}?userId=${userIdToken}`;
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -37,7 +37,7 @@ const FeedIdentifierCreatorComment = ({
       );
       console.log(error);
     }
-  }, [token, userIdComment, userIdToken]);
+  }, [token, url]);
 
   useEffect(() => {
     fetchGetFicheUserHandler();
