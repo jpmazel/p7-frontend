@@ -4,31 +4,27 @@ import classes from "./FicheUser.module.css";
 
 import { Navigate } from "react-router-dom";
 import FicheUserDisplay from "../components/FicheUser/FicheUserDisplay";
-
-import { getFicheUser } from "../store/actions/ficheUser-action";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getFicheUser } from "../store/actions/ficheUser-actions";
 
 const FicheUser = () => {
-  const isLoggedIn = useSelector((state) => state.authentification.isLoggedIn);
-  const userId = useSelector(
-    (state) => state.authentification.dataResponse.userId
-  );
-  const token = useSelector(
-    (state) => state.authentification.dataResponse.token
-  );
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.authentification.isLoggedIn);
 
-  // Pour exécuter la fonction au montage du composant
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
+
+  //Exécuté au montage du composant
   useEffect(() => {
-    if (isLoggedIn && userId) {
-      dispatch(getFicheUser(userId, token));
+    if (isLoggedIn) {
+      dispatch(getFicheUser(authentification.userId, authentification.token));
     }
-  }, [token, userId, dispatch, isLoggedIn]);
+  }, [authentification.token, authentification.userId, isLoggedIn, dispatch]);
 
   return (
     <section className={classes.ficheUser}>
       {!isLoggedIn && <Navigate to="/" replace={true} />}
-
       {isLoggedIn && <FicheUserDisplay />}
     </section>
   );

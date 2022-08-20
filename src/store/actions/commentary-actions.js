@@ -1,11 +1,9 @@
-//ACTION ASYNCHRONE (REDUX THUNK intégré dans REDUX TOOLKIT)
-
 import { commentaryActions } from "../slices/commentary-slice";
 
 //Pour aller chercher les données sur le serveur
-export const getFetchCommentary = (idPostsUser, userIdToken, token) => {
+export const getFetchCommentary = (idPostsUser, userIdToken, token) => {  
   return async (dispatch) => {
-    //La requête GET
+    //la requête GET
     const fetchGetData = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/posts/comments/${idPostsUser}?userId=${userIdToken}`,
@@ -17,7 +15,7 @@ export const getFetchCommentary = (idPostsUser, userIdToken, token) => {
         }
       );
 
-      const dataResponse = await response.json();
+      const dataResponse = await response.json();     
 
       if (!response.ok) {
         throw new Error("Problème pour récupérer la donnée sur le serveur");
@@ -36,8 +34,9 @@ export const getFetchCommentary = (idPostsUser, userIdToken, token) => {
 
 //Pour envoyer le nouveau commentaire vers le serveur
 export const postFetchCommentary = (userId, token, data) => {
+  
   return async (dispatch) => {
-    //La requête POST
+    //la requête POST
     const fetchPostData = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/posts/comments?userId=${userId}`,
@@ -51,7 +50,7 @@ export const postFetchCommentary = (userId, token, data) => {
         }
       );
 
-      const dataResponse = await response.json();
+      const dataResponse = await response.json();      
 
       if (!response.ok) {
         throw new Error("Problème pour envoyer la donnée sur le serveur");
@@ -70,6 +69,7 @@ export const postFetchCommentary = (userId, token, data) => {
 
 //Pour supprimer un commentaire de la base de données
 export const deleteFetchCommentary = (idCommentUser, userIdToken, token) => {
+  
   return async (dispatch) => {
     //la requête DELETE
     const fetchDeleteData = async () => {
@@ -84,6 +84,7 @@ export const deleteFetchCommentary = (idCommentUser, userIdToken, token) => {
       );
 
       const dataResponse = await response.json();
+     
 
       if (!response.ok) {
         throw new Error("Problème pour récupérer la donnée sur le serveur");
@@ -97,18 +98,16 @@ export const deleteFetchCommentary = (idCommentUser, userIdToken, token) => {
     } catch (error) {
       console.log(error);
     }
+
   };
 };
 
+
 //Pour modifier un commentaire sous un post
-export const putFetchCommentary = (
-  idComment,
-  userIdToken,
-  token,
-  messageTextarea
-) => {
+export const putFetchCommentary = (idComment,userIdToken,token,messageTextarea) =>{
+ 
   return async (dispatch) => {
-    //La requête PUT
+    //la requête PUT
     const fetchPUTData = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/posts/comment/${idComment}?userId=${userIdToken}`,
@@ -123,6 +122,7 @@ export const putFetchCommentary = (
       );
 
       const dataResponse = await response.json();
+     
 
       if (!response.ok) {
         throw new Error("Problème pour modifier le commentaire sur le serveur");
@@ -132,14 +132,12 @@ export const putFetchCommentary = (
 
     try {
       await fetchPUTData();
-      dispatch(
-        commentaryActions.putCommentary({
-          messageTextarea,
-          idComment,
-        })
-      );
+      dispatch(commentaryActions.putCommentary({
+        messageTextarea,
+        idComment
+      }));
     } catch (error) {
       console.log(error);
     }
   };
-};
+}

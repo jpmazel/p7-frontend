@@ -32,14 +32,7 @@ const authentificationSlice = createSlice({
         state.accountCreate = true;
       }
     },
-    localStorageAuth(state, action) {
-      if (localStorage.getItem("token")) {
-        state.dataResponse.userId = localStorage.getItem("userId");
-        state.dataResponse.token = localStorage.getItem("token");
-        state.dataResponse.admin = Number(localStorage.getItem("admin"));
-        state.isLoggedIn = true;
-      }
-    },
+
     logout(state) {
       state.dataResponse = {
         userId: null,
@@ -47,20 +40,29 @@ const authentificationSlice = createSlice({
         admin: null,
       };
       localStorage.clear();
-
       state.isLoggedIn = false;
     },
+
     errorFetch(state, action) {
       state.errorFetch = action.payload;
     },
+
     resetErrorFetch(state) {
       state.errorFetch = null;
-      state.isLoading = false;
+      state.isLoading = false;      
     },
+
     accountCreate(state, action) {
       state.accountCreate = action.payload;
     },
-    isLoading(state, action) {
+
+    localStorageAuth(state) {
+      if (localStorage.getItem("token")) {
+        state.isLoggedIn = true;
+      }
+    },
+
+    isLoading(state, action) {     
       state.isLoading = action.payload;
     },
   },

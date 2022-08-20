@@ -3,7 +3,7 @@ import classes from "./FeedComment.module.css";
 import Linkify from "linkify-react";
 import { useEffect } from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {putFetchCommentary} from "../../../store/actions/commentary-action"
+import {putFetchCommentary} from "../../../store/actions/commentary-actions"
 
 const FeedComment = ({
   idComment,

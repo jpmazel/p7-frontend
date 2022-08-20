@@ -1,12 +1,12 @@
+//ACTION ASYNCHRONE (REDUX THUNK intégré dans Redux Toolkit)
+
 import { ficheUserActions } from "../slices/ficheUser-slice";
 
-//ACTION ASYNCHRONE (REDUX THUNK intégré dans REDUX TOOLKIT)
-
-//Requête GET, pour contrôler si la fiche utilisateur existe sur la base de données
-//Pour aller chercher la fiche de l'utilisateur
+//Requête GET pour aller chercher la fiche utilisateur
+//Pour contrôler si la fiche utilisateur existe sur la base de donnée
 export const getFicheUser = (userId, token) => {
   return async (dispatch) => {
-    //La requête GET
+    //la requête GET
     const fetchGetData = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/?userId=${userId}`,
@@ -30,8 +30,7 @@ export const getFicheUser = (userId, token) => {
     try {
       const ficheUserData = await fetchGetData();
 
-      //convertir la donnée au bon format
-      const transformerdData = () => {
+      const transformedData = () => {
         if (ficheUserData && ficheUserData.results.length > 0) {
           return {
             job: ficheUserData.results[0].fiche_user_job,
@@ -49,15 +48,16 @@ export const getFicheUser = (userId, token) => {
         }
       };
 
-      dispatch(ficheUserActions.getFicheUser(transformerdData()));
+      dispatch(ficheUserActions.getFicheUser(transformedData()));
     } catch (error) {
-      console("error get");
+      console.log("error get");
       console.log(error);
     }
   };
 };
 
 //Requête POST pour envoyer la fiche utilisateur sur la base de données
+//Création de la fiche sur la table fiche_user
 export const postFicheUser = (
   userId,
   token,
@@ -69,6 +69,8 @@ export const postFicheUser = (
   formData.append("ficheUser", JSON.stringify(dataUpdateFormData));
 
   return async (dispatch) => {
+    //La données a envoyer au serveur
+
     //la requête POST
     const fetchPostData = async () => {
       const response = await fetch(
@@ -87,21 +89,25 @@ export const postFicheUser = (
       if (!response.ok) {
         throw new Error("Problème pour envoyer la donnée sur le serveur");
       }
+
       return dataResponse;
     };
 
     try {
-      await fetchPostData();
-      dispatch(ficheUserActions.postFicherUser({ dataUpdateFormData }));
+      await fetchPostData();     
+      dispatch(ficheUserActions.postFicheUser(dataUpdateFormData));
     } catch (error) {
+      console.log("error postFicheUser");
       console.log(error);
     }
   };
 };
 
+//Pour éffacer le compte de l'utilisateur et toutes ces données
 export const deleteAccount = (userId, token) => {
   return async (dispatch) => {
-    //La requête pour supprimer le compte et toutes les données de l'utilisateur
+    //La requête pour effacer toutes les données de l'user
+
     const fetchDeleteData = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/authentification/delete/?userId=${userId}`,
@@ -112,13 +118,11 @@ export const deleteAccount = (userId, token) => {
           },
         }
       );
-
       const dataResponse = await response.json();
 
       if (!response.ok) {
-        throw new Error("Problème pour récupérer la donnée sur le serveur");
+        throw new Error("Problème pour envoyer la donnée sur le serveur");
       }
-
       return dataResponse;
     };
 
@@ -126,11 +130,13 @@ export const deleteAccount = (userId, token) => {
       await fetchDeleteData();
       dispatch(ficheUserActions.deleteAccount());
     } catch (error) {
+      console.log(" deleteAccount error");
       console.log(error);
     }
   };
 };
 
+//Pour modifier la les données de la fiche utilisateur
 export const putFicheUser = (
   userId,
   token,
@@ -161,23 +167,23 @@ export const putFicheUser = (
       if (!response.ok) {
         throw new Error("Problème pour envoyer la donnée sur le serveur");
       }
+
       return dataResponse;
     };
 
     try {
       await fetchPutData();
-      dispatch(ficheUserActions.putFicheUser({ dataUpdateFormData }));
+      dispatch(ficheUserActions.putFicheUser(dataUpdateFormData));
     } catch (error) {
+      console.log("putFicheUser error");
       console.log(error);
     }
   };
 };
 
-//Récupérer l'idFiche pour le store redux si l'utilisateur veut modifier la fiche juste après ça création
-//ou pour supprimer son compte juste après ça création
 export const getIdFicheUser = (userId, token) => {
   return async (dispatch) => {
-    //la requête GET
+    // La requête GET
     const fetchGetData = async () => {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/api/fiche_user/fiche/?userId=${userId}`,
@@ -201,8 +207,7 @@ export const getIdFicheUser = (userId, token) => {
     try {
       const ficheUserData = await fetchGetData();
 
-      //Convertir la donnée au bon format
-      const transformerdData = () => {
+      const transformedData = () => {
         if (ficheUserData && ficheUserData.results.length > 0) {
           return {
             idFiche: ficheUserData.results[0].id_fiche_user,
@@ -212,8 +217,9 @@ export const getIdFicheUser = (userId, token) => {
         }
       };
 
-      dispatch(ficheUserActions.getIdFiche(transformerdData()));
+      dispatch(ficheUserActions.getIdFiche(transformedData()));
     } catch (error) {
+      console.log("error get");
       console.log(error);
     }
   };

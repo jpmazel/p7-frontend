@@ -4,58 +4,60 @@ import classes from "./authForm.module.css";
 import ErrorModal from "../UI/ErrorModal";
 import Wrapper from "../Helpers/Wrapper";
 import Loader from "../UI/Loader";
-
 import { useDispatch, useSelector } from "react-redux";
 import { postFetchLoginAuthentification } from "../../store/actions/authentification-actions";
 import { authentificationActions } from "../../store/slices/authentification-slice";
 
-//isLogin TRUE : Affiche l'interface pour se connecter
-//isLogin FALSE : Affiche l'interface pour créer un compte
-
+//Le composant
 const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const passwordControleInputRef = useRef();
 
-  const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(true);
-
-  const [passwordPlain, setPasswordPlain] = useState(false);
-
-  const [error, setError] = useState();
+  const [passwordPlain, setPassworPlain] = useState(false);
+  const [error, setError] = useState(null);
   const errorFetch = useSelector((state) => state.authentification.errorFetch);
   const accountCreate = useSelector(
     (state) => state.authentification.accountCreate
   );
 
-  //SPINNER - LOADER
+  const dispatch = useDispatch();
+
+  //SPINNER - LOADER - ETAT
   const isLoading = useSelector((state) => state.authentification.isLoading);
 
-  //Lire les identifiants dans le local storage
+  const toggleAuthModeHandler = () => {
+    setIsLogin((prevState) => !prevState);
+    dispatch(authentificationActions.accountCreate(false));
+  };
+
+  const errorHandler = () => {
+    setError(null);
+    dispatch(authentificationActions.resetErrorFetch());
+  };
+
+  //Lire dans le local storage s'il y a un token lorsque la personne
+  //actualise l'applicaiton pour ne pas perdre l'interface de
+  //l'utilisateur connecté
   useEffect(() => {
     dispatch(authentificationActions.localStorageAuth());
   }, [dispatch]);
-
-  //pour basculer entre les interfaces "CREATION de COMPTE" et "CONNEXION"
-  const toggleAuthModeHandler = () => {
-    dispatch(authentificationActions.accountCreate(false));
-    setIsLogin((prevState) => !prevState);
-  };
 
   const submitHandler = (event) => {
     event.preventDefault();
 
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    let enteredPasswordControl;
 
+    let enteredPasswordControl;
     if (isLogin) {
       enteredPasswordControl = enteredPassword;
     } else {
       enteredPasswordControl = passwordControleInputRef.current.value;
     }
 
-    //Contrôle input pas vide
+    // Contrôle input pas vide
     if (
       enteredEmail.trim().length === 0 ||
       enteredPassword.trim().length === 0
@@ -68,7 +70,7 @@ const AuthForm = () => {
       return;
     }
 
-    //Controle validité email
+    // controle validité email
     const regExEmail = (value) => {
       return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
     };
@@ -76,13 +78,13 @@ const AuthForm = () => {
     if (!regExEmail(enteredEmail)) {
       setError({
         title: "Email invalide",
-        message: "Email invalide",
+        message: "Entrer un format de mail valide",
       });
 
       return;
     }
 
-    //Contrôle que le password soit le même dans les deux inputs password
+    // Contrôle que le password soit le même dans les deux inputs password
     const samePassword = enteredPassword === enteredPasswordControl;
 
     if (!samePassword) {
@@ -99,31 +101,25 @@ const AuthForm = () => {
       password: enteredPassword,
     };
 
+    //Affichage du SPINNER
     dispatch(authentificationActions.isLoading(true));
 
-    //Envois de la requête login et création de compte
+    //Envoie de la requête login et création de compte
     dispatch(postFetchLoginAuthentification(isLogin, credential));
   };
 
-  //Gérer les modales d'erreurs------------------------------------------------
-  const errorHandler = () => {
-    setError(null);
-    dispatch(authentificationActions.resetErrorFetch());
-  };
-
+  //Gérer les modales d'erreurs
   useEffect(() => {
-    //AUTHENTIFICATION ECHEC
+    //Echec de connexion / AUTHENTIFICATION ECHEC
     if (isLogin && errorFetch) {
       setError({
-        title: "Echec authentification",
+        title: "Echec Authentification",
         message: errorFetch.error,
       });
-      return;
     }
 
-    //Gérer l'erreur de la CREATION DE COMPTE avec un EMAIL
-    //DEJA PRIS et l'afficher dans la modal ErrorModal
-    //OU mot de passe TROP FAIBLE
+    //Gérer l'erreur de la création de compte avec
+    //un email déja utilisé OU un mot de passe trop faible
     if (!isLogin && errorFetch) {
       setError({
         title: "Il y a un problème",
@@ -132,15 +128,15 @@ const AuthForm = () => {
     }
 
     //Quand il n'y a pas d'erreur à la création de compte
-    //basculer sur la page connexion
+    //Basculer sur l'interface de connexion
     if (!isLogin && !errorFetch && accountCreate) {
       setIsLogin(true);
     }
-  }, [isLogin, errorFetch, accountCreate]);
+  }, [errorFetch, isLogin, accountCreate]);
 
   //Pour gérer l'affichage en clair du password
   const passwordPlainHandler = () => {
-    setPasswordPlain((prevState) => !prevState);
+    setPassworPlain((prevState) => !prevState);
   };
 
   return (

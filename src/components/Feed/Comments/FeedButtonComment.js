@@ -3,7 +3,7 @@ import Button from "../../UI/Button";
 import { useState } from "react";
 import ConfirmationModal from "../../UI/ConfirmationModal";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFetchCommentary } from "../../../store/actions/commentary-action";
+import { deleteFetchCommentary } from "../../../store/actions/commentary-actions";
 import { commentaryActions } from "../../../store/slices/commentary-slice";
 
 const FeedButtonComment = ({

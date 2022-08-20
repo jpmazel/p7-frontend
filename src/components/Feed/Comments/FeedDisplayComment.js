@@ -10,7 +10,7 @@ import FeedButtonComment from "./FeedButtonComment";
 import { Link } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { getFetchCommentary } from "../../../store/actions/commentary-action";
+import { getFetchCommentary } from "../../../store/actions/commentary-actions";
 
 const FeedDisplayComment = ({
   onUpdate,

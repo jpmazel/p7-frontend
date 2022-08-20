@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 import { NavLink } from "react-router-dom";
+
 import Logo from "./Logo";
 import ErrorModal from "../UI/ErrorModal";
 import classes from "./MainHeader.module.css";
@@ -7,22 +9,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { authentificationActions } from "../../store/slices/authentification-slice";
 import { ficheUserActions } from "../../store/slices/ficheUser-slice";
 
-const MainHeader = () => {
-  const dispatch = useDispatch();
+const MainHeader = ({ ficheRefresh, onConditionLinkInactive }) => {
   const isLoggedIn = useSelector((state) => state.authentification.isLoggedIn);
+  const dispatch = useDispatch();
+
+  const [error, setError] = useState(false);
 
   const newFiche = useSelector(
     (state) => state.ficheUser.ficheUserData.newFiche
   );
 
-  const [error, setError] = useState(false);
-
   //à TRUE le lien ACCUEIL sera désactivé et donc à FALSE il sera activé
   const conditionLinkActive = newFiche;
 
+  //Pour se déconnecter
   const logoutHandler = () => {
     dispatch(authentificationActions.logout());
-    dispatch(ficheUserActions.deleteAccount());
+    dispatch(ficheUserActions.logout());
   };
 
   //Gestion de la modale d'erreur
@@ -40,7 +43,7 @@ const MainHeader = () => {
       <nav>
         <ul>
           {/* Le lien ACCUEIL lorsqu'on est connecté */}
-          {conditionLinkActive && (
+          {isLoggedIn && conditionLinkActive && (
             <NavLink
               className={({ isActive }) => (isActive ? classes.active : "")}
               to="/"

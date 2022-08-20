@@ -1,28 +1,30 @@
 import classes from "./FicheUserDisplay.module.css";
 import Button from "../UI/Button";
 import { useEffect, useRef, useState } from "react";
+
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import ConfirmationModal from "../UI/ConfirmationModal";
+
 import ErrorModal from "../UI/ErrorModal";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { ficheUserActions } from "../../store/slices/ficheUser-slice";
-import { authentificationActions } from "../../store/slices/authentification-slice";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  postFicheUser,
   deleteAccount,
-  putFicheUser,
-  getIdFicheUser,
   getFicheUser,
-} from "../../store/actions/ficheUser-action";
+  getIdFicheUser,
+  postFicheUser,
+  putFicheUser,
+} from "../../store/actions/ficheUser-actions";
+import { useNavigate } from "react-router-dom";
+import { authentificationActions } from "../../store/slices/authentification-slice";
+import { ficheUserActions } from "../../store/slices/ficheUser-slice";
 
 const FicheUserDisplay = () => {
+  const dispatch = useDispatch();
   const [confirmationModal, setConfirmationModal] = useState(null);
 
   const [imgPrevisualization, setImgPrevisualization] = useState(null);
 
   const [newPhotoState, setNewPhotoState] = useState({});
-  const [dataUpdateFormData, setDataUpdateFormData] = useState({});
 
   const [enterNameIsValid, setEnterNameIsValid] = useState(false);
   const [enterFirstNameIsValid, setEnterFirstNameIsValid] = useState(false);
@@ -37,7 +39,6 @@ const FicheUserDisplay = () => {
   const [displayButtonSend, setDisplayButtonSend] = useState(false);
 
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
 
   const nomInputRef = useRef();
@@ -46,40 +47,46 @@ const FicheUserDisplay = () => {
   const jobInputRef = useRef();
   const bioInputRef = useRef();
 
-  //Pour des champs NON contrôlés il faut utiliser "defaultValue" dans l'input et pas value
-  //car si non ça devient un champ contrôlé
-  const dispatch = useDispatch();
-
-  const data = useSelector((state) => state.ficheUser.ficheUserData);
+  const authentification = useSelector(
+    (state) => state.authentification.dataResponse
+  );
   const modification = useSelector((state) => state.ficheUser.modification);
 
+  //Pour fermer la modale de confirmation de suppression de compte
   const deleteFicheUserStore = useSelector(
     (state) => state.ficheUser.confirmationModal
   );
 
+  const data = useSelector((state) => state.ficheUser.ficheUserData);
+  const [dataUpdate, setDataUpdate] = useState(data);
+  const [dataUpdateFormData, setDataUpdateFormData] = useState({});
   const presenceIdFiche = useSelector(
     (state) => state.ficheUser.presenceIdFiche.idFiche
   );
-  const authentification = useSelector(
-    (state) => state.authentification.dataResponse
-  );
 
-  const [dataUpdate, setDataUpdate] = useState(data);
+  //Pour mettre à jour setDataUpdate qui sert à afficher les données dans la fiche
+  //A CONTROLER A LA FIN pour son utilité
+  // useEffect(() => {
+  //   setDataUpdate(data);
+  // }, [data]);
 
-  //-----Fermer la modale après la suppression compte--------------------------
+  //Pour fermer la modale qui sert à confirmer la suppression du compte utilisateur
   useEffect(() => {
     setConfirmationModal(false);
   }, [deleteFicheUserStore]);
 
-  //pour modifier les données qu'il y a sur la fiche utilisateur---------------
+  //pour modifier les données qu'il y a sur la page
   const modificationHandler = () => {
-    dispatch(ficheUserActions.isModification());
+    dispatch(ficheUserActions.isModification(true));
+
+    //Pour récupérer l'id de fiche quand l'utilisateur veut modifier sa fiche
+    //alors qu'il vient jsute de la créé , il n'y a pas d'id de fiche dans le store redux
     dispatch(getIdFicheUser(authentification.userId, authentification.token));
   };
 
-  //---------------------------------profilPhotoHandler------------------------
+  //---------------------------------profilPhotoHandler--------------------------
   //Pour changer de photo de profil
-  //La gestion de la nouvelle photo
+  //la gestion de la nouvelle photo
   const photoProfilHandler = (event) => {
     let newPhoto;
     if (event.target.files && event.target.files.length === 1) {
@@ -92,11 +99,12 @@ const FicheUserDisplay = () => {
       };
       reader.readAsDataURL(newPhoto);
     }
+
     setNewPhotoState(newPhoto);
   };
 
-  //-------------------------changeHandler-------------------------------------
-  //Pour surveiller les modifications qui sont faites dans les champs
+  //-------------------------changeHandler-----------------------------------------
+  //pour surveiller les modifications qui sont faites dans les champs
   const changeHandler = (event) => {
     const enteredNom = nomInputRef.current.value.toUpperCase();
     const enteredPrenomBrut = prenomInputRef.current.value;
@@ -107,7 +115,7 @@ const FicheUserDisplay = () => {
     const enteredJob = jobInputRef.current.value;
     const enteredBio = bioInputRef.current.value;
 
-    //Mettre à jour le state
+    //mettre à jour le state
     setDataUpdate((prevState) => ({
       ...prevState.dataUpdate,
       nom: enteredNom,
@@ -117,7 +125,7 @@ const FicheUserDisplay = () => {
       bio: enteredBio,
     }));
 
-    //Création de l'objet avec les propriétés à envoyer dans formData
+    //création de l'objet avec les propriétés à envoyer dans formData
     const dataUpdateFormData = {
       nom: enteredNom,
       prenom: enteredPrenom,
@@ -131,18 +139,15 @@ const FicheUserDisplay = () => {
     setDataUpdateFormData(dataUpdateFormData);
   };
 
-  //Effacer le compte utilisateur et toutes ses données************************
   const deleteAccountHandler = () => {
     dispatch(deleteAccount(authentification.userId, authentification.token));
     dispatch(authentificationActions.logout());
   };
-  //**************************************************************************/
 
-  //---------------------------------sendHandler-------------------------------
+  //---------------------------------sendHandler-----------------------------------
   //Lorsque je clique sur le bouton envoyer du formulaire
   const sendHandler = () => {
-    //Envoyer les nouvelles données vers le serveur
-    //Pour savoir si un un objet vide ou pas , TRUE si vide ET FALSE si pas vide
+    //Pour savoir si un un objet TRUE  et si pas vide FALSE
     const dataUpdateFormDataIsEmpty =
       Object.keys(dataUpdateFormData).length === 0 &&
       dataUpdateFormData.constructor === Object;
@@ -159,17 +164,8 @@ const FicheUserDisplay = () => {
     controlInputEmpty(dataUpdateFormData.prenom, setEnterFirstNameIsValid);
     controlInputEmpty(dataUpdateFormData.job, setEnterJobIsValid);
     controlInputEmpty(dataUpdateFormData.bio, setEnterBioIsValid);
-
-    //Controle qu'il y a de la donnée dans le formulaire avant envoi
-    //Si l'utilisateur ne touche pas aux inputs formData sera vide
-    if (dataUpdateFormDataIsEmpty) {
-      setError({
-        title: "ATTENTION",
-        message: "Modifier la valeur d'un champ",
-      });
-      return;
-    }
-
+    
+    //la donnée pour la requête du serveur    
     dispatch(
       postFicheUser(
         authentification.userId,
@@ -179,6 +175,8 @@ const FicheUserDisplay = () => {
       )
     );
 
+    //Lorsque la fiche utilisateur a été créé , je reste sur la fiche utilisateur
+    //Je ne vais pas sur la page Accueil
     navigate("fiche_utilisateur");
   };
 
@@ -204,7 +202,7 @@ const FicheUserDisplay = () => {
       warningBlur(setEnterBioIsValid, setUntouchedBio);
   };
 
-  //Confirmation modal pour suppression du compte------------------------------
+  //confirmation modal pour suppression du compte---------------------------------
   const confirmationModalHandler = () => {
     setConfirmationModal({
       title: "Confirmation de la suppression du compte",
@@ -212,9 +210,8 @@ const FicheUserDisplay = () => {
         "La suppression du compte et des données sont des actions irréverssibles",
     });
   };
-  //---------------------------------------------------------------------------
-
-  //Condition pour changer la classe de l'input si l'input n'est pas valide----
+  //--------------------------------------------------------------------------------
+  //Condition pour changer la classe de l'input si l'input n'est pas valide
   function inputClasses(enterValueIsValid, untouchedValue) {
     const nameInputClasses =
       enterValueIsValid || untouchedValue
@@ -231,7 +228,7 @@ const FicheUserDisplay = () => {
   const jobInputClasses = inputClasses(enterJobIsValid, untouchedJob);
   const bioInputClasses = inputClasses(enterBioIsValid, untouchedBio);
 
-  //--------------------------Pour gérer le onBlur des inputs------------------
+  //--------------------------pour gérer le onBlur des inputs---------
   //3 cas à gérer (activation du bouton envoyer)
   //1-à la création du compte
   //2-modification de la fiche sans avoir actualisé manuellement la page avant de rentrer les données
@@ -264,28 +261,26 @@ const FicheUserDisplay = () => {
     untouch,
   ]);
 
-  //---------------------------------------------------------------------------
-  //Envoyer la fiche qui a été modifié-----------------------------------------
+  //-------------------------------------------------------------------------
+  // Envoyer la fiche qui a été modifié
   const sendPutHandler = () => {
-    //Cntrôle si les champs du formulaire ont été modifié
+    // Controle si les champs du formulaire ont été modifié
     const dataUpdateFormDataEmpty =
-      Object.keys(dataUpdateFormData).length === 0;    
+      Object.keys(dataUpdateFormData).length === 0;
 
-    //Contrôle si la photo a été modifié
+    //contrôle si la photo a été modifié
     const newPhotoStateEmpty =
       Object.keys(newPhotoState).length === 0 &&
-      newPhotoState.constructor === Object;   
+      newPhotoState.constructor === Object;
 
+    //L'utilisateur n'a modifié aucun input de la fiche
     const emptyObjectControl = dataUpdateFormDataEmpty && newPhotoStateEmpty;
-
+    
     if (emptyObjectControl) {
-      console.log("les variables sont vides vous n'avez rien modifié");
-      dispatch(ficheUserActions.putFicheUser(data));
+      dispatch(ficheUserActions.isModification(false));
     } else {
-      console.log(
-        "requete putFicheUser la variable n'est pas vide vous avez modifié le formulaire"
-      );
-      // PROMISE pour faire partir la requête GET quand la PUT est bien terminé
+      // console.log("requêterequete putFicheUser la variable n'est pas vide vous avez modifié le formulaire")
+     // PROMISE pour faire partir la requête GET quand la PUT est bien terminé
       // Pour récupérer la nouvelle URL de la photo fourni par le backend
       // et la mettre dans le state et écraser l'ancienne URL de la photo
 
@@ -299,50 +294,47 @@ const FicheUserDisplay = () => {
             authentification.token,
             presenceIdFiche,
             newPhotoState,
-            !dataUpdateFormDataEmpty ? dataUpdateFormData : data
+            dataUpdateFormDataEmpty ? data : dataUpdateFormData
           )
         )
-      )
-        .then(() => {
-          dispatch(
-            getFicheUser(authentification.userId, authentification.token)
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      ).then(() =>
+        dispatch(getFicheUser(authentification.userId, authentification.token))
+      ).catch((error) => console.log(error))
     }
   };
 
-  //Pour gérer l'affichage du bouton envoyé
+  //Pour afficher le bouton ENVOYER pour la requete POST à la création de la fiche
+  //ou pour afficher le bouton ENVOYER pour la requete PUT à la modification de la fiche
   const conditionButtonSend = data.length === 0;
 
   return (
     <section className={classes.user}>
       <h1>
-        Bonjour <span>{data.prenom}</span>
+        Bonjour <span>{dataUpdate.prenom}</span>
       </h1>
       <p>Vous êtes sur votre fiche utilisateur</p>
 
+      {/* Affiche les données de l'utilisiateur */}
+
       {!modification && (
         <>
-          {!imgPrevisualization ? (
+          {imgPrevisualization ? (
+            <img src={imgPrevisualization} alt="prévisualisation" />
+          ) : (
             <img
               src={data.photoProfilUrl ? data.photoProfilUrl : emptyPortrait}
               alt="photo_fiche"
             />
-          ) : (
-            <img src={imgPrevisualization} alt="prévisualisation" />
           )}
 
           <p>Votre nom: </p>
-          <p>{data.nom}</p>
+          <p>{dataUpdate.nom}</p>
 
           <p>Votre prénom: </p>
-          <p>{data.prenom}</p>
+          <p>{dataUpdate.prenom}</p>
 
           <p>Votre age: </p>
-          <p>{data.age} ans</p>
+          <p>{dataUpdate.age} ans</p>
 
           <p>Profession</p>
           <p>{dataUpdate.job}</p>
@@ -353,6 +345,7 @@ const FicheUserDisplay = () => {
       )}
 
       {/* Modifier les données de l'utilisateur */}
+
       {modification && (
         <form>
           {error && (
@@ -383,8 +376,6 @@ const FicheUserDisplay = () => {
             />
 
             {/* INPUT pour entrer le nom */}
-            {/* defaultValue pour que le composant soit uncontrolled , obligatoire avec useRef
-            si non avec "value" warning dans la console */}
             <div className={nameInputClasses}>
               <label htmlFor="lastName">Votre nom: </label>
               <input
@@ -435,7 +426,7 @@ const FicheUserDisplay = () => {
               />
             </div>
 
-            {/* INPUT pour entrer la profession */}
+            {/* Input pour entrer la profession */}
             <div className={jobInputClasses}>
               <label htmlFor="job">Profession</label>
               <input
@@ -476,30 +467,33 @@ const FicheUserDisplay = () => {
         </form>
       )}
 
+      {/* J'apprends les technologies pour être développeur full stack JavaScript mais c'est vachement dur , car pour s'autoformer il faut trouver du contenu de qualité et accessible à un débutant  ce qui est très difficile</p> */}
+
       <div>
+        {/* BOUTON MODIFIER LA FICHE */}
         {!modification && (
           <Button onClick={modificationHandler}>Modifier la fiche</Button>
-        )}
-
-        {/*Gérer la requête POST création de la fiche utilisateur et PUT pour modifier la fiche utilisateur  */}
-        {modification && displayButtonSend && conditionButtonSend && (
-          <Button onClick={sendHandler}>Envoyer</Button>
         )}
 
         {modification && displayButtonSend && !conditionButtonSend && (
           <Button onClick={sendPutHandler}>Envoyer PUT</Button>
         )}
 
+        {/* BOUTON ENVOYER LA FICHE MAIS A LA CREATION DE LA FICHE */}
+        {modification && displayButtonSend && conditionButtonSend && (
+          <Button onClick={sendHandler}>Envoyer</Button>
+        )}
         {modification && !displayButtonSend && (
           <Button style={{ background: "grey" }}>Envoyer</Button>
         )}
 
+        {/* MODALE de confirmation POUR LA SUPPRESSION DU COMPTE */}
         {confirmationModal && (
           <ConfirmationModal
             title={confirmationModal.title}
             message={confirmationModal.message}
             onConfirm={() => setConfirmationModal(null)}
-            onConfirmDelete={deleteAccountHandler}
+            onConfirmDelete={() => deleteAccountHandler()}
           />
         )}
         <Button onClick={confirmationModalHandler}>

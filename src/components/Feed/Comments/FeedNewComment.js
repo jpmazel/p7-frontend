@@ -3,7 +3,7 @@ import Button from "../../UI/Button";
 import classes from "./FeedNewComment.module.css";
 import Card from "../../UI/Card";
 import { useDispatch } from "react-redux";
-import { postFetchCommentary } from "../../../store/actions/commentary-action";
+import { postFetchCommentary } from "../../../store/actions/commentary-actions";
 import { useSelector } from "react-redux";
 
 const FeedNewComment = ({ idPostsUser }) => {

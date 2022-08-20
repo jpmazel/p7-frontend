@@ -3,20 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   ficheUserData: [
     // {
-      // job(pin):"developpeur web"
-      // bio(pin):"developpeur web"
-      // age(pin):12
-      // nom(pin):"DOE"
-      // photoProfilUrl(pin):"http://localhost:3000/images/4K_logo_png.png_1659505273443.png"
-      // prenom(pin):"John"
-      // userId(pin):759
-      // idFiche(pin):797
-      // newFiche(pin):"1"
-    // },
+    // age: 0
+    // bio: "dqsdqs"
+    // idFiche: 820
+    // job: "dqsdsq"
+    // newFiche: "0"
+    // nom: "DQSDQS"
+    // photoProfilUrl: "http://localhost:3000/images/IMAGE-LOGO-CHAINE-YOUTUBE.jpg_1660553281845.jpg"
+    // prenom: "Sddq"
+    // userId: 791
+    // }
   ],
   modification: false,
-  confirmationModal: null,  
-  presenceIdFiche: {},  
+  confirmationModal: null,
+  presenceIdFiche: {},
 };
 
 const ficheUserSlice = createSlice({
@@ -25,50 +25,50 @@ const ficheUserSlice = createSlice({
   reducers: {
     getFicheUser(state, action) {
       state.ficheUserData = action.payload;
-      //si tableau fiche utilisateur vide-fiche inexistante
+      //Si le tableau fiche utilisateur est vide-fiche est inexistante
       if (action.payload.length === 0) {
         state.modification = true;
       } else {
         state.modification = false;
       }
     },
-    postFicherUser(state, action) {     
-      state.ficheUserData = { ...action.payload.dataUpdateFormData };
+
+    postFicheUser(state, action) {
+      state.ficheUserData = action.payload;
       state.modification = false;
     },
 
-    putFicheUser(state, action) {    
-      if(!action.payload){
-        state.modification = false;
-        return
-      }
-
-      state.ficheUserData = {
-        ...state.ficheUserData,
-        ...action.payload.dataUpdateFormData,
-      };      
-
-      state.modification = false;
-    },
-    deleteAccount(state, action) {
+    deleteAccount(state) {
       state.ficheUserData = [];
       state.confirmationModal = false;
       state.presenceIdFiche = {};
-     
     },
 
-    isModification(state) {
-      state.modification = true;
-    },
-
-    getIdFiche(state, action) {     
+    isModification(state, action) {
+      state.modification = action.payload;
+    }, 
+    
+    getIdFiche(state, action) {
       state.presenceIdFiche = action.payload;
     },
+
+    putFicheUser(state, action) {
+      // state.ficheUserData = action.payload;
+      state.ficheUserData = {
+        ...state.ficheUserData,
+        ...action.payload
+      }
+    
+      state.modification = false;
+    },
+    logout(state){
+      state.ficheUserData = []
+    }
   },
 });
 
 //export des actions
 export const ficheUserActions = ficheUserSlice.actions;
 
-//export de ficheUserSlice
+//export le slice
 export default ficheUserSlice;

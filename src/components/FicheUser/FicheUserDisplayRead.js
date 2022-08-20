@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Navigate, useParams } from "react-router-dom";
 import emptyPortrait from "../../assets/images/empty-portrait.jpg";
 import useHttp from "../../hooks/use-http";
-import { useSelector } from "react-redux";
 
 import classes from "./FicheUserDisplayRead.module.css";
 
@@ -14,6 +14,7 @@ const FicheUserDisplayRead = () => {
   const { sendRequest: fetchGetFicheUserHandler } = useHttp();
 
   const isLoggedIn = useSelector((state) => state.authentification.isLoggedIn);
+
   const authentification = useSelector(
     (state) => state.authentification.dataResponse
   );
