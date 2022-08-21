@@ -2,17 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   ficheUserData: [
-    // {
-    // age: 0
-    // bio: "dqsdqs"
-    // idFiche: 820
-    // job: "dqsdsq"
-    // newFiche: "0"
-    // nom: "DQSDQS"
-    // photoProfilUrl: "http://localhost:3000/images/IMAGE-LOGO-CHAINE-YOUTUBE.jpg_1660553281845.jpg"
-    // prenom: "Sddq"
-    // userId: 791
-    // }
+    {
+    age: 0,
+    bio: "",
+    idFiche:0,
+    job: "",
+    newFiche: "0",
+    nom: "",
+    photoProfilUrl: "",
+    prenom: "",
+    userId: 0
+    }
   ],
   modification: false,
   confirmationModal: null,

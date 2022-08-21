@@ -7,7 +7,7 @@ const FeedBadge = ({
   userIdToken,
   token,  
 }) => {
-  const [numberOfComments, setNumberOfComments] = useState();
+  const [numberOfComments, setNumberOfComments] = useState([]);
 
   const newComment = useSelector((state) => state.commentary.onNewComment);
   const updateDeleteComment = useSelector((state) => state.commentary.onUpdateDeleteComment);
@@ -47,7 +47,7 @@ const FeedBadge = ({
   return (
     <div className={classes.feedBadge}>
       <div className={classes.numberCicle}>
-        {numberOfComments && numberOfComments.length}
+        {numberOfComments?.length}
       </div>
     </div>
   );
