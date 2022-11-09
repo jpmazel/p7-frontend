@@ -45,4 +45,6 @@ __React Router DOM V6:__
   * Suppression de certains "props drilling" et de "lifting state up"
   * Gestion des CRUD (authentification, les posts du feed, la fiche utilisateur)
 
-Actuellement au 2022-08-03 il y a 0 warning (ESLint)
+  __Passage de React17 à React18__
+
+Actuellement au 2022-11-09 il y a 0 warning (ESLint)
