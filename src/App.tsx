@@ -5,7 +5,7 @@ import FicheUser from "./pages/FicheUser";
 import Home from "./pages/Home";
 import { useSelector } from "react-redux";
 
-function App() {
+const  App: React.FC = () => {
   const isLoggedIn = useSelector((state) => state.authentification.isLoggedIn);
 
   const newFiche = useSelector(
